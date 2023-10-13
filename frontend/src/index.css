@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+	font-family: clash;
+	src: url("/assets/fonts/clash/ClashDisplay-Regular.otf") format("opentype");
+}
+@font-face {
+	font-family: clashBold;
+	src: url("/assets/fonts/clash/ClashDisplay-Semibold.otf") format("opentype");
+}
+
+.navbar {
+	background-color: #424242;
+	color: rgb(247, 247, 247);
+}

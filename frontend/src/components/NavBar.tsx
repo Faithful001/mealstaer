@@ -1,4 +1,11 @@
+import { useState } from "react";
+// import { useQuery } from "react-query";
+
 const NavBar = () => {
+	const [search, setSearch] = useState<string>("");
+	console.log(search);
+
+	// function handleSearch() {}
 	return (
 		<div className="navbar">
 			<div className="section p-5">
@@ -8,6 +15,7 @@ const NavBar = () => {
 					<input
 						className="bg-transparent border-white border rounded-2xl"
 						type="text"
+						onChange={(e) => setSearch(e.target.value)}
 					/>
 					<p>profile</p>
 				</div>

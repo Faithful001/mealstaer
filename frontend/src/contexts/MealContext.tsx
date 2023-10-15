@@ -26,6 +26,8 @@ type MealsType = {
 	image_url: string;
 	ingredients: string[];
 	steps: string[];
+	favorited: boolean;
+	saved: boolean;
 };
 
 export const MealContextProvider = ({ children }: MealContextProviderType) => {

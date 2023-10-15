@@ -4,6 +4,10 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { useMeal } from "../contexts/MealContext";
 import chef_hat from "../assets/chef_hat.png";
+import favorite from "../assets/favorite.svg";
+import favorite_black from "../assets/favorite_black.svg";
+import turned_in from "../assets/turned_in.svg";
+import turned_in_black from "../assets/turned_in_black.svg";
 // import { useMeal } from "../contexts/MealContext";
 
 type MealsType = {
@@ -12,29 +16,48 @@ type MealsType = {
 	image_url: string;
 	ingredients: string[];
 	steps: string[];
+	favorited: boolean;
+	saved: boolean;
 };
 
 const Home = () => {
 	const [meals, setMeals] = useState<MealsType[]>([]);
 	const [fetchError, setFetchError] = useState<any>(null);
 	const { value, notValue } = useMeal();
+	const [favorites, setFavorites] = useState<Set<MealsType>>(new Set());
+	// const [saveForLater, setSaveForLater] = useState(new Set());
 	const [fave, setFave] = useState<boolean>(false);
-	const [save, setSave] = useState<boolean>(false);
 
 	console.log(fave);
-	console.log(save);
+
+	console.log(favorites);
+
+	// console.log(fave);
+	// console.log(save);
 
 	console.log(value);
 	console.log(meals);
 	console.log(fetchError);
 
-	function handleFave() {
-		setFave(!fave);
-	}
+	const addToFavorites = (meal: MealsType) => {
+		setFavorites((prevFavorites) => {
+			const newSet = new Set(prevFavorites);
+			newSet.add(meal);
+			return newSet;
+		});
+	};
 
-	function handleSave() {
-		setSave(!save);
-	}
+	const removeFromFavorites = (meal: MealsType) => {
+		setFavorites((prevFavorites) => {
+			const newSet = new Set(prevFavorites);
+			newSet.delete(meal);
+			return newSet;
+		});
+	};
+
+	// function handleSave() {
+	// 	setSave(!save);
+	// }
 
 	useEffect(() => {
 		if (value) {
@@ -88,29 +111,36 @@ const Home = () => {
 										{/* <img src={meal.image_url} alt={meal.name} /> */}
 									</div>
 								</Link>
-								<div className="-mb-2">
-									{fave ? (
-										<span
-											className="material-icons-outlined text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
-											onClick={handleFave}
-										>
-											favorite
-										</span>
-									) : (
-										<span
-											className="material-symbols-outlined text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
-											onClick={handleFave}
-										>
-											favorite
-										</span>
-									)}
+								<div className="-mb-2 flex">
+									<img
+										src={favorite}
+										alt=""
+										className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
+										onClick={() => addToFavorites(meal)}
+									/>
 
-									<span
-										className="material-symbols-outlined text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
-										onClick={handleSave}
-									>
-										bookmark
-									</span>
+									<img
+										src={favorite_black}
+										alt=""
+										className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
+										onClick={() => removeFromFavorites(meal)}
+									/>
+
+									{/* {!save ? (
+									// 	<img
+									// 		src={turned_in}
+									// 		alt=""
+									// 		className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
+									// 		onClick={handleSave}
+									// 	/>
+									// ) : (
+									// 	<img
+									// 		src={turned_in_black}
+									// 		alt=""
+									// 		className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
+									// 		onClick={handleSave}
+									// 	/>
+									// )} */}
 								</div>
 							</div>
 						))}

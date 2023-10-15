@@ -19,7 +19,9 @@
 				"Drain the cooked pasta and quickly toss it with the egg and cheese mixture.",
 				"Add the crispy pancetta or guanciale and stir well.",
 				"Garnish with chopped fresh parsley and serve."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 2,
@@ -41,7 +43,9 @@
 				"Add heavy cream and grated Parmesan cheese to the pan, stirring until it thickens.",
 				"Combine cooked pasta, sliced chicken, and the creamy Alfredo sauce.",
 				"Garnish with fresh parsley and serve."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 3,
@@ -63,7 +67,9 @@
 				"In a small bowl, mix soy sauce and cornstarch to create a sauce, then pour it over the stir-fry.",
 				"Stir until the sauce thickens and coats the ingredients.",
 				"Serve over rice or noodles."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 4,
@@ -84,7 +90,9 @@
 				"Season with a pinch of salt and black pepper.",
 				"Bake in the preheated oven until the crust is golden and the cheese is bubbly and slightly browned.",
 				"Remove from the oven, drizzle with olive oil, and garnish with fresh basil leaves. Slice and serve."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 5,
@@ -103,7 +111,9 @@
 				"In a large bowl, toss the lettuce with Caesar dressing and season with salt and pepper.",
 				"Add croutons and grated Parmesan cheese. Toss to combine.",
 				"Serve with lemon wedges and extra Parmesan cheese if desired."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 6,
@@ -125,7 +135,9 @@
 				"Warm taco shells in the oven or microwave.",
 				"Fill taco shells with seasoned beef, lettuce, tomatoes, cheese, sour cream, and salsa.",
 				"Serve and enjoy your homemade beef tacos."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 7,
@@ -144,7 +156,9 @@
 				"Drizzle olive oil over the salmon.",
 				"Bake in the preheated oven for about 15-20 minutes or until the salmon is cooked through.",
 				"Serve with additional lemon and dill for garnish."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 8,
@@ -172,7 +186,9 @@
 				"In a separate pan, sauté the mushrooms with the remaining butter until they're browned.",
 				"When the rice is creamy and cooked al dente, remove from heat, stir in the sautéed mushrooms, and Parmesan cheese.",
 				"Season with salt and black pepper, garnish with fresh parsley, and serve."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 9,
@@ -192,7 +208,9 @@
 				"Shred the cooked pork with two forks and mix it with the sauce.",
 				"Toast the hamburger buns, then fill them with pulled pork.",
 				"Add coleslaw and pickles if desired, and serve."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 10,
@@ -215,7 +233,9 @@
 				"Add mixed vegetables and stir to coat them with the curry paste.",
 				"Pour in the coconut milk and simmer until the vegetables are tender and the sauce thickens.",
 				"Season with salt and pepper, garnish with fresh cilantro, and serve with rice or naan bread."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 11,
@@ -242,7 +262,9 @@
 				"Simmer on low heat for 20-30 minutes until the chili thickens.",
 				"Season with salt and pepper.",
 				"Serve hot, garnished with sour cream, grated cheddar cheese, and chopped green onions."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 12,
@@ -267,7 +289,9 @@
 				"Add shrimp and cook until they turn pink, about 2 minutes per side.",
 				"Stir in white wine and lemon juice, then add cooked pasta and toss to combine.",
 				"Season with salt and pepper, garnish with fresh parsley, and add red pepper flakes if you like it spicy."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 13,
@@ -292,7 +316,9 @@
 				"Stir in curry powder and cook for another minute.",
 				"Add mango and coconut milk, then simmer until the chicken is cooked through and the sauce thickens.",
 				"Season with salt and pepper, garnish with fresh cilantro, and serve with rice."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 14,
@@ -312,7 +338,9 @@
 				"In a separate pan, sauté onions and bell peppers until tender.",
 				"Warm the tortillas, then fill them with chicken, peppers, and onions.",
 				"Serve with sour cream and salsa."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 15,
@@ -331,7 +359,9 @@
 				"Layer eggplant slices, marinara sauce, and cheeses in a baking dish.",
 				"Bake until cheese is bubbly and golden brown.",
 				"Garnish with fresh basil leaves and serve."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 16,
@@ -349,7 +379,9 @@
 				"Dissolve miso paste in a small amount of dashi, then add it to the pot.",
 				"Add tofu and simmer until heated through.",
 				"Garnish with green onions and seaweed if desired."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 17,
@@ -376,7 +408,9 @@
 				"Return the cooked beef to the pan and heat through.",
 				"Season with salt and black pepper.",
 				"Serve over cooked egg noodles."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 18,
@@ -397,7 +431,9 @@
 				"Add mixed vegetables and garlic, stir-frying until the veggies are tender-crisp.",
 				"Stir in soy sauce and hoisin sauce, mixing well.",
 				"Serve over cooked rice."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 19,
@@ -418,7 +454,9 @@
 				"Roll the bamboo mat tightly to form the sushi roll, wetting the nori's border to seal it.",
 				"Slice the roll into bite-sized pieces.",
 				"Serve with soy sauce, wasabi, and pickled ginger."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		},
 		{
 			"id": 20,
@@ -441,7 +479,9 @@
 				"Cook shrimp until pink and opaque, then add lemon juice and zest.",
 				"Toss cooked pasta with the lemon butter sauce and shrimp.",
 				"Garnish with fresh parsley and serve."
-			]
+			],
+			"favorited": false,
+			"saved": false
 		}
 	]
 }

@@ -1,58 +1,62 @@
-// import { meals } from "../data/mealAPI";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useQuery } from "react-query";
-import { useMeal } from "../contexts/MealContext";
-
-// type MealType = {
-// 	id: number;
-// 	name: string;
-// 	image_url: string;
-// 	ingredients: string[];
-// 	steps: string[];
-// };
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MealDetails = () => {
-	const { value, notValue } = useMeal();
-	console.log(value);
-	console.log(notValue);
-	// const [meal, setMeal] = useState<any>({});
-	// console.log(typeof meal.ingredients);
-
-	// const [fetchError, setFetchError] = useState<any>([]);
+	const navigate = useNavigate();
+	const [meal, setMeal] = useState<any>(null);
+	console.log(meal);
+	// const [fetchError, setFetchError] = useState<any>(null);
 	let { id } = useParams();
 
-	// value?.forEach((item: any) => {
-	// 	if(item.id == id)
-	// });
+	useEffect(() => {
+		const mealData = localStorage.getItem("meals");
 
-	// const { isLoading, error, data } = useQuery("meal", fetchData);
-	// useEffect(() => {
-	// 	if (data) {
-	// 		setMeal(data);
-	// 		setFetchError([]);
-	// 	}
-	// 	if (error) {
-	// 		setFetchError(error);
-	// 		setMeal([]);
-	// 	}
-	// }, []);
+		if (mealData) {
+			const parsedData = JSON.parse(mealData);
+			const matchingMeals = parsedData.filter(
+				(item: any) => item.id.toString() === id
+			);
+			console.log(matchingMeals);
+			setMeal(matchingMeals);
+		}
+	}, [id]);
 
-	// async function fetchData() {
-	// 	try {
-	// 		const response = await axios.get(`http://localhost:8080/api/data/${id}`);
-	// 		return response.data;
-	// 	} catch (error: any) {
-	// 		throw error.message;
-	// 	}
-	// }
+	function handleBack(e: React.FormEvent<HTMLSpanElement>) {
+		e.preventDefault();
+		navigate(-1);
+	}
 
 	return (
-		<div className="meal-details p-5">
+		<div className="meal-details p-7">
 			<div className="section">
 				<div>
-					<p>{id}</p>
+					<span
+						className="material-symbols-outlined mb-5 p-2 cursor-pointer hover:cursor-pointer rounded-3xl hover:bg-[#e4e4e42c]"
+						onClick={handleBack}
+					>
+						arrow_back
+					</span>
+					<div className="">
+						{meal ? (
+							<div>
+								{meal.map((data: any) => (
+									<div key={data.id}>
+										<h1 className="text-3xl font-bold mb-5">{data.name}</h1>
+										<p className="text-xl font-bold">
+											Ingredients: <br />
+										</p>
+										{data.ingredients.join(", ")}
+										<p className="text-xl mt-5 font-bold">Steps:</p>
+										{data.steps.map((step: any) => (
+											<li>{step}</li>
+										))}
+									</div>
+								))}
+							</div>
+						) : (
+							<p>Loading meal details...</p>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

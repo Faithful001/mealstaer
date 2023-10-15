@@ -10,7 +10,7 @@ import {
 type ContextDataType = {
 	value: object;
 	setValue: Dispatch<SetStateAction<any>> | undefined;
-	notValue: object;
+	notValue: ReactNode;
 	setNotValue: Dispatch<SetStateAction<any>> | undefined;
 };
 
@@ -20,9 +20,17 @@ type MealContextProviderType = {
 	children: ReactNode;
 };
 
+type MealsType = {
+	id: number;
+	name: string;
+	image_url: string;
+	ingredients: string[];
+	steps: string[];
+};
+
 export const MealContextProvider = ({ children }: MealContextProviderType) => {
-	const [value, setValue] = useState<any>([]);
-	const [notValue, setNotValue] = useState<any>("");
+	const [value, setValue] = useState<MealsType[]>([]);
+	const [notValue, setNotValue] = useState<any | undefined>("");
 	console.log(value);
 
 	return (

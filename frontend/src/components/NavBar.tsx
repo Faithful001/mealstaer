@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useMeal } from "../contexts/MealContext";
+import { Link } from "react-router-dom";
 // import { useQuery } from "react-query";
 
 const NavBar = () => {
 	const [search, setSearch] = useState<string>("");
+	const [dropDown, setDropDown] = useState<boolean>(false);
 	const { setValue = () => {}, setNotValue = () => {} } = useMeal();
 	// console.log(search);
 
@@ -44,11 +46,21 @@ const NavBar = () => {
 			// }
 		}
 	}
+
+	function handleDropDown(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
+		e.preventDefault();
+		setDropDown(!dropDown);
+	}
 	return (
 		<div className="navbar">
 			<div className="section p-5 py-6">
 				<div className="flex justify-between items-center">
-					<h1>mealstar</h1>
+					<div className="flex">
+						<span className="material-symbols-outlined mr-1 text-yellow-400">
+							award_star
+						</span>
+						<h1 className="">mealstar</h1>
+					</div>
 					<div className="flex items-center relative">
 						{/* <form onSubmit={handleSubmit}> */}
 						<input
@@ -68,7 +80,56 @@ const NavBar = () => {
 						)}
 						{/* </form> */}
 					</div>
-					<p>profile</p>
+					<div className="md:flex items-center">
+						{/* <div className="">
+							<Link to={""} className="underline">
+								Login
+							</Link>
+							/
+							<Link to={""} className="underline">
+								Signup
+							</Link>
+						</div> */}
+						<span
+							className="material-symbols-outlined text-4xl cursor-pointer ml-2"
+							onClick={handleDropDown}
+						>
+							account_circle
+						</span>
+					</div>
+					{dropDown && (
+						<div
+							className="bg-white rounded-md p-10 pt-20 pb-20 flex flex-col
+					 absolute right-5 top-[72px] z-10"
+						>
+							<Link to={""}>
+								<div className="flex items-center mb-3 cursor-pointer">
+									<span className="material-symbols-outlined text-black">
+										bookmarks
+									</span>
+									<p className="text-black ml-2">Saved for Later</p>
+								</div>
+							</Link>
+
+							<Link to={""}>
+								<div className="flex items-center mb-3 cursor-pointer">
+									<span className="material-symbols-outlined text-black">
+										favorite
+									</span>
+									<p className="text-black ml-2">Favourites</p>
+								</div>
+							</Link>
+
+							<Link to={""}>
+								<div className="flex items-center mb-3 cursor-pointer">
+									<span className="material-symbols-outlined text-black">
+										logout
+									</span>
+									<p className="text-black ml-2">Logout</p>
+								</div>
+							</Link>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

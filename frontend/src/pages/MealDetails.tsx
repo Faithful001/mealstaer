@@ -23,7 +23,7 @@ const MealDetails = () => {
 
 	function handleBack(e: React.FormEvent<HTMLSpanElement>) {
 		e.preventDefault();
-		navigate(-1);
+		navigate("/");
 	}
 
 	return (

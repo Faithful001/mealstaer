@@ -8,10 +8,14 @@ import {
 } from "react";
 
 type ContextDataType = {
-	value: object;
-	setValue: Dispatch<SetStateAction<any>> | undefined;
+	value: MealsType[] | undefined;
+	setValue: Dispatch<SetStateAction<MealsType[]>> | undefined;
 	notValue: ReactNode;
-	setNotValue: Dispatch<SetStateAction<any>> | undefined;
+	setNotValue: Dispatch<SetStateAction<MealsType[]>> | undefined;
+	searchValue: MealsType[] | undefined;
+	setSearchValue: Dispatch<SetStateAction<MealsType[]>> | undefined;
+	notSearchValue: ReactNode;
+	setNotSearchValue: Dispatch<SetStateAction<MealsType[]>> | undefined;
 };
 
 export const MealContext = createContext<Partial<ContextDataType>>({});
@@ -20,8 +24,8 @@ type MealContextProviderType = {
 	children: ReactNode;
 };
 
-type MealsType = {
-	id: number;
+export type MealsType = {
+	_id: number;
 	name: string;
 	image_url: string;
 	ingredients: string[];
@@ -33,10 +37,23 @@ type MealsType = {
 export const MealContextProvider = ({ children }: MealContextProviderType) => {
 	const [value, setValue] = useState<MealsType[]>([]);
 	const [notValue, setNotValue] = useState<any | undefined>("");
+	const [searchValue, setSearchValue] = useState<MealsType[]>([]);
+	const [notSearchValue, setNotSearchValue] = useState<any | undefined>("");
 	console.log(value);
 
 	return (
-		<MealContext.Provider value={{ value, setValue, notValue, setNotValue }}>
+		<MealContext.Provider
+			value={{
+				value,
+				setValue,
+				notValue,
+				setNotValue,
+				searchValue,
+				setSearchValue,
+				notSearchValue,
+				setNotSearchValue,
+			}}
+		>
 			{children}
 		</MealContext.Provider>
 	);

@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useMeal } from "../contexts/MealContext";
+import { MealsType } from "../contexts/MealContext";
 
 const MealDetails = () => {
 	const navigate = useNavigate();
-	const [meal, setMeal] = useState<any>(null);
+	const [meal, setMeal] = useState<MealsType[]>([]);
+	const { value } = useMeal();
 	console.log(meal);
 	// const [fetchError, setFetchError] = useState<any>(null);
 	let { id } = useParams();
 
 	useEffect(() => {
-		const mealData = localStorage.getItem("meals");
+		// const mealData = localStorage.getItem("meals");
 
-		if (mealData) {
-			const parsedData = JSON.parse(mealData);
-			const matchingMeals = parsedData.filter(
-				(item: any) => item.id.toString() === id
+		if (value) {
+			const matchingMeals = value.filter(
+				(item: any) => item._id?.toString() === id
 			);
 			console.log(matchingMeals);
 			setMeal(matchingMeals);

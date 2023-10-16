@@ -1,49 +1,25 @@
 import { useState } from "react";
 import { useMeal } from "../contexts/MealContext";
 import { Link } from "react-router-dom";
-// import { useQuery } from "react-query";
 
 const NavBar = () => {
 	const [search, setSearch] = useState<string>("");
 	const [dropDown, setDropDown] = useState<boolean>(false);
-	const { setValue = () => {}, setNotValue = () => {} } = useMeal();
-	// console.log(search);
-
-	// function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-	// 	e.preventDefault();
-	// 	const data = localStorage.getItem("meals");
-	// 	if (data) {
-	// 		const parsedData = JSON.parse(data);
-	// 		console.log(parsedData);
-	// 		const newData = parsedData.filter((item: any) =>
-	// 			item.name.toLowerCase().includes(search)
-	// 		);
-	// 		console.log(newData);
-	// 		setValue && setValue(newData);
-	// 		setNotValue("");
-
-	// 	}
-	// }
+	const {
+		value,
+		setSearchValue = () => {},
+		// setNotSearchValue = () => {},
+	} = useMeal();
+	console.log(search);
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		setSearch(e.target.value);
-		const data = localStorage.getItem("meals");
-		if (data) {
-			const parsedData = JSON.parse(data);
-			console.log(parsedData);
-			const newData = parsedData.filter((item: any) =>
+		if (value) {
+			const newValue = value.filter((item: any) =>
 				item.name.toLowerCase().includes(search)
 			);
-			console.log(newData);
-			setValue && setValue(newData);
-			setNotValue("");
-			// if (newData) {
-			// 	parsedData.filter(
-			// 		(item: any) => !item.name.toLowerCase().includes(search)
-			// 	);
-			// 	setNotValue && setNotValue("Meal not found");
-			// 	setValue([]);
-			// }
+			console.log(newValue);
+			setSearchValue && setSearchValue(newValue);
 		}
 	}
 
@@ -81,15 +57,6 @@ const NavBar = () => {
 						{/* </form> */}
 					</div>
 					<div className="md:flex items-center">
-						{/* <div className="">
-							<Link to={""} className="underline">
-								Login
-							</Link>
-							/
-							<Link to={""} className="underline">
-								Signup
-							</Link>
-						</div> */}
 						<span
 							className="material-symbols-outlined text-4xl cursor-pointer ml-2"
 							onClick={handleDropDown}

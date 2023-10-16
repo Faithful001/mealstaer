@@ -37,9 +37,13 @@ const createMeal = async (req, res) => {
 			ingredients,
 			steps,
 		});
+		const exists = await Meal.findOne({ name });
+		if (exists) {
+			throw new Error(`${name} already exists`);
+		}
 		res.status(200).json(mealData);
 	} catch (error) {
-		res.status(500).json({ error: "Something went wrong" + error });
+		res.status(500).json({ error: "Something went wrong " + error });
 	}
 };
 
@@ -54,7 +58,7 @@ const deleteMeal = async (req, res) => {
 		const mealData = await Meal.findOneAndDelete({ _id: id });
 		res.status(200).json(mealData);
 	} catch (error) {
-		res.status(500).json({ error: "Something went wrong" + error });
+		res.status(500).json({ error: "Something went wrong " + error });
 	}
 };
 
@@ -67,7 +71,7 @@ const updateMeal = async (res, req) => {
 		const mealData = await Meal.findOneAndUpdate({ _id: id }, { ...req.body });
 		res.status(200).json(mealData);
 	} catch (error) {
-		res.status(500).json({ error: "Something went wrong" + error });
+		res.status(500).json({ error: "Something went wrong " + error });
 	}
 };
 

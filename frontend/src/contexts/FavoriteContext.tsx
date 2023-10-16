@@ -22,10 +22,8 @@ export const FavoriteContextProvider = ({
 }: {
 	children: ReactNode;
 }) => {
-	const [favorited, setFavorited] = useState<Set<MealsType>>(
-		new Set<MealsType>()
-	);
-	const [saved, setSaved] = useState<Set<MealsType>>(new Set<MealsType>());
+	const [favorited, setFavorited] = useState<Set<MealsType>>(new Set());
+	const [saved, setSaved] = useState<Set<MealsType>>(new Set());
 
 	return (
 		<FavoriteContext.Provider

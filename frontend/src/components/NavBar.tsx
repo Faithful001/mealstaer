@@ -69,7 +69,7 @@ const NavBar = () => {
 							className="bg-white rounded-md p-10 pt-20 pb-20 flex flex-col
 					 absolute right-5 top-[72px] z-10"
 						>
-							<Link to={""}>
+							<Link to={"/user/saved"}>
 								<div className="flex items-center mb-3 cursor-pointer">
 									<span className="material-symbols-outlined text-black">
 										bookmarks
@@ -78,7 +78,7 @@ const NavBar = () => {
 								</div>
 							</Link>
 
-							<Link to={""}>
+							<Link to={"/user/favorite"}>
 								<div className="flex items-center mb-3 cursor-pointer">
 									<span className="material-symbols-outlined text-black">
 										favorite

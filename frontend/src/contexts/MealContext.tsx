@@ -1,3 +1,5 @@
+// import { ObjectId } from "mongodb";
+
 import {
 	Dispatch,
 	ReactNode,
@@ -25,13 +27,11 @@ type MealContextProviderType = {
 };
 
 export type MealsType = {
-	_id: number;
+	_id: any;
 	name: string;
 	image_url: string;
 	ingredients: string[];
 	steps: string[];
-	favorited: boolean;
-	saved: boolean;
 };
 
 export const MealContextProvider = ({ children }: MealContextProviderType) => {

@@ -1,8 +1,11 @@
+// import { ObjectId } from "mongodb";
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { useMeal } from "../contexts/MealContext";
+import { useFavorite } from "../contexts/FavoriteContext";
 import chef_hat from "../assets/chef_hat.png";
 import { MealsType } from "../contexts/MealContext";
 
@@ -20,9 +23,16 @@ const Home = () => {
 		setValue = () => {},
 	} = useMeal();
 
+	const {
+		favorited,
+		setFavorited = () => {},
+		saved,
+		setSaved = () => {},
+	} = useFavorite();
+
 	// Maintain a state for favorited meals
-	const [favorited, setFavorited] = useState<Set<string>>(new Set());
-	const [saved, setSaved] = useState<Set<string>>(new Set());
+	// const [favorited, setFavorited] = useState<Set<string>>(new Set());
+	// const [saved, setSaved] = useState<Set<string>>(new Set());
 	console.log(favorited);
 	console.log(saved);
 
@@ -69,7 +79,7 @@ const Home = () => {
 		// Update the favorited state
 		setFavorited((prevFavorited) => {
 			const newSet = new Set(prevFavorited);
-			newSet.add(meal._id.toString());
+			newSet.add(meal);
 			return newSet;
 		});
 		// } catch (error) {
@@ -90,7 +100,7 @@ const Home = () => {
 		// Update the favorited state
 		setFavorited((prevFavorited) => {
 			const newSet = new Set(prevFavorited);
-			newSet.delete(meal._id.toString());
+			newSet.delete(meal);
 			return newSet;
 		});
 		// } catch (error) {
@@ -101,7 +111,7 @@ const Home = () => {
 	function addToSaved(meal: MealsType) {
 		setSaved((prevSaved) => {
 			const newSet = new Set(prevSaved);
-			newSet.add(meal._id.toString());
+			newSet.add(meal);
 			return newSet;
 		});
 	}
@@ -109,7 +119,7 @@ const Home = () => {
 	function removeFromSaved(meal: MealsType) {
 		setSaved((prevSaved) => {
 			const newSet = new Set(prevSaved);
-			newSet.delete(meal._id.toString());
+			newSet.delete(meal);
 			return newSet;
 		});
 	}
@@ -127,33 +137,29 @@ const Home = () => {
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-white">
 						{meals.map((meal: MealsType) => (
 							<div key={meal._id} className="bg-[#424242] rounded-lg p-5">
-								<Link to={`/meal/${meal._id}`}>
+								<Link to={`/user/meal/${meal._id}`}>
 									<div className="">
 										<h2 className="text-xl mb-3">{meal.name}</h2>
 									</div>
 								</Link>
 								<div className="-mb-2 flex">
 									{/* Check if meal is favorited and render the appropriate button */}
-									{typeof meal._id == "string" && !favorited.has(meal._id) ? (
-										<button>
-											<img
-												src={favoritee}
-												alt=""
-												className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
-												onClick={() => addToFavorites(meal)}
-											/>
-										</button>
+									{!favorited?.has(meal) ? (
+										<img
+											src={favoritee}
+											alt=""
+											className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
+											onClick={() => addToFavorites(meal)}
+										/>
 									) : (
-										<button>
-											<img
-												src={favorite_black}
-												alt=""
-												className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
-												onClick={() => removeFromFavorites(meal)}
-											/>
-										</button>
+										<img
+											src={favorite_black}
+											alt=""
+											className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
+											onClick={() => removeFromFavorites(meal)}
+										/>
 									)}
-									{typeof meal._id == "string" && !saved.has(meal._id) ? (
+									{!saved?.has(meal) ? (
 										<img
 											src={turned_in}
 											alt=""

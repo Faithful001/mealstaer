@@ -56,19 +56,25 @@ const deleteMeal = async (req, res) => {
 			res.status(400).json({ error: "Invalid id" });
 		}
 		const mealData = await Meal.findOneAndDelete({ _id: id });
+		if (!mealData) {
+			return res.status(404).json({ error: "No such meal" });
+		}
 		res.status(200).json(mealData);
 	} catch (error) {
 		res.status(500).json({ error: "Something went wrong " + error });
 	}
 };
 
-const updateMeal = async (res, req) => {
+const updateMeal = async (req, res) => {
 	try {
 		const { id } = req.params;
 		if (!mongoose.Types.ObjectId.isValid(id)) {
 			res.status(400).json("Invalid id");
 		}
 		const mealData = await Meal.findOneAndUpdate({ _id: id }, { ...req.body });
+		if (!mealData) {
+			res.status(404).json({ error: "No such meal" });
+		}
 		res.status(200).json(mealData);
 	} catch (error) {
 		res.status(500).json({ error: "Something went wrong " + error });

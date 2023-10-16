@@ -21,14 +21,14 @@ const MealSchema = new Schema(
 			type: [String],
 			required: true,
 		},
-		favorited: {
-			type: [String],
-			required: false,
-		},
-		saved: {
-			type: [String],
-			required: false,
-		},
+		// favorited: {
+		// 	type: Boolean,
+		// 	required: false,
+		// },
+		// saved: {
+		// 	type: Boolean,
+		// 	required: false,
+		// },
 	},
 	{ timestamps: true }
 );

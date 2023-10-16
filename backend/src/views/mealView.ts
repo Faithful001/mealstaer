@@ -14,6 +14,6 @@ router.get("/", getMeals);
 router.get("/:id", getMeal);
 router.post("/", createMeal);
 router.delete("/:id", deleteMeal);
-router.patch("/", updateMeal);
+router.patch("/:id", updateMeal);
 
 module.exports = router;

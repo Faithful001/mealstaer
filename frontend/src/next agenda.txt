@@ -1,0 +1,4 @@
+- create new input fields: favorited[], saved[], favoritedBool: boolean, savedBool: boolean
+- in the home component, send a patch request to the backend and change the favoriteBool to true. Toggle the favorite button based on this condition, same for the saved
+- when a user clicks on the favorite button, send a patch request to the backend to adds that particular array to the favorited meal to the favorited array in the backend
+- in the favorited route, consume the favorited array field on the backend by sending a get request to get the array with that id

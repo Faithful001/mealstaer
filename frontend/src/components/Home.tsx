@@ -33,8 +33,8 @@ const Home = () => {
 	// Maintain a state for favorited meals
 	// const [favorited, setFavorited] = useState<Set<string>>(new Set());
 	// const [saved, setSaved] = useState<Set<string>>(new Set());
-	console.log(favorited);
-	console.log(saved);
+	// console.log(favorited);
+	// console.log(saved);
 
 	async function fetchData() {
 		try {
@@ -50,6 +50,7 @@ const Home = () => {
 	const { isLoading, error, data } = useQuery("meals", fetchData, {
 		enabled: Boolean(meals),
 	});
+	console.log(isLoading);
 
 	useEffect(() => {
 		if (data) {
@@ -66,28 +67,29 @@ const Home = () => {
 		}
 	}, [searchValue]);
 
-	function addToFavorites(meal: MealsType) {
-		// try {
-		// 	const body = { favorited: true };
-		// 	const response = await axios.patch(
-		// 		`http://localhost:4000/api/data/${meal._id}`,
-		// 		body
-		// 	);
-		// 	console.log(response);
-		// 	console.log(meal._id);
+	async function addToFavorites(meal: MealsType) {
+		try {
+			const body = {
+				name: meal.name,
+				ingredients: meal.ingredients,
+				steps: meal.steps,
+			};
+			const response = await axios.post(`http://localhost:4000/api/fave`, body);
+			console.log(response);
+			console.log(meal._id);
+		} catch (error) {
+			console.log("Problem adding to fave");
+		}
 
 		// Update the favorited state
-		setFavorited((prevFavorited) => {
-			const newSet = new Set(prevFavorited);
-			newSet.add(meal);
-			return newSet;
-		});
-		// } catch (error) {
-		// 	console.log("Problem adding to fave");
-		// }
+		// setFavorited((prevFavorited) => {
+		// 	const newSet = new Set(prevFavorited);
+		// 	newSet.add(meal);
+		// 	return newSet;
+		// });
 	}
 
-	function removeFromFavorites(meal: MealsType) {
+	async function removeFromFavorites(meal: MealsType) {
 		// try {
 		// 	const body = { favorited: false };
 		// 	const response = await axios.patch(
@@ -108,7 +110,12 @@ const Home = () => {
 		// }
 	}
 
-	function addToSaved(meal: MealsType) {
+	async function addToSaved(meal: MealsType) {
+		try {
+			// const response = await axios.patch();
+		} catch (error) {
+			console.log(error);
+		}
 		setSaved((prevSaved) => {
 			const newSet = new Set(prevSaved);
 			newSet.add(meal);
@@ -116,7 +123,7 @@ const Home = () => {
 		});
 	}
 
-	function removeFromSaved(meal: MealsType) {
+	async function removeFromSaved(meal: MealsType) {
 		setSaved((prevSaved) => {
 			const newSet = new Set(prevSaved);
 			newSet.delete(meal);

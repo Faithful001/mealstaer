@@ -18,9 +18,7 @@
 				"Drain the cooked pasta and quickly toss it with the egg and cheese mixture.",
 				"Add the crispy pancetta or guanciale and stir well.",
 				"Garnish with chopped fresh parsley and serve."
-			],
-			"favorited": false,
-			"saved": false
+			]
 		},
 		{
 			"name": "Chicken Alfredo",
@@ -41,9 +39,7 @@
 				"Add heavy cream and grated Parmesan cheese to the pan, stirring until it thickens.",
 				"Combine cooked pasta, sliced chicken, and the creamy Alfredo sauce.",
 				"Garnish with fresh parsley and serve."
-			],
-			"favorited": false,
-			"saved": false
+			]
 		},
 		{
 			"name": "Vegetable Stir-Fry",
@@ -64,9 +60,7 @@
 				"In a small bowl, mix soy sauce and cornstarch to create a sauce, then pour it over the stir-fry.",
 				"Stir until the sauce thickens and coats the ingredients.",
 				"Serve over rice or noodles."
-			],
-			"favorited": false,
-			"saved": false
+			]
 		},
 		{
 			"name": "Margherita Pizza",
@@ -86,9 +80,7 @@
 				"Season with a pinch of salt and black pepper.",
 				"Bake in the preheated oven until the crust is golden and the cheese is bubbly and slightly browned.",
 				"Remove from the oven, drizzle with olive oil, and garnish with fresh basil leaves. Slice and serve."
-			],
-			"favorited": false,
-			"saved": false
+			]
 		},
 		{
 			"name": "Caesar Salad",
@@ -106,9 +98,7 @@
 				"In a large bowl, toss the lettuce with Caesar dressing and season with salt and pepper.",
 				"Add croutons and grated Parmesan cheese. Toss to combine.",
 				"Serve with lemon wedges and extra Parmesan cheese if desired."
-			],
-			"favorited": false,
-			"saved": false
+			]
 		},
 		{
 			"name": "Beef Tacos",
@@ -129,9 +119,7 @@
 				"Warm taco shells in the oven or microwave.",
 				"Fill taco shells with seasoned beef, lettuce, tomatoes, cheese, sour cream, and salsa.",
 				"Serve and enjoy your homemade beef tacos."
-			],
-			"favorited": false,
-			"saved": false
+			]
 		},
 		{
 			"name": "Salmon with Lemon-Dill Sauce",

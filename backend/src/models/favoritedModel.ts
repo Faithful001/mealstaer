@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const MealSchema = new Schema(
+const FavoritedSchema = new Schema(
 	{
 		name: {
 			type: String,
@@ -25,14 +25,10 @@ const MealSchema = new Schema(
 	{ timestamps: true }
 );
 
-// MealSchema.statics.addToFavorite = async function (value) {
-// 	const favorited = new Set();
+const FavoriteModel = mongoose.model(
+	"Favorite",
+	FavoritedSchema,
+	"favoritedMeals"
+);
 
-// 	favorited.add(value);
-
-// 	return favorited;
-// };
-
-const model = mongoose.model("Meal", MealSchema, "meals");
-
-module.exports = model;
+module.exports = FavoriteModel;

@@ -7,7 +7,8 @@ const port = process.env.PORT || 8080; //  chose port from here like 8080, 3001
 // const api = require("./data/db.json");
 const mealView = require("./views/mealView");
 const favoritedView = require("./views/favoritedView");
-const userViewGoogle = require("./views/userViewGoogle");
+// const userViewGoogle = require("./views/userViewGoogle");
+const userView = require("./views/userView");
 
 const app = express();
 
@@ -35,7 +36,8 @@ app.use((req, res, next) => {
 //middleware routes
 app.use("/api/data", mealView);
 app.use("/api/fave", favoritedView);
-app.use("/api/user", userViewGoogle);
+// app.use("/api/user", userViewGoogle);
+app.use("/api/user", userView);
 
 mongoose
 	.connect(process.env.MONGO_URI)

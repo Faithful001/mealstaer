@@ -1,9 +1,9 @@
-import express from "express";
+// import express from "express";
 
-const loginWithGoogle = require("../controllers/userControllerGoogle");
+// const loginWithGoogle = require("../controllers/userControllerGoogle");
 
-const router = express.Router();
+// const router = express.Router();
 
-router.post("/login-google", loginWithGoogle);
+// router.post("/login-google", loginWithGoogle);
 
-module.exports = router;
+// module.exports = router;

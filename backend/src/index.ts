@@ -3,12 +3,11 @@ import express, { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
-const port = process.env.PORT || 8080; //  chose port from here like 8080, 3001
-// const api = require("./data/db.json");
+const port = process.env.PORT || 8080;
 const mealView = require("./views/mealView");
 const favoritedView = require("./views/favoritedView");
-// const userViewGoogle = require("./views/userViewGoogle");
 const userView = require("./views/userView");
+const personalizedView = require("./views/personalizedViews");
 
 const app = express();
 
@@ -20,7 +19,7 @@ app.use((req, res, next) => {
 
 app.use(
 	cors({
-		origin: "http://localhost:5173",
+		origin: process.env.LOCAL_URL,
 		method: ["GET", "POST", "PATCH", "DELETE"],
 	})
 );
@@ -36,7 +35,7 @@ app.use((req, res, next) => {
 //middleware routes
 app.use("/api/data", mealView);
 app.use("/api/fave", favoritedView);
-// app.use("/api/user", userViewGoogle);
+app.use("/api/personalized", personalizedView);
 app.use("/api/user", userView);
 
 mongoose

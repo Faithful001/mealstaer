@@ -9,10 +9,6 @@ const MealSchema = new Schema(
 			required: true,
 			unique: true,
 		},
-		image_url: {
-			type: String,
-			required: false,
-		},
 		ingredients: {
 			type: [String],
 			required: true,

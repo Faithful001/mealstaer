@@ -28,23 +28,23 @@ const signupUser = async (req, res) => {
 	}
 };
 
-const loginWithGoogle = async (req, res) => {
-	try {
-		const { user_name, email } = req.body;
-		const exists = await User.findOne({ email });
-		// console.log(exists.email);
-		if (!exists) {
-			const user = await User.create({ user_name, email });
-			const token = createToken(user._id);
-			res.status(200).json({ user, token });
-		} else {
-			const user = await User.findOne({ email });
-			const token = createToken(user._id);
-			res.status(200).json({ user, token });
-		}
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-};
+// const loginWithGoogle = async (req, res) => {
+// 	try {
+// 		const { user_name, email } = req.body;
+// 		const exists = await User.findOne({ email });
+// 		// console.log(exists.email);
+// 		if (!exists) {
+// 			const user = await User.create({ user_name, email });
+// 			const token = createToken(user._id);
+// 			res.status(200).json({ user, token });
+// 		} else {
+// 			const user = await User.findOne({ email });
+// 			const token = createToken(user._id);
+// 			res.status(200).json({ user, token });
+// 		}
+// 	} catch (error) {
+// 		res.status(500).json({ error: error.message });
+// 	}
+// };
 
-module.exports = { loginUser, signupUser, loginWithGoogle };
+module.exports = { loginUser, signupUser };

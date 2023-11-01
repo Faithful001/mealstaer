@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express"; // Import Request, Response, and NextFunction types
 const User = require("../models/userModel");
 
-const requireAuth = async (req, res, next) => {
+const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
 	const { authorization } = req.headers;
 
 	if (!authorization) {
@@ -10,9 +11,8 @@ const requireAuth = async (req, res, next) => {
 	const token = authorization.split(" ")[1];
 
 	try {
-		const _id = jwt.verify(token, process.env.JWT_SEC);
+		const { _id } = jwt.verify(token, process.env.JWT_SEC);
 		req.user = await User.findOne({ _id }).select("_id");
-		// req.user_google = await UserGoog({ _id }).select("_id");
 		next();
 	} catch (error) {
 		console.log(error);
@@ -20,4 +20,4 @@ const requireAuth = async (req, res, next) => {
 	}
 };
 
-module.exports = requireAuth;
+export default requireAuth;

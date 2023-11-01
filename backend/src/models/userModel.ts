@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Document } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 
@@ -75,25 +76,15 @@ UserSchema.statics.login = async function (email, password) {
 
 	const user = await this.findOne({ email });
 	if (user) {
-		if (!user.password) {
-			// user.user_name = user_name;
-			// user.email = email;
-			const salt = await bcrypt.genSalt(10);
-			const hash = await bcrypt.hash(password, salt);
-
-			user.password = hash;
-			await user.save();
-		} else if (user.password) {
-			const match = await bcrypt.compare(password, user.password);
-			if (!match) {
-				throw new Error("Incorrect password");
-			}
+		const match = await bcrypt.compare(password, user.password);
+		if (!match) {
+			throw new Error("Incorrect password");
+		} else {
+			return user;
 		}
 	} else {
 		throw new Error("Incorrect email");
 	}
-
-	return user;
 };
 
 const model = mongoose.model("User", UserSchema, "mealUsers");

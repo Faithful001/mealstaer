@@ -1,11 +1,12 @@
 import express from "express";
 import passport from "passport";
 const {
-	addToFavorites,
-	getFavorites,
-	getFavorite,
-	deleteFavorite,
-} = require("../controllers/favoritedController");
+	getAllPersonalized,
+	getPersonalized,
+	createPersonalized,
+	updatePersonalized,
+	deletePersonlized,
+} = require("../controllers/personalizedController");
 
 const requireAuth = require("../middlewares/requireAuth");
 
@@ -13,21 +14,30 @@ const router = express.Router();
 
 router.use(requireAuth);
 
-router.post(
+router.get(
 	"/",
 	passport.authenticate("jwt", { session: false }),
-	addToFavorites
+	getAllPersonalized
 );
-router.get("/", passport.authenticate("jwt", { session: false }), getFavorites);
 router.get(
 	"/:id",
 	passport.authenticate("jwt", { session: false }),
-	getFavorite
+	getPersonalized
+);
+router.post(
+	"/",
+	passport.authenticate("jwt", { session: false }),
+	createPersonalized
+);
+router.patch(
+	"/:id",
+	passport.authenticate("jwt", { session: false }),
+	updatePersonalized
 );
 router.delete(
 	"/:id",
 	passport.authenticate("jwt", { session: false }),
-	deleteFavorite
+	deletePersonlized
 );
 
 module.exports = router;

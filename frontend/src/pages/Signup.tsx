@@ -7,8 +7,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const Signup = () => {
 	// const [user, setUser] = useState<any>(null);
+	const [user_name, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<any>("");
@@ -38,12 +39,12 @@ const Login = () => {
 	}
 	// getUser();
 
-	const body = { email, password };
-	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+	const body = { user_name, email, password };
+	const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
 			const response = await axios.post(
-				"http://localhost:4000/api/auth/login",
+				"http://localhost:4000/api/auth/signup",
 				body,
 				{ withCredentials: true }
 			);
@@ -71,8 +72,24 @@ const Login = () => {
 				{/* login form */}
 				<form
 					className="flex max-w-md flex-col gap-4 min-w-[200px]"
-					onSubmit={handleLogin}
+					onSubmit={handleSignup}
 				>
+					<div>
+						<div className="mb-2 block">
+							<Label
+								className="text-white"
+								htmlFor="email1"
+								value="Your name"
+							/>
+						</div>
+						<TextInput
+							id="user_name1"
+							placeholder="John Doe"
+							required
+							type="text"
+							onChange={(e) => setUsername(e.target.value)}
+						/>
+					</div>
 					<div>
 						<div className="mb-2 block">
 							<Label
@@ -83,7 +100,7 @@ const Login = () => {
 						</div>
 						<TextInput
 							id="email1"
-							placeholder="example@gmail.com"
+							placeholder="johndoe@gmail.com"
 							required
 							type="email"
 							onChange={(e) => setEmail(e.target.value)}
@@ -114,13 +131,13 @@ const Login = () => {
 						className="p-2 rounded-md bg-yellow-400 hover:bg-yellow-500 font-semibold"
 						type="submit"
 					>
-						Login
+						Signup
 					</button>
 				</form>
 				<span className="text-sm mt-2">
-					Don't have an account?{" "}
-					<Link className="underline" to={"/signup"}>
-						Signup
+					Have an account?{" "}
+					<Link className="underline" to={"/login"}>
+						Login
 					</Link>
 				</span>
 
@@ -144,4 +161,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default Signup;

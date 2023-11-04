@@ -1,49 +1,43 @@
 import express from "express";
 import passport from "passport";
 const { loginUser, signupUser } = require("../controllers/userController");
-import jwt from "jsonwebtoken";
-const User = require("../models");
 
 const router = express.Router();
 
-// interface User {
-// 	_id: string;
-// 	username: string;
-// 	token: string;
-// }
-
 const CLIENT_URL = "http://localhost:5173/";
-
-const createToken = (_id) => {
-	return jwt.sign({ _id }, process.env.JWT_SEC, { expiresIn: "2d" });
-};
-router.get("/login/success", (req, res) => {
-	// const tokenValue = createToken(req.user._id);
-	// const user = User
-	if (req.user) {
+router.get("/login/success", async (req, res) => {
+	const user = req.user;
+	// console.log("User from success route is: " + user);
+	if (user) {
 		res.status(200).json({
-			success: true,
 			message: "Successful login",
-			user: req.user,
-			// token: tokenValue,
+			user: user,
+			// cookies: req.cookies,
 		});
 		console.log("Google login successful");
+	} else {
+		res.status(400).json({
+			error: "Login unsuccessful",
+		});
 	}
 });
 
 router.get("/login/failed", (req, res) => {
 	res.status(401).json({
-		success: false,
 		message: "Login failed",
 	});
 	console.log("Google login failed");
+});
+
+router.get("/logout", (req, res) => {
+	req.logout;
+	res.redirect(CLIENT_URL);
 });
 
 router.get(
 	"/google",
 	passport.authenticate("google", {
 		scope: ["email", "profile"],
-		session: false,
 	})
 );
 
@@ -52,7 +46,6 @@ router.get(
 	passport.authenticate("google", {
 		successRedirect: CLIENT_URL,
 		failureRedirect: "/login/failed",
-		session: false,
 	})
 );
 

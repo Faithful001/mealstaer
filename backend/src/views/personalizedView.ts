@@ -8,36 +8,16 @@ const {
 	deletePersonlized,
 } = require("../controllers/personalizedController");
 
-const requireAuth = require("../middlewares/requireAuth");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 const router = express.Router();
 
-router.use(requireAuth);
+router.use(isAuthenticated);
 
-router.get(
-	"/",
-	passport.authenticate("jwt", { session: false }),
-	getAllPersonalized
-);
-router.get(
-	"/:id",
-	passport.authenticate("jwt", { session: false }),
-	getPersonalized
-);
-router.post(
-	"/",
-	passport.authenticate("jwt", { session: false }),
-	createPersonalized
-);
-router.patch(
-	"/:id",
-	passport.authenticate("jwt", { session: false }),
-	updatePersonalized
-);
-router.delete(
-	"/:id",
-	passport.authenticate("jwt", { session: false }),
-	deletePersonlized
-);
+router.get("/", getAllPersonalized);
+router.get("/:id", getPersonalized);
+router.post("/", createPersonalized);
+router.patch("/:id", updatePersonalized);
+router.delete("/:id", deletePersonlized);
 
 module.exports = router;

@@ -1,18 +1,18 @@
 import { useFavorite } from "../contexts/FavoriteContext";
 
 const Favorited = () => {
-	const { favorited } = useFavorite();
+	const { favorites } = useFavorite();
 
-	console.log(favorited);
+	console.log(favorites);
 
-	const favoritedArray = favorited ? Array.from(favorited) : [];
+	const favoritedArray = favorites ? Array.from(favorites) : [];
 	console.log(favoritedArray);
 
 	return (
 		<div className="favorited p-7">
 			<div className="section">
 				<div>
-					{favorited && favorited?.size < 1 ? (
+					{favorites && favorites?.length < 1 ? (
 						<div className="text-center font-bold text-2xl">
 							You don't have any favorite meal yet chef
 						</div>

@@ -5,30 +5,11 @@ import bcrypt from "bcrypt";
 
 const Schema = mongoose.Schema;
 
-// const RecipeSchema = new Schema({
-// 	name: {
-// 		type: String,
-// 		required: true,
-// 		unique: true,
-// 	},
-// 	image_url: {
-// 		type: String,
-// 		required: false,
-// 	},
-// 	ingredients: {
-// 		type: [String],
-// 		required: true,
-// 	},
-// 	steps: {
-// 		type: [String],
-// 		required: true,
-// 	},
-// });
-
 const UserSchema = new Schema(
 	{
 		user_name: {
 			type: String,
+			unique: false,
 		},
 		email: {
 			type: String,
@@ -38,6 +19,7 @@ const UserSchema = new Schema(
 		password: {
 			type: String,
 			required: false,
+			unique: false,
 		},
 	},
 	{ timestamps: true }
@@ -76,6 +58,9 @@ UserSchema.statics.login = async function (email, password) {
 
 	const user = await this.findOne({ email });
 	if (user) {
+		if (user.password == null) {
+			throw new Error("Sign in with google like you did in the past");
+		}
 		const match = await bcrypt.compare(password, user.password);
 		if (!match) {
 			throw new Error("Incorrect password");

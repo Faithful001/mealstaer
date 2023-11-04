@@ -21,6 +21,10 @@ const FavoritedSchema = new Schema(
 			type: String,
 			required: true,
 		},
+		// favorited: {
+		// 	type: Boolean,
+		// 	required: true,
+		// },
 	},
 	{ timestamps: true }
 );

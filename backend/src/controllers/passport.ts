@@ -1,21 +1,27 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-import jwt from "jsonwebtoken";
+// import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 const User = require("../models/userModel");
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const createToken = (_id) => {
-	return jwt.sign({ _id }, process.env.JWT_SEC, { expiresIn: "2d" });
-};
+// interface User {
+// 	_id: string;
+// 	user_name: string;
+// 	email: string;
+// 	passowrd;
+// }
 
-// JWT configuration
-// const jwtOptions = {
-// 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-// 	secretOrKey: process.env.JWT_SEC,
-// };
+passport.serializeUser((user: any, done) => {
+	done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+	User.findById(id).then((user) => {
+		done(null, user);
+	});
+});
 
 passport.use(
 	new GoogleStrategy(
@@ -25,13 +31,11 @@ passport.use(
 			callbackURL: "http://localhost:4000/api/auth/google/callback",
 		},
 		async (accessToken, refreshToken, profile, done) => {
-			console.log(profile);
+			// console.log(profile);
 			try {
 				const exists = await User.findOne({ email: profile?.emails[0]?.value });
 				if (exists) {
-					// Generate a JWT token
-					const token = createToken(exists._id);
-					done(null, { user: exists, token });
+					done(null, exists);
 				} else {
 					const user = new User({
 						user_name: profile.displayName,
@@ -41,10 +45,7 @@ passport.use(
 
 					// Save the user to your database
 					await user.save();
-					// Generate a JWT token
-					const token = createToken(user._id);
-
-					done(null, { user, token });
+					done(null, user);
 				}
 			} catch (error) {
 				done(error, null);
@@ -53,11 +54,14 @@ passport.use(
 	)
 );
 
-// const user = await User.findById()
+// const opts = {
+// 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+// 	secretOrKey: process.env.JWT_SEC,
+// };
 
 // passport.use(
-// 	new JwtStrategy(jwtOptions, (token, done) => {
-// 		User.findById(user._id, (err, user) => {
+// 	new JwtStrategy(opts, function (jwt_payload, done) {
+// 		User.findOne({ id: jwt_payload.sub }, function (err, user) {
 // 			if (err) {
 // 				return done(err, false);
 // 			}
@@ -65,28 +69,8 @@ passport.use(
 // 				return done(null, user);
 // 			} else {
 // 				return done(null, false);
+// 				// or you could create a new account
 // 			}
 // 		});
 // 	})
 // );
-
-var opts = {
-	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-	secretOrKey: process.env.JWT_SEC,
-};
-
-passport.use(
-	new JwtStrategy(opts, function (jwt_payload, done) {
-		User.findOne({ id: jwt_payload.sub }, function (err, user) {
-			if (err) {
-				return done(err, false);
-			}
-			if (user) {
-				return done(null, user);
-			} else {
-				return done(null, false);
-				// or you could create a new account
-			}
-		});
-	})
-);

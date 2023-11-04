@@ -7,27 +7,15 @@ const {
 	deleteFavorite,
 } = require("../controllers/favoritedController");
 
-const requireAuth = require("../middlewares/requireAuth");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 const router = express.Router();
 
-router.use(requireAuth);
+router.use(isAuthenticated);
 
-router.post(
-	"/",
-	passport.authenticate("jwt", { session: false }),
-	addToFavorites
-);
-router.get("/", passport.authenticate("jwt", { session: false }), getFavorites);
-router.get(
-	"/:id",
-	passport.authenticate("jwt", { session: false }),
-	getFavorite
-);
-router.delete(
-	"/:id",
-	passport.authenticate("jwt", { session: false }),
-	deleteFavorite
-);
+router.post("/", addToFavorites);
+router.get("/", getFavorites);
+router.get("/:id", getFavorite);
+router.delete("/:id", deleteFavorite);
 
 module.exports = router;

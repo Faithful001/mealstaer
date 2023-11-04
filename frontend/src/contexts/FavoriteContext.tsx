@@ -9,10 +9,10 @@ import {
 } from "react";
 
 export interface FavoriteContextType {
-	favorited: Set<MealsType>;
-	setFavorited: Dispatch<SetStateAction<Set<MealsType>>>;
-	saved: Set<MealsType>;
-	setSaved: Dispatch<SetStateAction<Set<MealsType>>>;
+	favorites: Array<MealsType>;
+	setFavorites: Dispatch<SetStateAction<Array<MealsType>>> | undefined;
+	saves: Array<MealsType>;
+	setSaves: Dispatch<SetStateAction<Array<MealsType>>> | undefined;
 }
 
 export const FavoriteContext = createContext<Partial<FavoriteContextType>>({});
@@ -22,12 +22,12 @@ export const FavoriteContextProvider = ({
 }: {
 	children: ReactNode;
 }) => {
-	const [favorited, setFavorited] = useState<Set<MealsType>>(new Set());
-	const [saved, setSaved] = useState<Set<MealsType>>(new Set());
+	const [favorites, setFavorites] = useState<Array<MealsType>>([]);
+	const [saves, setSaves] = useState<Array<MealsType>>([]);
 
 	return (
 		<FavoriteContext.Provider
-			value={{ favorited, setFavorited, saved, setSaved }}
+			value={{ favorites, setFavorites, saves, setSaves }}
 		>
 			{children}
 		</FavoriteContext.Provider>

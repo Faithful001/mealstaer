@@ -1,14 +1,16 @@
 const Meal = require("../models/mealModel");
 const mongoose = require("mongoose");
-// const { Request, Response } = require("express")
 
 const getMeals = async (req, res) => {
 	try {
-		const user_id = req.user._id;
+		const user = req.session.user;
+		const userr = req.user;
+		const user_id = user ? user._id : userr._id;
+		// console.log("The user is: " + user_id);
 		const mealData = await Meal.find({ user_id }).sort({ createdAt: -1 });
 		res.status(200).json(mealData);
 	} catch (error) {
-		res.status(500).json({ error: "Something went wrong" + error });
+		res.status(500).json({ error: "Something went wrong " + error });
 	}
 };
 
@@ -32,18 +34,21 @@ const getMeal = async (req, res) => {
 //createMeal
 const createMeal = async (req, res) => {
 	try {
-		const user_id = req.user._id;
+		const user = req.session.user;
+		const userr = req.user;
+		const user_id = user ? user._id : userr._id;
+		// console.log("The user is: " + user_id);
 		const { name, ingredients, steps } = req.body;
+		const exists = await Meal.findOne({ name });
+		if (exists) {
+			throw new Error(`${name} already exists`);
+		}
 		const mealData = await Meal.create({
 			name,
 			ingredients,
 			steps,
 			user_id,
 		});
-		const exists = await Meal.findOne({ name });
-		if (exists) {
-			throw new Error(`${name} already exists`);
-		}
 		res.status(200).json(mealData);
 	} catch (error) {
 		res.status(500).json({ error: "Something went wrong " + error });

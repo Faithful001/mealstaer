@@ -3,13 +3,22 @@ import mongoose from "mongoose";
 
 const addToFavorites = async (req, res) => {
 	try {
-		const user_id = req.user._id;
-		const { name, ingredients, steps } = req.body;
+		const user = req.session.user;
+		const userr = req.user;
+		const user_id = user ? user._id : userr._id;
+		// console.log("The user is: " + user_id);
+		const { name, ingredients, steps, favorited } = req.body;
 		const exists = await Favorited.findOne({ name });
 		if (exists) {
-			res.status(400).json({ error: "Meal already exists" });
+			return res.status(400).json({ error: "Meal already exists" });
 		}
-		const favorite = new Favorited({ name, ingredients, steps, user_id });
+		const favorite = new Favorited({
+			name,
+			ingredients,
+			steps,
+			user_id,
+			favorited,
+		});
 		const mealData = await favorite.save();
 		res.status(200).json(mealData);
 	} catch (error) {
@@ -19,15 +28,16 @@ const addToFavorites = async (req, res) => {
 
 const getFavorites = async (req, res) => {
 	try {
-		const user_id = req.user._id;
+		const user = req.session.user;
+		const userr = req.user;
+		const user_id = user ? user._id : userr._id;
+		// console.log("The user is: " + user_id);
 		const mealData = await Favorited.find({ user_id }).sort({ createdAt: -1 });
 		res.status(200).json(mealData);
 	} catch (error) {
-		req.status(500).json({ error: "An error occured " + error });
+		res.status(500).json({ error: "An error occurred " + error });
 	}
 };
-
-// get favorites by id
 
 const getFavorite = async (req, res) => {
 	try {
@@ -38,38 +48,24 @@ const getFavorite = async (req, res) => {
 		const mealData = await Favorited.findById(id);
 		res.status(200).json(mealData);
 	} catch (error) {
-		req.status(500).json({ error: "An error occured " + error });
+		res.status(500).json({ error: "An error occurred " + error });
 	}
 };
 
-//delete from db
 const deleteFavorite = async (req, res) => {
 	try {
 		const { id } = req.params;
 		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ error: "No such meal in favorite" });
+			res.status(400).json({ error: "Invalid id" });
 		}
-		const mealData = await Favorited.findOneAndDelete({ _id: id });
-		res.status(200).json(mealData);
+		const favoritedData = await Favorited.findOneAndDelete({ _id: id });
+		if (!favoritedData) {
+			return res.status(404).json({ error: "No such meal" });
+		}
+		res.status(200).json(favoritedData);
 	} catch (error) {
-		req.status(500).json({ error: "Could not remove from favorites " + error });
+		res.status(500).json({ error: "Something went wrong " + error });
 	}
 };
 
 module.exports = { addToFavorites, getFavorites, getFavorite, deleteFavorite };
-
-// const addToFavorites = async (req, res) => {
-// 	try {
-// 		const favorited = new Set();
-// 		const saved = new Set();
-// 		const { favoritedList, savedList } = req.body;
-// 		favorited.add({ favoritedList });
-// 		saved.add({ savedList });
-
-// 		const favorite = new Favorited({ favorited, saved });
-// 		const mealData = await favorite.save();
-// 		res.status(200).json(mealData);
-// 	} catch (error) {
-// 		res.status(500).json({ error: "Something went wrong " + error });
-// 	}
-// };

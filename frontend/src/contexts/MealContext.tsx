@@ -32,6 +32,7 @@ export type MealsType = {
 	image_url: string;
 	ingredients: string[];
 	steps: string[];
+	user_id: string;
 };
 
 export const MealContextProvider = ({ children }: MealContextProviderType) => {

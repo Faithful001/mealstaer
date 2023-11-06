@@ -21,25 +21,35 @@ export class IndexedDB {
 		name: string,
 		ingredients: string[],
 		steps: string[],
-		user_id: string
+		user_id: string,
+		original_meal_id: string
 	) {
 		try {
-			// Add the new friend!
 			const id = await db.favorites.add({
 				_id,
 				name,
 				ingredients,
 				steps,
 				user_id,
+				original_meal_id,
 			});
 
 			console.log(id);
 			return id;
-		} catch (error) {
+		} catch (error: any) {
 			console.log(error);
-			return error;
+			throw new Error(error?.message);
+		}
+	}
+
+	async getFromDB() {
+		try {
+			const fave = await db.favorites.toArray();
+			const fieldValues = fave.map((item) => item.original_meal_id);
+			return fieldValues;
+		} catch (error: any) {
+			console.log(error);
+			throw new Error(error?.message);
 		}
 	}
 }
-
-// const DB = new IndexedDB.addToDB

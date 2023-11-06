@@ -7,17 +7,18 @@ const addToFavorites = async (req, res) => {
 		const userr = req.user;
 		const user_id = user ? user._id : userr._id;
 		// console.log("The user is: " + user_id);
-		const { name, ingredients, steps, favorited } = req.body;
+		const { name, ingredients, steps, original_meal_id } = req.body;
 		const exists = await Favorited.findOne({ name });
 		if (exists) {
 			return res.status(400).json({ error: "Meal already exists" });
 		}
+		// const original_meal_id = req.session.meal._id;
 		const favorite = new Favorited({
 			name,
 			ingredients,
 			steps,
 			user_id,
-			favorited,
+			original_meal_id,
 		});
 		const mealData = await favorite.save();
 		res.status(200).json(mealData);

@@ -1,4 +1,4 @@
-import { MealsType } from "./MealContext";
+// import { MealsType } from "./MealContext";
 import {
 	ReactNode,
 	Dispatch,
@@ -9,10 +9,10 @@ import {
 } from "react";
 
 export interface FavoriteContextType {
-	favorites: Array<MealsType>;
-	setFavorites: Dispatch<SetStateAction<Array<MealsType>>> | undefined;
-	saves: Array<MealsType>;
-	setSaves: Dispatch<SetStateAction<Array<MealsType>>> | undefined;
+	favorites: any;
+	setFavorites: Dispatch<SetStateAction<any>> | undefined;
+	saves: any;
+	setSaves: Dispatch<SetStateAction<any>> | undefined;
 }
 
 export const FavoriteContext = createContext<Partial<FavoriteContextType>>({});
@@ -22,8 +22,8 @@ export const FavoriteContextProvider = ({
 }: {
 	children: ReactNode;
 }) => {
-	const [favorites, setFavorites] = useState<Array<MealsType>>([]);
-	const [saves, setSaves] = useState<Array<MealsType>>([]);
+	const [favorites, setFavorites] = useState<any>([]);
+	const [saves, setSaves] = useState<any>([]);
 
 	return (
 		<FavoriteContext.Provider

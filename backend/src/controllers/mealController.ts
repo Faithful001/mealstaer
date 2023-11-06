@@ -49,6 +49,7 @@ const createMeal = async (req, res) => {
 			steps,
 			user_id,
 		});
+		// req.session.meal = mealData;
 		res.status(200).json(mealData);
 	} catch (error) {
 		res.status(500).json({ error: "Something went wrong " + error });

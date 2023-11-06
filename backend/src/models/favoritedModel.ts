@@ -21,10 +21,10 @@ const FavoritedSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		// favorited: {
-		// 	type: Boolean,
-		// 	required: true,
-		// },
+		original_meal_id: {
+			type: String,
+			required: true,
+		},
 	},
 	{ timestamps: true }
 );

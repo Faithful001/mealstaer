@@ -5,7 +5,6 @@ import cors from "cors";
 import morgan from "morgan";
 import passport from "passport";
 import session from "express-session";
-const MongoDBSession = require("connect-mongodb-session");
 import cookieParser from "cookie-parser";
 const port = process.env.PORT || 8080;
 const mealView = require("./views/mealView");

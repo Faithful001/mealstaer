@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useQuery, useMutation, QueryClient } from "react-query";
 import axios from "axios";
 import { useMeal } from "../contexts/MealContext";
 import wave from "../assets/wave1.png";
@@ -9,12 +9,12 @@ import favoritee from "../assets/favorite.svg";
 import favorite_black from "../assets/favorite_black.svg";
 // import turned_in from "../assets/turned_in.svg";
 // import turned_in_black from "../assets/turned_in_black.svg";
-import { IndexedDB } from "../utils/methods/IndexedDB";
-import { useLiveQuery } from "dexie-react-hooks";
+// import { IndexedDB } from "../utils/methods/IndexedDB";
+// import { useLiveQuery } from "dexie-react-hooks";
 import { useFavorite } from "../contexts/FavoriteContext";
-// import { useFavorite } from "../contexts/FavoriteContext";
 
 const Home = () => {
+	const queryClient = new QueryClient();
 	const [user_name, setUsername] = useState("");
 	const [meals, setMeals] = useState<MealsType[]>([]);
 	const [fetchError, setFetchError] = useState<any>(null);
@@ -27,7 +27,7 @@ const Home = () => {
 
 	const { favorites, setFavorites = () => {} } = useFavorite();
 
-	const [faveId, setFaveId] = useState<string>("");
+	// const [faveId, setFaveId] = useState<string>("");
 	const [mealId, setMealId] = useState<string[]>([]);
 	//forYou and byYou states
 	const [forYou, setForYou] = useState(true);
@@ -35,7 +35,7 @@ const Home = () => {
 	//all states end
 
 	//funtions & methods start
-	//onPageLoad data
+	//onPageLoad data (render the meal data on page load)
 	async function fetchData() {
 		try {
 			const response = await axios.get("http://localhost:4000/api/data", {
@@ -66,6 +66,7 @@ const Home = () => {
 		}
 	}, [data]);
 
+	//check if search is an array of length > 0
 	useEffect(() => {
 		if (Array.isArray(searchValue) && searchValue.length > 0) {
 			setMeals([]);
@@ -74,6 +75,7 @@ const Home = () => {
 
 	//addToFavorites function
 	async function addToFavorites(meal: MealsType) {
+		localStorage.setItem("meal_id", meal._id);
 		try {
 			const body = {
 				name: meal.name,
@@ -91,39 +93,59 @@ const Home = () => {
 					},
 				}
 			);
-			// const faveId = JSON.stringify(response.data._id);
-
-			//add to indexed db function (client side data storage)
-			const indexedDBInstance = new IndexedDB();
-			indexedDBInstance
-				.addToDB(
-					response.data._id,
-					response.data.name,
-					response.data.ingredients,
-					response.data.steps,
-					response.data.user_id,
-					meal._id
-				)
-				.then((id) => {
-					console.log("Added to the database with ID:", id);
-				})
-				.catch((error) => {
-					console.error("Error adding to the database:", error);
-				});
-			setFavorites(indexedDBInstance.addToDB);
-			setFaveId(meal._id);
+			setFavorites(response.data);
 			console.log(meal._id);
 		} catch (error) {
 			console.log("Problem adding to fave");
 		}
 	}
+	// addToFavorite function with the useMutation hook
+	const addFavoriteMutation = useMutation(addToFavorites, {
+		onMutate: async (meal) => {
+			// Store the previous data in a variable
+			const prevData = queryClient.getQueryData("fave");
+
+			// Optimistically update the cache to reflect addition
+			queryClient.setQueryData("fave", (prevData: any) => {
+				if (prevData) {
+					return [...prevData, meal]; // Assuming 'meal' is the new favorite item
+				}
+				return prevData;
+			});
+
+			// Return the previous data for potential rollback
+			return { prevData };
+		},
+		onError: (error, variables, context: any) => {
+			// Rollback the cache to its previous state if the mutation fails
+			if (context.prevData) {
+				queryClient.setQueryData("fave", context.prevData);
+			}
+		},
+		onSettled: () => {
+			// Refetch the favorites data after the mutation is complete
+			queryClient.invalidateQueries("fave");
+		},
+	});
+
+	const meal_id = localStorage.getItem("meal_id");
 
 	// removeFromFavorite function
 	async function removeFromFavorites(meal: MealsType) {
+		localStorage.removeItem("meal_id");
 		try {
-			// const body = { _id: meal._id };
+			const getReqRes = await axios.get("http://localhost:4000/api/fave", {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
+			// const meal = getReqRes.data.map((item: any)=> item._id)
+			const faveMealId = getReqRes.data.find(
+				(item: any) => item.original_meal_id == meal._id
+			);
 			const response = await axios.delete(
-				`http://localhost:4000/api/fave/${meal._id}`,
+				`http://localhost:4000/api/fave/${faveMealId._id}`,
 				{
 					withCredentials: true,
 					headers: {
@@ -135,7 +157,75 @@ const Home = () => {
 		} catch (error) {
 			console.log(error);
 		}
-		// localStorage.removeItem(`fave ${meal._id}`);
+	}
+	//removeFromFavorite function with useMutation
+	const removeFavoriteMutation = useMutation(removeFromFavorites, {
+		onMutate: async (meal) => {
+			// Store the previous data in a variable
+			const prevData = queryClient.getQueryData("fave");
+
+			// Optimistically update the cache to reflect removal
+			queryClient.setQueryData("fave", (prevData: any) => {
+				if (prevData) {
+					return prevData.filter(
+						(item: any) => item.original_meal_id !== meal._id
+					);
+				}
+				return prevData;
+			});
+
+			// Return the previous data for potential rollback
+			return { prevData };
+		},
+		onError: (error, variables, context: any) => {
+			// Rollback the cache to its previous state if the mutation fails
+			if (context.prevData) {
+				queryClient.setQueryData("fave", context.prevData);
+			}
+		},
+		onSettled: () => {
+			// Refetch the favorites data after the mutation is complete
+			queryClient.invalidateQueries("fave");
+		},
+	});
+
+	// const {error: removeError, data: removeData} = useQuery("remove from favorite", removeFromFavorites, )
+
+	//getting favorite meals from the database
+	async function getFavoritesFromDB() {
+		try {
+			const response = await axios.get("http://localhost:4000/api/fave/", {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
+			const originalMealIds = response.data.map(
+				(item: any) => item.original_meal_id
+			);
+			console.log(originalMealIds);
+			return originalMealIds;
+		} catch (error: any) {
+			console.log(error);
+		}
+	}
+	const { error: queryError, data: queryData } = useQuery(
+		"fave",
+		getFavoritesFromDB,
+		{
+			enabled: Boolean(favorites),
+		}
+	);
+
+	useEffect(() => {
+		if (queryData) {
+			setMealId(queryData);
+		}
+	}, [queryData]);
+
+	//find the original_meal_id from the mealId state array
+	function compareId(meal_id: any) {
+		return mealId.find((id: any) => id == meal_id);
 	}
 
 	//addToSaved function
@@ -163,33 +253,7 @@ const Home = () => {
 	// 	});
 	// }
 
-	useEffect(() => {
-		async function getFavoritesFromDB() {
-			try {
-				const response = await axios.get("http://localhost:4000/api/fave/", {
-					withCredentials: true,
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-					},
-				});
-				console.log(response.data.original_meal_id);
-				setMealId(response.data.original_meal_id);
-			} catch (error: any) {
-				console.log(error);
-			}
-		}
-		getFavoritesFromDB();
-	});
-
-	const indexedDBInstance = new IndexedDB();
-	const faveMeals = useLiveQuery(() => indexedDBInstance.getFromDB(), []);
-
-	function compareId(mealId: any) {
-		const id = faveMeals?.find((id) => id == mealId);
-		return id;
-	}
-	console.log(faveMeals);
-
+	//getting the firstname of every user
 	useEffect(() => {
 		const user = localStorage.getItem("user");
 		if (user) {
@@ -251,19 +315,19 @@ const Home = () => {
 								</Link>
 								<div className="-mb-2 flex">
 									{/* Check if meal is favorited and render the appropriate button */}
-									{compareId(meal._id) == meal._id ? (
+									{compareId(meal._id) == meal._id || meal_id == meal._id ? (
 										<img
 											src={favorite_black}
 											alt=""
 											className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
-											onClick={() => removeFromFavorites(meal)}
+											onClick={() => removeFavoriteMutation.mutate(meal)}
 										/>
 									) : (
 										<img
 											src={favoritee}
 											alt=""
 											className="text-white hover:cursor-pointer p-2 rounded-3xl hover:bg-[#e4e4e42c]"
-											onClick={() => addToFavorites(meal)}
+											onClick={() => addFavoriteMutation.mutate(meal)}
 										/>
 									)}
 									{/* {!saved ? (

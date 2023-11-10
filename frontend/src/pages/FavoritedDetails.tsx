@@ -5,7 +5,7 @@ import { MealsType } from "../contexts/MealContext";
 import axios from "axios";
 import { useQuery } from "react-query";
 
-const MealDetails = () => {
+const FavoriteDetails = () => {
 	const navigate = useNavigate();
 	const [meal, setMeal] = useState<MealsType[]>([]);
 	// const { value } = useMeal();
@@ -15,7 +15,7 @@ const MealDetails = () => {
 
 	async function fetchData() {
 		try {
-			const response = await axios.get(`http://localhost:4000/api/data/${id}`, {
+			const response = await axios.get(`http://localhost:4000/api/fave/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -57,7 +57,7 @@ const MealDetails = () => {
 
 	function handleBack(e: React.FormEvent<HTMLSpanElement>) {
 		e.preventDefault();
-		navigate("/");
+		navigate("/user/favorite");
 	}
 
 	return (
@@ -98,4 +98,4 @@ const MealDetails = () => {
 	);
 };
 
-export default MealDetails;
+export default FavoriteDetails;

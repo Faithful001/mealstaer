@@ -24,6 +24,21 @@ const UserSchema = new Schema(
 	{ timestamps: true }
 );
 
+function isStrongPassword(password) {
+	if (password.length < 8) {
+		return false;
+	}
+	if (
+		!/[A-Z]/.test(password) ||
+		!/[a-z]/.test(password) ||
+		!/[0-9]/.test(password) ||
+		!/[¬`!"£$%^&*()-_=+/|[]{};'@\\#~?><]/.test(password)
+	) {
+		return false;
+	}
+	return true;
+}
+
 UserSchema.statics.signup = async function (user_name, email, password) {
 	if (!user_name || !email || !password) {
 		throw new Error("All fields are required");
@@ -33,7 +48,7 @@ UserSchema.statics.signup = async function (user_name, email, password) {
 		throw new Error("Email is not valid");
 	}
 
-	if (!validator.isStrongPassword(password)) {
+	if (!isStrongPassword(password)) {
 		throw new Error("Password is not strong enough");
 	}
 

@@ -40,6 +40,10 @@ const createPersonalized = async (req, res) => {
 		const user_id = user ? user._id : userr._id;
 		// console.log("The user is: " + user_id);
 		const { name, ingredients, steps } = req.body;
+		const exists = await Personalized.findOne({ name });
+		if (exists) {
+			return res.status(400).json({ error: `${name} already exists` });
+		}
 		const personalizedMeals = new Personalized({
 			name,
 			ingredients,
@@ -47,6 +51,7 @@ const createPersonalized = async (req, res) => {
 			user_id,
 		});
 		await personalizedMeals.save();
+		res.status(200).json(personalizedMeals);
 	} catch (error) {
 		res.status(500).json({ error: "An error occured " + error });
 	}

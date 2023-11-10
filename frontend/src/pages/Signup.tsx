@@ -2,7 +2,7 @@
 
 import { Label, TextInput } from "flowbite-react";
 import google_icon from "../assets/google_icon.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -12,9 +12,11 @@ const Signup = () => {
 	const [user_name, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [pwdRequirements, setPwdRequirements] = useState(false);
+	const [pwdLength, setPwdLength] = useState(false);
+	console.log(pwdLength);
 	const [error, setError] = useState<any>("");
 	const navigate = useNavigate();
-	console.log(email, password);
 
 	const signInWithGoogle = async () => {
 		window.open("http://localhost:4000/api/auth/google", "_self");
@@ -64,6 +66,31 @@ const Signup = () => {
 			}
 		}
 	};
+
+	function handlePassword(e: React.ChangeEvent<HTMLInputElement>) {
+		setPassword(e.target.value);
+	}
+	useEffect(() => {
+		function checkPassword() {
+			let isStrong = true;
+			if (password.length < 8) {
+				setPwdLength(false);
+			} else {
+				setPwdLength(true);
+			}
+			if (
+				!/[A-Z]/.test(password) ||
+				!/[a-z]/.test(password) ||
+				!/[0-9]/.test(password) ||
+				!/[!@#$%^&*]/.test(password)
+			) {
+				isStrong = false;
+			}
+			setPwdRequirements(isStrong);
+		}
+
+		checkPassword();
+	}, [password]);
 
 	return (
 		<div className="login flex flex-col items-center justify-center">
@@ -118,8 +145,23 @@ const Signup = () => {
 							id="password1"
 							required
 							type="password"
-							onChange={(e) => setPassword(e.target.value)}
+							onChange={handlePassword}
 						/>
+						<p
+							className={`text-red-700 text-[12px] leading-4 mt-1 ${
+								password.length > 0 && !pwdRequirements ? "block" : "hidden"
+							}`}
+						>
+							*An uppercase letter, a lowercase letter, <br />a number and a
+							symbol is required
+						</p>
+						<p
+							className={`text-red-700 text-[12px] leading-4 mt-1 ${
+								password.length > 0 && !pwdLength ? "block" : "hidden"
+							}`}
+						>
+							*More than 8 character required
+						</p>
 					</div>
 					{/* <div className="flex items-center gap-2">
 						<Checkbox id="remember" />
@@ -128,8 +170,11 @@ const Signup = () => {
 						</Label>
 					</div> */}
 					<button
-						className="p-2 rounded-md bg-yellow-400 hover:bg-yellow-500 font-semibold"
+						className={`p-2 rounded-md bg-yellow-400 ${
+							!pwdRequirements && !pwdLength ? "" : "hover:bg-yellow-500"
+						} font-semibold`}
 						type="submit"
+						disabled={!pwdRequirements}
 					>
 						Signup
 					</button>

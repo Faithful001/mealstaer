@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, QueryClient } from "react-query";
 import axios from "axios";
 import { useMeal } from "../contexts/MealContext";
@@ -12,8 +12,12 @@ import favorite_black from "../assets/favorite_black.svg";
 // import { IndexedDB } from "../utils/methods/IndexedDB";
 // import { useLiveQuery } from "dexie-react-hooks";
 import { useFavorite } from "../contexts/FavoriteContext";
+import { useToast } from "../contexts/ToastContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
+	const navigate = useNavigate();
 	const queryClient = new QueryClient();
 	const [user_name, setUsername] = useState("");
 	const [meals, setMeals] = useState<MealsType[]>([]);
@@ -26,15 +30,23 @@ const Home = () => {
 	} = useMeal();
 
 	const { favorites, setFavorites = () => {} } = useFavorite();
+	const { toast: otherToast } = useToast();
+	console.log(otherToast);
 
 	// const [faveId, setFaveId] = useState<string>("");
 	const [mealId, setMealId] = useState<string[]>([]);
 	//forYou and byYou states
-	const [forYou, setForYou] = useState(true);
-	const [byYou, setByYou] = useState(false);
+	const [forYou, setForYou] = useState<boolean>(true);
+	const [byYou, setByYou] = useState<boolean>(false);
 	//all states end
 
 	//funtions & methods start
+
+	useEffect(() => {
+		toast(otherToast);
+		setForYou(false);
+		setByYou(true);
+	}, [otherToast]);
 	//onPageLoad data (render the meal data on page load)
 	async function fetchData() {
 		try {
@@ -47,8 +59,12 @@ const Home = () => {
 			console.log(response.data);
 			return response.data;
 		} catch (error: any) {
-			setFetchError(`Something went wrong, ${error.message}`);
-			console.log(`Something went wrong, ${error.message}`);
+			if (error.response.status == 401) {
+				navigate("/login");
+			} else {
+				setFetchError(`Something went wrong, ${error.message}`);
+				console.log(`Something went wrong, ${error.message}`);
+			}
 		}
 	}
 
@@ -95,8 +111,12 @@ const Home = () => {
 			);
 			setFavorites(response.data);
 			console.log(meal._id);
-		} catch (error) {
-			console.log("Problem adding to fave");
+		} catch (error: any) {
+			if (error.response.status == 401) {
+				navigate("/login");
+			} else {
+				console.log("Problem adding to fave");
+			}
 		}
 	}
 	// addToFavorite function with the useMutation hook
@@ -154,8 +174,12 @@ const Home = () => {
 				}
 			);
 			console.log(response.data);
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			if (error.response.status == 401) {
+				navigate("/login");
+			} else {
+				console.log(error);
+			}
 		}
 	}
 	//removeFromFavorite function with useMutation
@@ -206,7 +230,11 @@ const Home = () => {
 			console.log(originalMealIds);
 			return originalMealIds;
 		} catch (error: any) {
-			console.log(error);
+			if (error.response.status == 401) {
+				navigate("/login");
+			} else {
+				console.log(error);
+			}
 		}
 	}
 	const { error: queryError, data: queryData } = useQuery(
@@ -278,6 +306,7 @@ const Home = () => {
 	return (
 		<div className="home">
 			<div className="section p-5">
+				<ToastContainer />
 				<div className="mb-10">
 					<div className="flex items-start">
 						<h1 className="text-2xl font-semibold text-white mb-2 mr-2">

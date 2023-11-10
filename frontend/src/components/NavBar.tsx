@@ -66,15 +66,15 @@ const NavBar = () => {
 					</div>
 					{dropDown && (
 						<div
-							className="bg-white rounded-md p-10 pt-20 pb-20 flex flex-col
+							className="bg-white rounded-md p-10 py-10 flex flex-col
 					 absolute right-5 top-[72px] z-10"
 						>
-							<Link to={"/user/saved"}>
+							<Link to={"/add-new-meal"}>
 								<div className="flex items-center mb-3 cursor-pointer">
 									<span className="material-symbols-outlined text-black">
-										bookmarks
+										add_box
 									</span>
-									<p className="text-black ml-2">Saved for Later</p>
+									<p className="text-black ml-2">Add Your Meal</p>
 								</div>
 							</Link>
 

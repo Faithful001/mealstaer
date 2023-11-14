@@ -18,13 +18,16 @@ require("./controllers/passport");
 const app = express();
 
 //middleware
+const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
+
 app.use(
 	session({
 		secret: process.env.COOKIE_KEY,
 		resave: false,
 		saveUninitialized: true,
 		cookie: {
-			maxAge: 2 * 24 * 60 * 60 * 1000,
+			maxAge: twoDaysInMilliseconds,
+			expires: new Date(Date.now() + twoDaysInMilliseconds),
 		},
 	})
 );

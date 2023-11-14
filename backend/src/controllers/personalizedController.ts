@@ -7,7 +7,7 @@ const getAllPersonalized = async (req, res) => {
 		const userr = req.user;
 		const user_id = user ? user._id : userr._id;
 		// console.log("The user is: " + user_id);
-		const personalizedMeals = Personalized.find({ user_id }).sort({
+		const personalizedMeals = await Personalized.find({ user_id }).sort({
 			createdAt: -1,
 		});
 		res.status(200).json(personalizedMeals);
@@ -29,7 +29,7 @@ const getPersonalized = async (req, res) => {
 			res.status(200).json(personalizedMeal);
 		}
 	} catch (error) {
-		res.status(200).json({ error: "An error occcured " + error });
+		res.status(500).json({ error: "An error occcured " + error });
 	}
 };
 

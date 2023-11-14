@@ -1,3 +1,4 @@
+import { error } from "console";
 import express from "express";
 import passport from "passport";
 const { loginUser, signupUser } = require("../controllers/userController");
@@ -30,8 +31,21 @@ router.get("/login/failed", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-	req.logout;
-	res.redirect(CLIENT_URL);
+	req.session.destroy((error) => {
+		if (error) {
+			console.error("Error destroying session:", error);
+			res.status(500).send("Internal Server Error");
+		} else {
+			req.logout((error) => {
+				if (error) {
+					console.error("Error during logout:", error);
+					res.status(500).send("Internal Server Error");
+				} else {
+					res.redirect(`${CLIENT_URL}login`);
+				}
+			});
+		}
+	});
 });
 
 router.get(

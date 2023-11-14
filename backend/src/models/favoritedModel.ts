@@ -7,7 +7,6 @@ const FavoritedSchema = new Schema(
 		name: {
 			type: String,
 			required: true,
-			unique: true,
 		},
 		ingredients: {
 			type: [String],

@@ -18,6 +18,8 @@ type ContextDataType = {
 	setSearchValue: Dispatch<SetStateAction<MealsType[]>> | undefined;
 	notSearchValue: ReactNode;
 	setNotSearchValue: Dispatch<SetStateAction<MealsType[]>> | undefined;
+	search: string;
+	setSearch: Dispatch<SetStateAction<string>>;
 };
 
 export const MealContext = createContext<Partial<ContextDataType>>({});
@@ -29,18 +31,18 @@ type MealContextProviderType = {
 export type MealsType = {
 	_id: any;
 	name: string;
-	image_url: string;
 	ingredients: string[];
 	steps: string[];
 	user_id: string;
 };
 
 export const MealContextProvider = ({ children }: MealContextProviderType) => {
-	const [value, setValue] = useState<MealsType[]>([]);
+	const [value, setValue] = useState<MealsType[]>([]); //meal data gotten from the server
 	const [notValue, setNotValue] = useState<any | undefined>("");
-	const [searchValue, setSearchValue] = useState<MealsType[]>([]);
+	const [searchValue, setSearchValue] = useState<MealsType[]>([]); //returned meal data after filtered search
 	const [notSearchValue, setNotSearchValue] = useState<any | undefined>("");
-	console.log(value);
+	const [search, setSearch] = useState<string>(""); //character written in the input
+	console.log(searchValue);
 
 	return (
 		<MealContext.Provider
@@ -53,6 +55,8 @@ export const MealContextProvider = ({ children }: MealContextProviderType) => {
 				setSearchValue,
 				notSearchValue,
 				setNotSearchValue,
+				search,
+				setSearch,
 			}}
 		>
 			{children}

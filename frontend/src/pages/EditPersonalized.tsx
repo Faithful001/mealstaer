@@ -1,13 +1,14 @@
 "use client";
 import { Label } from "flowbite-react";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "../contexts/ToastContext";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 
-const PersonalizedForm = () => {
+const EditPersonalized = () => {
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>("");
 	const [ingredients, setIngredients] = useState<string>("");
@@ -17,18 +18,55 @@ const PersonalizedForm = () => {
 	const [error, setError] = useState<any>("");
 	const { setToast = () => {} } = useToast();
 
-	// console.log(steps);
-	// console.log(ingredientsMessage);
-	// console.log(stepsMessage);
+	let { id } = useParams();
+
+	async function getMealsData() {
+		try {
+			const response = await axios.get(
+				`http://localhost:4000/api/personalized/${id}`,
+				{
+					withCredentials: true,
+					headers: {
+						"Access-Control-Allow-Origin": "*",
+					},
+				}
+			);
+
+			// console.log(response.data);
+			return response.data;
+		} catch (error: any) {
+			if (error?.response?.status === 401) {
+				navigate("/login");
+			} else {
+				console.error("Error fetching meal", error?.response?.data?.error);
+				throw error?.response?.data?.error;
+			}
+		}
+	}
+
+	const {
+		isLoading,
+		error: queryError,
+		data,
+	} = useQuery(["meals", id], getMealsData);
+
+	const ingredient = data?.ingredients.join(", ");
+	const step = data?.steps.join("\n");
+
+	useEffect(() => {
+		if (data) {
+			setName(data?.name.toString());
+			setIngredients(ingredient);
+			setSteps(step);
+		}
+		if (queryError) {
+			setError(queryError);
+		}
+	}, [data, queryError]);
 
 	function formatSteps(steps: string) {
 		const split = steps.split("\n");
 		const formattedSteps = split.map((step) => step.trim());
-		return formattedSteps;
-	}
-	function formatIngredients(ingredients: string) {
-		const split = ingredients.split(",");
-		const formattedSteps = split.map((ingredient) => ingredient.trim());
 		return formattedSteps;
 	}
 
@@ -53,17 +91,16 @@ const PersonalizedForm = () => {
 		}
 
 		const formattedSteps = formatSteps(steps);
-		const formattedIngredients = formatIngredients(ingredients);
 
 		const personalizedMealData = {
 			name,
-			ingredients: formattedIngredients,
+			ingredients,
 			steps: formattedSteps,
 		};
 
 		try {
-			const response = await axios.post(
-				"http://localhost:4000/api/personalized",
+			const response = await axios.patch(
+				`http://localhost:4000/api/personalized/${id}`,
 				personalizedMealData,
 				{
 					withCredentials: true,
@@ -73,15 +110,15 @@ const PersonalizedForm = () => {
 				}
 			);
 
-			console.log("Meal added successfully", response.data);
-			setToast(`${name} added successfully`);
+			console.log("Meal edited successfully", response.data);
+			setToast(`${name} edited successfully`);
 			navigate("/?tab=by-you");
 			return response.data;
 		} catch (error: any) {
 			if (error?.response?.status === 401) {
 				navigate("/login");
 			} else {
-				console.error("Error adding meal", error?.response?.data?.error);
+				console.error("Error editing meal", error?.response?.data?.error);
 				setError(error?.response?.data?.error);
 			}
 		}
@@ -89,22 +126,18 @@ const PersonalizedForm = () => {
 
 	function handleBack(e: React.FormEvent<HTMLSpanElement>) {
 		e.preventDefault();
-		navigate("/");
+		navigate(`/user/personalized/${id}`);
 	}
-
 	return (
-		<div className="personalized-form">
+		<div className="edit-personalized">
 			<div className="section p-10">
-				<ToastContainer />
 				<span
 					className="material-symbols-outlined absolute left-4 top-4 mb-5 p-2 cursor-pointer hover:cursor-pointer rounded-3xl hover:bg-[#e4e4e42c]"
 					onClick={handleBack}
 				>
 					arrow_back
 				</span>
-				<h1 className="text-center font-bold text-2xl pb-5">
-					Add your own meal
-				</h1>
+				<h1 className="text-center font-bold text-2xl pb-5">Edit this meal</h1>
 				{error && <p className="text-red-700 text-sm text-center">{error}</p>}
 				<form
 					onSubmit={handleSubmit}
@@ -119,6 +152,7 @@ const PersonalizedForm = () => {
 							id="name"
 							name="name"
 							type="text"
+							value={name}
 							placeholder="Meal name"
 							required
 							onChange={(e) => setName(e.target.value)}
@@ -134,6 +168,7 @@ const PersonalizedForm = () => {
 						<textarea
 							id="ingredients"
 							name="ingredients"
+							value={ingredients}
 							required
 							rows={4}
 							placeholder="Ingredients"
@@ -159,6 +194,7 @@ const PersonalizedForm = () => {
 						<textarea
 							id="steps"
 							name="steps"
+							value={steps}
 							required
 							rows={4}
 							placeholder="Steps"
@@ -189,4 +225,4 @@ const PersonalizedForm = () => {
 	);
 };
 
-export default PersonalizedForm;
+export default EditPersonalized;

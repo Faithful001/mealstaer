@@ -55,9 +55,9 @@ const Favorited = () => {
 					arrow_back
 				</span>
 				<h1 className="text-center font-bold text-2xl pb-5">
-					Your favorite Meals
+					All your favorite Meals
 				</h1>
-				<div>
+				<div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-white mt-8">
 					{faves && faves?.length < 1 ? (
 						<div className="text-center text-xl">
 							You don't have any favorite meal yet chef
@@ -66,18 +66,18 @@ const Favorited = () => {
 						<p className="text-3xl font-bold mb-5">...Loading</p>
 					) : (
 						faves.map((fave: any) => (
-							<div className="flex items-center justify-center">
-								<div
-									key={fave._id}
-									className="bg-[#424242] rounded-lg p-5 px-20"
-								>
-									<Link to={`/user/favorite/${fave._id}`}>
-										<div className="">
-											<h2 className="text-xl mb-3">{fave.name}</h2>
-										</div>
-									</Link>
-								</div>
+							// <div className="">
+							<div
+								key={fave._id}
+								className="bg-[#424242] rounded-lg p-5 px-20 py-8 flex justify-center items-center"
+							>
+								<Link to={`/user/favorite/${fave._id}`}>
+									<div className="">
+										<h2 className="text-xl mb-3">{fave.name}</h2>
+									</div>
+								</Link>
 							</div>
+							// </div>
 						))
 					)}
 				</div>

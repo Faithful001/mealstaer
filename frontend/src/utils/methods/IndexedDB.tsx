@@ -1,4 +1,5 @@
-import { db } from "./db";
+import { mealdb } from "./db";
+import { personalizeddb } from "./db";
 // import { FavoriteMeals } from "./db";
 
 export class IndexedDB {
@@ -16,22 +17,22 @@ export class IndexedDB {
 	// 	user_id = user_id;
 	// }
 
-	async addToDB(
+	async addToMealDB(
 		_id: string,
 		name: string,
 		ingredients: string[],
 		steps: string[],
-		user_id: string,
-		original_meal_id: string
+		user_id: string
+		// original_meal_id: string
 	) {
 		try {
-			const id = await db.favorites.add({
+			const id = await mealdb.meals.add({
 				_id,
 				name,
 				ingredients,
 				steps,
 				user_id,
-				original_meal_id,
+				// original_meal_id,
 			});
 
 			console.log(id);
@@ -42,10 +43,48 @@ export class IndexedDB {
 		}
 	}
 
-	async getFromDB() {
+	async getFromMealDB() {
 		try {
-			const fave = await db.favorites.toArray();
-			const fieldValues = fave.map((item) => item.original_meal_id);
+			const fave = await mealdb.meals.toArray();
+			const fieldValues = fave.map((item) => item);
+			return fieldValues;
+		} catch (error: any) {
+			console.log(error);
+			throw new Error(error?.message);
+		}
+	}
+
+	//personlized
+	async addToPersonalizedDB(
+		_id: string,
+		name: string,
+		ingredients: string[],
+		steps: string[],
+		user_id: string
+		// original_meal_id: string
+	) {
+		try {
+			const id = await personalizeddb.meals.add({
+				_id,
+				name,
+				ingredients,
+				steps,
+				user_id,
+				// original_meal_id,
+			});
+
+			console.log(id);
+			return id;
+		} catch (error: any) {
+			console.log(error);
+			throw new Error(error?.message);
+		}
+	}
+
+	async getFromPersonalizedDB() {
+		try {
+			const fave = await personalizeddb.meals.toArray();
+			const fieldValues = fave.map((item) => item);
 			return fieldValues;
 		} catch (error: any) {
 			console.log(error);
@@ -53,3 +92,5 @@ export class IndexedDB {
 		}
 	}
 }
+
+export const myDB = new IndexedDB();

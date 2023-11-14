@@ -22,6 +22,7 @@ export const ToastContextProvider = ({
 	children,
 }: ToastContextProviderType) => {
 	const [toast, setToast] = useState<string>("");
+	console.log(toast);
 	return (
 		<ToastContext.Provider value={{ toast, setToast }}>
 			{children}

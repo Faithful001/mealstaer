@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { useMeal } from "../contexts/MealContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const NavBar = () => {
-	const [search, setSearch] = useState<string>("");
+	// const [search, setSearch] = useState<string>("");
 	const [dropDown, setDropDown] = useState<boolean>(false);
+	const navigate = useNavigate();
+
 	const {
+		search,
+		setSearch = () => {},
 		value,
 		setSearchValue = () => {},
 		// setNotSearchValue = () => {},
@@ -14,7 +19,10 @@ const NavBar = () => {
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		setSearch(e.target.value);
-		if (value) {
+		// if (!search) {
+		// 	return null;
+		// }
+		if (value && search) {
 			const newValue = value.filter((item: any) =>
 				item.name.toLowerCase().includes(search)
 			);
@@ -26,6 +34,25 @@ const NavBar = () => {
 	function handleDropDown(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
 		e.preventDefault();
 		setDropDown(!dropDown);
+	}
+
+	async function logout() {
+		navigate("/login");
+		try {
+			const response = await axios.get(
+				"http://localhost:4000/api/auth/logout",
+				{
+					withCredentials: true,
+				}
+			);
+			console.log(response.data);
+		} catch (error: any) {
+			if (error.response.status == 401) {
+				navigate("/login");
+			} else {
+				console.log(`Something went wrong, ${error.message}`);
+			}
+		}
 	}
 	return (
 		<div className="navbar">
@@ -43,14 +70,14 @@ const NavBar = () => {
 							className="bg-transparent border-white border md:w-[300px] w-[180px] rounded-3xl"
 							type="text"
 							onChange={handleChange}
-							placeholder="Search for your favourite meal..."
+							placeholder="Search for a meal..."
 						/>
-						{search.length > 0 ? (
-							<span className="material-symbols-outlined absolute right-0 md:right-0 p-2 hidden hover:cursor-pointer rounded-3xl hover:bg-[#e4e4e42c]">
+						{search && search.length > 0 ? (
+							<span className="material-symbols-outlined absolute right-0 md:right-0 p-2 hidden cursor-pointer rounded-3xl hover:bg-[#e4e4e42c]">
 								search
 							</span>
 						) : (
-							<span className="material-symbols-outlined absolute right-0 md:right-0 p-2 hover:cursor-pointer rounded-3xl hover:bg-[#e4e4e42c]">
+							<span className="material-symbols-outlined absolute right-0 md:right-0 p-2 cursor-pointer rounded-3xl hover:bg-[#e4e4e42c]">
 								search
 							</span>
 						)}
@@ -87,14 +114,14 @@ const NavBar = () => {
 								</div>
 							</Link>
 
-							<Link to={""}>
+							<button onClick={logout}>
 								<div className="flex items-center mb-3 cursor-pointer">
 									<span className="material-symbols-outlined text-black">
 										logout
 									</span>
 									<p className="text-black ml-2">Logout</p>
 								</div>
-							</Link>
+							</button>
 						</div>
 					)}
 				</div>

@@ -1,25 +1,35 @@
 import Dexie, { Table } from "dexie";
 
-export interface FavoriteMeals {
+export interface Meals {
 	id?: number;
 	_id: string;
 	name: string;
 	ingredients: string[];
 	steps: string[];
 	user_id: string;
-	original_meal_id: string;
+	// original_meal_id: string;
 }
 
-export class MySubClassedDexie extends Dexie {
-	favorites!: Table<FavoriteMeals>;
+export class MealClassedDexie extends Dexie {
+	meals!: Table<Meals>;
 
 	constructor() {
-		super("myDatabase");
+		super("mealsDatabase");
 		this.version(1).stores({
-			favorites:
-				"++id, _id, name, ingredients, steps, user_id, original_meal_id",
+			meals: "++id, _id, name, ingredients, steps, user_ids",
+		});
+	}
+}
+export class PersonalClassedDexie extends Dexie {
+	meals!: Table<Meals>;
+
+	constructor() {
+		super("mealsDatabase");
+		this.version(1).stores({
+			meals: "++id, _id, name, ingredients, steps, user_ids",
 		});
 	}
 }
 
-export const db = new MySubClassedDexie();
+export const mealdb = new MealClassedDexie();
+export const personalizeddb = new PersonalClassedDexie();

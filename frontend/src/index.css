@@ -29,6 +29,21 @@ body {
 	flex-direction: column;
 }
 
+.edit-personalized {
+	background-color: #272727;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	color: rgb(247, 247, 247);
+	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
+}
+
 .navbar {
 	background-color: #424242;
 	color: rgb(247, 247, 247);
@@ -37,7 +52,7 @@ body {
 .home {
 	background-color: #272727;
 	position: fixed;
-	top: 90px;
+	/* top: 90px; */
 	right: 0;
 	bottom: 0;
 	left: 0;
@@ -48,6 +63,18 @@ body {
 }
 
 .meal-details {
+	background-color: #272727;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	color: rgb(247, 247, 247);
+	overflow-y: scroll;
+}
+.recommended-details {
 	background-color: #272727;
 	position: fixed;
 	top: 0;

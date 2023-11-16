@@ -50,17 +50,6 @@ app.use((req, res, next) => {
     console.log(req.path, req.method);
     next();
 });
-// app.use(async (req, res, next) => {
-// 	if (req.session && req.session.user_id) {
-// 		try {
-// 			const user = await User.findById(req.session.user_id);
-// 			req.session.user = user;
-// 		} catch (err) {
-// 			console.error("Error retrieving user data:", err);
-// 		}
-// 	}
-// 	next();
-// });
 //middleware routes
 app.use("/api/data", mealView);
 app.use("/api/fave", favoritedView);

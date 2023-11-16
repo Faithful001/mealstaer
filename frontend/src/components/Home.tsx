@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
-import { useQuery } from "react-query";
 import NavBar from "./NavBar";
 import Recommended from "./Recommended";
 import PreContent from "./PreContent";

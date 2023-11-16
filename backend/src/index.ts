@@ -6,6 +6,7 @@ import morgan from "morgan";
 import passport from "passport";
 import session from "express-session";
 import cookieParser from "cookie-parser";
+const MongoDBStore = require("connect-mongodb-session")(session);
 const port = process.env.PORT || 8080;
 const mealView = require("./views/mealView");
 const favoritedView = require("./views/favoritedView");
@@ -19,6 +20,16 @@ const app = express();
 
 //middleware
 const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
+
+const store = new MongoDBStore({
+	uri: process.env.MONGO_URI, // Replace with your MongoDB URI
+	collection: "sessions",
+	expires: twoDaysInMilliseconds, // Session will expire in 1 day
+	// connectionOptions: {
+	// 	useNewUrlParser: true,
+	// 	useUnifiedTopology: true,
+	// },
+});
 
 app.use(
 	session({

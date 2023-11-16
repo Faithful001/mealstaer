@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { URL } from "../utils/methods/url/URL";
 
 const Signup = () => {
+	const prodURL = URL.prodURL;
 	// const [user, setUser] = useState<any>(null);
 	const [user_name, setUsername] = useState("");
 	const [email, setEmail] = useState("");
@@ -24,15 +26,12 @@ const Signup = () => {
 	};
 
 	async function getUser() {
-		const response = await axios.get(
-			"http://localhost:4000/api/auth/login/success",
-			{
-				withCredentials: true,
-				headers: {
-					"Access-Control-Allow-Origin": "*",
-				},
-			}
-		);
+		const response = await axios.get(`${prodURL}/api/auth/login/success`, {
+			withCredentials: true,
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+			},
+		});
 		console.log(response.data);
 		if (response.status == 200) {
 			const parsedUser = JSON.stringify(response.data.user);

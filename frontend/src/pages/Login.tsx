@@ -6,8 +6,10 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { URL } from "../utils/methods/url/URL";
 
 const Login = () => {
+	const prodURL = URL.prodURL;
 	// const [user, setUser] = useState<any>(null);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -16,20 +18,17 @@ const Login = () => {
 	console.log(email, password);
 
 	const signInWithGoogle = async () => {
-		window.open("http://localhost:4000/api/auth/google", "_self");
+		window.open(`${prodURL}/api/auth/google`, "_self");
 		getUser();
 	};
 
 	async function getUser() {
-		const response = await axios.get(
-			"http://localhost:4000/api/auth/login/success",
-			{
-				withCredentials: true,
-				headers: {
-					"Access-Control-Allow-Origin": "*",
-				},
-			}
-		);
+		const response = await axios.get(`${prodURL}/api/auth/login/success`, {
+			withCredentials: true,
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+			},
+		});
 		console.log(response.data);
 		if (response.status == 200) {
 			const parsedUser = JSON.stringify(response.data.user);
@@ -42,11 +41,9 @@ const Login = () => {
 	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const response = await axios.post(
-				"http://localhost:4000/api/auth/login",
-				body,
-				{ withCredentials: true }
-			);
+			const response = await axios.post(`${prodURL}/api/auth/login`, body, {
+				withCredentials: true,
+			});
 			console.log(response);
 			if (response.status == 200) {
 				const parsedUser = JSON.stringify(response.data.user);

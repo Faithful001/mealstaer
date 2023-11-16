@@ -39,14 +39,14 @@ const RecommendedDetails = () => {
 						{meal && Array.isArray(meal) && meal.length > 0 ? (
 							<div>
 								{meal.map((data: any) => (
-									<div key={data._id}>
-										<h1 className="text-3xl font-bold mb-5">{data.name}</h1>
+									<div key={data?._id}>
+										<h1 className="text-3xl font-bold mb-5">{data?.name}</h1>
 										<p className="text-xl font-bold">
 											Ingredients: <br />
 										</p>
-										{data.ingredients.join(", ")}
+										{data?.ingredients.join(", ")}
 										<p className="text-xl mt-5 font-bold">Steps:</p>
-										{data.steps.map((step: any) => (
+										{data?.steps.map((step: any) => (
 											<li key={step}>{step}</li>
 										))}
 									</div>

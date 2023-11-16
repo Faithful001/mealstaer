@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { URL } from "../utils/methods/url/URL";
 
 const Recommended = () => {
+	const prodURL = URL.prodURL;
 	const [allMeals, setAllMeals] = useState<object[]>([]);
 	const [randomMeals, setRandomMeals] = useState<object[]>([]);
 	const [mealLabels, setMealLabels] = useState<string[]>([
@@ -43,14 +45,14 @@ const Recommended = () => {
 	useEffect(() => {
 		const getMeals = async () => {
 			try {
-				const response = await axios.get("http://localhost:4000/api/data/", {
+				const response = await axios.get(`${prodURL}/api/data/`, {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
 					},
 				});
 				const personalizedResponse = await axios.get(
-					"http://localhost:4000/api/personalized",
+					`${prodURL}/api/personalized`,
 					{
 						withCredentials: true,
 						headers: {

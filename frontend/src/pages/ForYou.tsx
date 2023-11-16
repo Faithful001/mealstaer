@@ -10,10 +10,11 @@ import { useToast } from "../contexts/ToastContext";
 // import { useLiveQuery } from "dexie-react-hooks";
 // import { myDB } from "../utils/methods/IndexedDB";
 import { useFavorite } from "../contexts/FavoriteContext";
-
 import { usePage } from "../contexts/PageContext";
+import { URL } from "../utils/methods/url/URL";
 
 const ForYou = () => {
+	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const queryClient = new QueryClient();
 	const { setToast = () => {} } = useToast();
@@ -44,7 +45,7 @@ const ForYou = () => {
 	//onPageLoad data (render the meal data on page load)
 	async function fetchData() {
 		try {
-			const response = await axios.get("http://localhost:4000/api/data", {
+			const response = await axios.get(`${prodURL}/api/data`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -111,16 +112,12 @@ const ForYou = () => {
 				steps: meal.steps,
 				original_meal_id: meal._id,
 			};
-			const response = await axios.post(
-				"http://localhost:4000/api/fave/",
-				body,
-				{
-					withCredentials: true,
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-					},
-				}
-			);
+			const response = await axios.post(`${prodURL}/api/fave/`, body, {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
 			setToast(`${meal.name} added to favorites`);
 			setFavorites(response.data);
 			console.log(meal._id);
@@ -167,7 +164,7 @@ const ForYou = () => {
 	async function removeFromFavorites(meal: MealsType) {
 		localStorage.removeItem("meal_id");
 		try {
-			const getReqRes = await axios.get("http://localhost:4000/api/fave", {
+			const getReqRes = await axios.get(`${prodURL}/api/fave`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -178,7 +175,7 @@ const ForYou = () => {
 				(item: any) => item.original_meal_id == meal._id
 			);
 			const response = await axios.delete(
-				`http://localhost:4000/api/fave/${faveMealId._id}`,
+				`${prodURL}/api/fave/${faveMealId._id}`,
 				{
 					withCredentials: true,
 					headers: {
@@ -230,7 +227,7 @@ const ForYou = () => {
 	//getting favorite meals from the database and mapping through their original_meal_ids
 	async function getFavoritesFromDB() {
 		try {
-			const response = await axios.get("http://localhost:4000/api/fave/", {
+			const response = await axios.get(`${prodURL}/api/fave/`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",

@@ -6,8 +6,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "../contexts/ToastContext";
+import { URL } from "../utils/methods/url/URL";
 
 const PersonalizedForm = () => {
+	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>("");
 	const [ingredients, setIngredients] = useState<string>("");
@@ -63,7 +65,7 @@ const PersonalizedForm = () => {
 
 		try {
 			const response = await axios.post(
-				"http://localhost:4000/api/personalized",
+				`${prodURL}/api/personalized`,
 				personalizedMealData,
 				{
 					withCredentials: true,

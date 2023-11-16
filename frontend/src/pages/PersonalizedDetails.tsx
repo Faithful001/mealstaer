@@ -8,8 +8,10 @@ import { MealsType } from "../contexts/MealContext";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useToast } from "../contexts/ToastContext";
+import { URL } from "../utils/methods/url/URL";
 
 const PersonalizedDetails = () => {
+	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const [meal, setMeal] = useState<MealsType[]>([]);
 	const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -23,15 +25,12 @@ const PersonalizedDetails = () => {
 
 	async function fetchData() {
 		try {
-			const response = await axios.get(
-				`http://localhost:4000/api/personalized/${id}`,
-				{
-					withCredentials: true,
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-					},
-				}
-			);
+			const response = await axios.get(`${prodURL}/api/personalized/${id}`, {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
 			// console.log(response.data);
 			return [response.data];
 		} catch (error: any) {
@@ -80,7 +79,7 @@ const PersonalizedDetails = () => {
 
 	async function deleteFromFavorite(id: any) {
 		try {
-			const response = await axios.get(`http://localhost:4000/api/fave`, {
+			const response = await axios.get(`${prodURL}/api/fave`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -93,7 +92,7 @@ const PersonalizedDetails = () => {
 			//   setFavoriteMealId(meal._id);
 
 			const deleteResponse = await axios.delete(
-				`http://localhost:4000/api/fave/${meal._id}`,
+				`${prodURL}/api/fave/${meal._id}`,
 				{
 					withCredentials: true,
 					headers: {
@@ -113,15 +112,12 @@ const PersonalizedDetails = () => {
 		deleteFromFavorite(id);
 
 		try {
-			const response = await axios.delete(
-				`http://localhost:4000/api/personalized/${id}`,
-				{
-					withCredentials: true,
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-					},
-				}
-			);
+			const response = await axios.delete(`${prodURL}/api/personalized/${id}`, {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
 			console.log(response);
 			setToast(`${name} deleted successfully`);
 			navigate("/?tab=by-you");

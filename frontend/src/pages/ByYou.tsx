@@ -9,6 +9,7 @@ import { useFavorite } from "../contexts/FavoriteContext";
 import favorite from "../assets/favorite2.svg";
 import favorite_white from "../assets/favorite2_white.svg";
 import { useToast } from "../contexts/ToastContext";
+import { URL } from "../utils/methods/url/URL";
 // import NavBar from "../components/NavBar";
 // import PreContent from "../components/PreContent";
 // import { usePage } from "../contexts/PageContext";
@@ -17,6 +18,7 @@ interface PropsType {
 	name: string | null;
 }
 const ByYou: React.FC<PropsType> = ({ name }) => {
+	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const queryClient = new QueryClient();
 	const [meals, setMeals] = useState<MealsType[]>([]);
@@ -37,15 +39,12 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 	//onPageLoad data (render the meal data on page load)
 	async function fetchData() {
 		try {
-			const response = await axios.get(
-				"http://localhost:4000/api/personalized",
-				{
-					withCredentials: true,
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-					},
-				}
-			);
+			const response = await axios.get(`${prodURL}/api/personalized`, {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
 			// console.log(response.data);
 			return response.data;
 		} catch (error: any) {
@@ -94,16 +93,12 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 				steps: meal.steps,
 				original_meal_id: meal._id,
 			};
-			const response = await axios.post(
-				"http://localhost:4000/api/fave/",
-				body,
-				{
-					withCredentials: true,
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-					},
-				}
-			);
+			const response = await axios.post(`${prodURL}/api/fave/`, body, {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
 			setToast(`${meal.name} added to favorites`);
 			setFavorites(response.data);
 			console.log(meal._id);
@@ -150,7 +145,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 	async function removeFromFavorites(meal: MealsType) {
 		localStorage.removeItem("meal_id");
 		try {
-			const getReqRes = await axios.get("http://localhost:4000/api/fave", {
+			const getReqRes = await axios.get(`${prodURL}/api/fave`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -161,7 +156,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 				(item: any) => item.original_meal_id == meal._id
 			);
 			const response = await axios.delete(
-				`http://localhost:4000/api/fave/${faveMealId._id}`,
+				`${prodURL}/api/fave/${faveMealId._id}`,
 				{
 					withCredentials: true,
 					headers: {
@@ -213,7 +208,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 	//getting favorite meals from the database and mapping through their original_meal_ids
 	async function getFavoritesFromDB() {
 		try {
-			const response = await axios.get("http://localhost:4000/api/fave/", {
+			const response = await axios.get(`${prodURL}/api/fave/`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",

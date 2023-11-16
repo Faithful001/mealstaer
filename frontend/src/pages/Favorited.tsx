@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
+import { URL } from "../utils/methods/url/URL";
 
 const Favorited = () => {
+	const prodURL = URL.prodURL;
 	const [faves, setFaves] = useState<any>([]);
 	const navigate = useNavigate();
 
@@ -15,7 +17,7 @@ const Favorited = () => {
 
 	async function getAllFavorites() {
 		try {
-			const response = await axios.get("http://localhost:4000/api/fave/", {
+			const response = await axios.get(`${prodURL}/api/fave/`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",

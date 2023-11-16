@@ -4,8 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { MealsType } from "../contexts/MealContext";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { URL } from "../utils/methods/url/URL";
 
 const FavoriteDetails = () => {
+	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const [meal, setMeal] = useState<MealsType[]>([]);
 	// const { value } = useMeal();
@@ -15,7 +17,7 @@ const FavoriteDetails = () => {
 
 	async function fetchData() {
 		try {
-			const response = await axios.get(`http://localhost:4000/api/fave/${id}`, {
+			const response = await axios.get(`${prodURL}/api/fave/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",

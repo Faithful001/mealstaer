@@ -7,8 +7,10 @@ import axios from "axios";
 import { useToast } from "../contexts/ToastContext";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
+import { URL } from "../utils/methods/url/URL";
 
 const EditPersonalized = () => {
+	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>("");
 	const [ingredients, setIngredients] = useState<string>("");
@@ -22,15 +24,12 @@ const EditPersonalized = () => {
 
 	async function getMealsData() {
 		try {
-			const response = await axios.get(
-				`http://localhost:4000/api/personalized/${id}`,
-				{
-					withCredentials: true,
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-					},
-				}
-			);
+			const response = await axios.get(`${prodURL}/api/personalized/${id}`, {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
 
 			// console.log(response.data);
 			return response.data;
@@ -100,7 +99,7 @@ const EditPersonalized = () => {
 
 		try {
 			const response = await axios.patch(
-				`http://localhost:4000/api/personalized/${id}`,
+				`${prodURL}/api/personalized/${id}`,
 				personalizedMealData,
 				{
 					withCredentials: true,

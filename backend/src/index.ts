@@ -54,7 +54,7 @@ app.use(
 		name: "session",
 		keys: [process.env.COOKIE_KEY],
 		maxAge: twoDaysInMilliseconds,
-		expires: new Date(Date.now() + twoDaysInMilliseconds),
+		// expires: new Date(Date.now() + twoDaysInMilliseconds),
 	})
 );
 

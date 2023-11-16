@@ -31,11 +31,16 @@ const store = new MongoDBStore({
 	// },
 });
 
+store.on("error", (error) => {
+	console.error("Session Store Error:", error);
+});
+
 app.use(
 	session({
 		secret: process.env.COOKIE_KEY,
 		resave: false,
 		saveUninitialized: true,
+		store: store,
 		cookie: {
 			maxAge: twoDaysInMilliseconds,
 			expires: new Date(Date.now() + twoDaysInMilliseconds),

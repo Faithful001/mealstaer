@@ -1,24 +1,33 @@
 {
-	"ts-node": {
-		"files": true
-	},
 	"compilerOptions": {
-		"module": "CommonJS",
-		"moduleResolution": "Node",
-		"target": "ES2020",
-		"sourceMap": true,
-		"rootDir": "src",
-		"outDir": "build",
-		"skipLibCheck": true,
-		"typeRoots": ["./node_modules/@types"],
-		// "strict": true,
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true, // Enable ES module interop
-		"strictNullChecks": false,
-		"noImplicitAny": false,
-		"strictBindCallApply": false,
-		"forceConsistentCasingInFileNames": false,
-		"noFallthroughCasesInSwitch": false
+		"target": "esnext" /* Set the ECMAScript target version */,
+		"module": "commonjs" /* Specify module system (e.g., commonjs for Node.js) */,
+		"lib": [
+			"esnext"
+		] /* Specify library files to include (e.g., es6 for modern JavaScript features) */,
+		"jsx": "react" /* If using React, set the JSX compiler option */,
+		"esModuleInterop": true /* Enable/disable emitting interop code for ES modules */,
+		"skipLibCheck": true /* Skip type checking of declaration files (can improve build performance) */,
+		"forceConsistentCasingInFileNames": true /* Ensure consistent casing in file names to avoid issues on case-sensitive file systems */,
+		"strict": true /* Enable all strict type-checking options */,
+		"moduleResolution": "node" /* Specify module resolution strategy (e.g., node for Node.js) */,
+		"baseUrl": "./" /* Base directory to resolve non-relative module names */,
+		"paths": {
+			"*": [
+				"types/*"
+			] /* Custom path mappings for module resolution, if needed */
+		},
+		"outDir": "./dist" /* Output directory for compiled TypeScript files */,
+		"rootDir": "./src" /* Root directory of TypeScript source files */,
+		"sourceMap": false /* Disable source maps in production for better performance */,
+		"removeComments": true /* Remove comments from compiled code for smaller bundle size */,
+		"declaration": true /* Generate declaration files (.d.ts) for type information */,
+		"declarationMap": true /* Generate source map for declaration files */
 	},
-	"include": ["./**/*.ts"]
+	"include": [
+		"src/**/*.ts" /* Include TypeScript source files in the compilation */
+	],
+	"exclude": [
+		"node_modules" /* Exclude node_modules directory from compilation */
+	]
 }

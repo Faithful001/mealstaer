@@ -42,7 +42,6 @@ app.use(
 		saveUninitialized: true,
 		store: store,
 		cookie: {
-			// secure: true,
 			maxAge: twoDaysInMilliseconds,
 			expires: new Date(Date.now() + twoDaysInMilliseconds),
 		},

@@ -22,6 +22,17 @@ const Login = () => {
 		getUser();
 	};
 
+	// const setCookie = (name: string, value: string, days: number) => {
+	// 	const expirationDate = new Date();
+	// 	expirationDate.setDate(expirationDate.getDate() + days);
+
+	// 	const cookieValue = `${encodeURIComponent(name)}=${encodeURIComponent(
+	// 		value
+	// 	)};expires=${expirationDate.toUTCString()};path=/`;
+
+	// 	document.cookie = cookieValue;
+	// };
+
 	async function getUser() {
 		const response = await axios.get(`${prodURL}/api/auth/login/success`, {
 			withCredentials: true,
@@ -31,6 +42,16 @@ const Login = () => {
 		});
 		console.log(response.data);
 		if (response.status == 200) {
+			const cookieName = "session";
+			const cookieValue = response?.data?.session;
+
+			// const expirationDate = new Date();
+			// expirationDate.setDate(expirationDate.getDate() + 2);
+
+			// const expires = `expires=${expirationDate.toUTCString()}`;
+
+			document.cookie = `${cookieName}=${cookieValue};`;
+			console.log(document.cookie);
 			const parsedUser = JSON.stringify(response.data.user);
 			localStorage.setItem("user", parsedUser);
 		}
@@ -44,11 +65,22 @@ const Login = () => {
 			const response = await axios.post(`${prodURL}/api/auth/login`, body, {
 				withCredentials: true,
 			});
-			console.log(response);
+			console.log(response.data.session);
 			if (response.status == 200) {
+				const cookieName = "session";
+				const cookieValue = response?.data?.session;
+
+				// const expirationDate = new Date();
+				// expirationDate.setDate(expirationDate.getDate() + 2);
+
+				// const expires = `expires=${expirationDate.toUTCString()}`;
+
+				document.cookie = `${cookieName}=${cookieValue};`;
+				console.log(document.cookie);
+
 				const parsedUser = JSON.stringify(response.data.user);
 				localStorage.setItem("user", parsedUser);
-				navigate("/");
+				// navigate("/");
 			}
 		} catch (error: any) {
 			if (error.response) {

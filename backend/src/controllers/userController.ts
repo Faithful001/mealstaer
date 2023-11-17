@@ -5,9 +5,9 @@ const loginUser = async (req, res) => {
 	try {
 		const user = await User.login(email, password);
 		req.session.user = user;
-		// const session = req.cookies;
-		// console.log(req.session.user);
-		res.status(200).json({ user });
+		const session = req.cookies.session;
+		console.log(session);
+		res.status(200).json({ user, session });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
@@ -18,9 +18,9 @@ const signupUser = async (req, res) => {
 		const { user_name, email, password } = req.body;
 		const user = await User.signup(user_name, email, password);
 		req.session.user = user;
-		// const session = req.cookies;
-		// console.log(req.session.user);
-		res.status(200).json({ user });
+		const session = req.cookies;
+		console.log(session);
+		res.status(200).json({ user, session });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}

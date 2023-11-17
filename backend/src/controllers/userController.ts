@@ -7,7 +7,10 @@ const loginUser = async (req, res) => {
 		req.session.user = user;
 		const session = req.cookies;
 		console.log(session);
-		res.status(200).json({ user, session });
+		res
+			.status(200)
+			.cookie("session", "my-session data")
+			.json({ user, session });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}

@@ -42,15 +42,15 @@ const Login = () => {
 		});
 		console.log(response.data);
 		if (response.status == 200) {
-			const cookieName = "session";
+			const cookieName = "sessions";
 			const cookieValue = response?.data?.session;
+			const expirationDate = new Date();
+			expirationDate.setDate(expirationDate.getDate() + 2);
 
-			// const expirationDate = new Date();
-			// expirationDate.setDate(expirationDate.getDate() + 2);
+			const expires = `expires=${expirationDate.toUTCString()}`;
 
-			// const expires = `expires=${expirationDate.toUTCString()}`;
+			document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly; ${expires}; `;
 
-			document.cookie = `${cookieName}=${cookieValue};`;
 			console.log(document.cookie);
 			const parsedUser = JSON.stringify(response.data.user);
 			localStorage.setItem("user", parsedUser);
@@ -67,15 +67,15 @@ const Login = () => {
 			});
 			console.log(response.data.session);
 			if (response.status == 200) {
-				const cookieName = "session";
+				const cookieName = "sessions";
 				const cookieValue = response?.data?.session;
+				const expirationDate = new Date();
+				expirationDate.setDate(expirationDate.getDate() + 2);
 
-				// const expirationDate = new Date();
-				// expirationDate.setDate(expirationDate.getDate() + 2);
+				const expires = `expires=${expirationDate.toUTCString()}`;
 
-				// const expires = `expires=${expirationDate.toUTCString()}`;
+				document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly; ${expires}; `;
 
-				document.cookie = `${cookieName}=${cookieValue};`;
 				console.log(document.cookie);
 
 				const parsedUser = JSON.stringify(response.data.user);

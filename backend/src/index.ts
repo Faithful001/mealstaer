@@ -55,6 +55,7 @@ app.use(
 		keys: [process.env.COOKIE_KEY],
 		maxAge: twoDaysInMilliseconds,
 		secure: false,
+		httpOnly: true,
 		// expires: new Date(Date.now() + twoDaysInMilliseconds),
 	})
 );

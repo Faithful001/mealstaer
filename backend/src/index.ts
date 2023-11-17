@@ -4,10 +4,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
 import passport from "passport";
-// import session from "express-session";
+import session from "express-session";
 import cookieParser from "cookie-parser";
-// const MongoDBStore = require("connect-mongodb-session")(session);
-import cookieSession from "cookie-session";
+const MongoDBStore = require("connect-mongodb-session")(session);
 const port = process.env.PORT || 8080;
 const mealView = require("./views/mealView");
 const favoritedView = require("./views/favoritedView");
@@ -19,13 +18,13 @@ require("./controllers/passport");
 
 const app = express();
 
-// middleware
+//middleware
 const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
 
 // const store = new MongoDBStore({
 // 	uri: process.env.MONGO_URI, // Replace with your MongoDB URI
 // 	collection: "sessions",
-// 	expires: twoDaysInMilliseconds,
+// 	expires: twoDaysInMilliseconds, // Session will expire in 1 day
 // 	// connectionOptions: {
 // 	// 	useNewUrlParser: true,
 // 	// 	useUnifiedTopology: true,
@@ -36,27 +35,16 @@ const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
 // 	console.error("Session Store Error:", error);
 // });
 
-// app.use(
-// 	session({
-// 		secret: process.env.COOKIE_KEY,
-// 		resave: false,
-// 		saveUninitialized: true,
-// 		store: store,
-// 		cookie: {
-// 			maxAge: twoDaysInMilliseconds,
-// 			expires: new Date(Date.now() + twoDaysInMilliseconds),
-// 		},
-// 	})
-// );
-
 app.use(
-	cookieSession({
-		name: "session",
-		keys: [process.env.COOKIE_KEY],
-		maxAge: twoDaysInMilliseconds,
-		secure: false,
-		httpOnly: true,
-		// expires: new Date(Date.now() + twoDaysInMilliseconds),
+	session({
+		secret: process.env.COOKIE_KEY,
+		resave: false,
+		saveUninitialized: true,
+		// store: store,
+		cookie: {
+			maxAge: twoDaysInMilliseconds,
+			expires: new Date(Date.now() + twoDaysInMilliseconds),
+		},
 	})
 );
 
@@ -70,15 +58,15 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(
-	cors({
-		origin: "http://localhost:5173",
-		method: ["GET", "POST", "PATCH", "DELETE"],
-		credentials: true,
-	})
-);
+const corsOptions = {
+	origin: "http://localhost:5173",
+	method: ["GET", "POST", "PATCH", "DELETE"],
+	credentials: true,
+};
 
-app.options("*", cors());
+app.use(cors(corsOptions));
+
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 app.use(morgan("combined"));

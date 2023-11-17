@@ -63,6 +63,7 @@ const Login = () => {
 		e.preventDefault();
 		try {
 			const response = await axios.post(`${prodURL}/api/auth/login`, body, {
+				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
 				},

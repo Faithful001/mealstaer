@@ -43,11 +43,7 @@ const EditPersonalized = () => {
 		}
 	}
 
-	const {
-		isLoading,
-		error: queryError,
-		data,
-	} = useQuery(["meals", id], getMealsData);
+	const { error: queryError, data } = useQuery(["meals", id], getMealsData);
 
 	const ingredient = data?.ingredients.join(", ");
 	const step = data?.steps.join("\n");

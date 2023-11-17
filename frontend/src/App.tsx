@@ -9,7 +9,6 @@ import Signup from "./pages/Signup";
 import FavoriteDetails from "./pages/FavoritedDetails";
 import PersonalizedForm from "./pages/PersonalizedForm";
 // import ForYou from "./pages/ForYou";
-import PreContent from "./components/PreContent";
 import PersonalizedDetails from "./pages/PersonalizedDetails";
 import EditPersonalized from "./pages/EditPersonalized";
 import Home from "./components/Home";

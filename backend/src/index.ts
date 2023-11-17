@@ -21,26 +21,26 @@ const app = express();
 //middleware
 const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
 
-// const store = new MongoDBStore({
-// 	uri: process.env.MONGO_URI, // Replace with your MongoDB URI
-// 	collection: "sessions",
-// 	expires: twoDaysInMilliseconds, // Session will expire in 1 day
-// 	// connectionOptions: {
-// 	// 	useNewUrlParser: true,
-// 	// 	useUnifiedTopology: true,
-// 	// },
-// });
+const store = new MongoDBStore({
+	uri: process.env.MONGO_URI, // Replace with your MongoDB URI
+	collection: "sessions",
+	expires: twoDaysInMilliseconds, // Session will expire in 1 day
+	// connectionOptions: {
+	// 	useNewUrlParser: true,
+	// 	useUnifiedTopology: true,
+	// },
+});
 
-// store.on("error", (error) => {
-// 	console.error("Session Store Error:", error);
-// });
+store.on("error", (error) => {
+	console.error("Session Store Error:", error);
+});
 
 app.use(
 	session({
 		secret: process.env.COOKIE_KEY,
 		resave: false,
 		saveUninitialized: true,
-		// store: store,
+		store: store,
 		cookie: {
 			maxAge: twoDaysInMilliseconds,
 			expires: new Date(Date.now() + twoDaysInMilliseconds),

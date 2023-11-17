@@ -1,4 +1,3 @@
-import { error } from "console";
 import express from "express";
 import passport from "passport";
 const { loginUser, signupUser } = require("../controllers/userController");

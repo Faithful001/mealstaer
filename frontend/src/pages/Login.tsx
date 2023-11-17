@@ -4,7 +4,7 @@ import { Label, TextInput } from "flowbite-react";
 import google_icon from "../assets/google_icon.png";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { URL } from "../utils/methods/url/URL";
 
@@ -14,7 +14,7 @@ const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<any>("");
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	console.log(email, password);
 
 	const signInWithGoogle = async () => {
@@ -69,8 +69,8 @@ const Login = () => {
 			});
 			console.log(response.data);
 
-			const cookieName = "sessions";
-			const cookieValue = response?.data;
+			// const cookieName = "sessions";
+			// const cookieValue = response?.data;
 			// document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly;`;
 
 			// console.log(document.cookie);

@@ -44,12 +44,9 @@ const Login = () => {
 		if (response.status == 200) {
 			const cookieName = "sessions";
 			const cookieValue = response?.data?.session;
-			const expirationDate = new Date();
-			expirationDate.setDate(expirationDate.getDate() + 2);
 
-			const expires = `expires=${expirationDate.toUTCString()}`;
-
-			document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly; ${expires}; `;
+			// Set the HttpOnly cookie
+			document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly;`;
 
 			console.log(document.cookie);
 			const parsedUser = JSON.stringify(response.data.user);
@@ -69,12 +66,7 @@ const Login = () => {
 			if (response.status == 200) {
 				const cookieName = "sessions";
 				const cookieValue = response?.data?.session;
-				const expirationDate = new Date();
-				expirationDate.setDate(expirationDate.getDate() + 2);
-
-				const expires = `expires=${expirationDate.toUTCString()}`;
-
-				document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly; ${expires}; `;
+				document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly;`;
 
 				console.log(document.cookie);
 

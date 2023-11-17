@@ -80,7 +80,7 @@ const Login = () => {
 
 				const parsedUser = JSON.stringify(response.data.user);
 				localStorage.setItem("user", parsedUser);
-				// navigate("/");
+				navigate("/");
 			}
 		} catch (error: any) {
 			if (error.response) {

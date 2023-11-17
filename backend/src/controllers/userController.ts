@@ -10,15 +10,9 @@ const loginUser = async (req, res) => {
 		// const session = setCookieHeader.split("; ");
 		// const sessionId = session[0]
 		const cookiesString = req.headers.cookie || "";
-		const cookies = cookiesString.split(";").reduce((acc, cookie) => {
-			const [key, value] = cookie.trim().split("=");
-			acc[key] = decodeURIComponent(value);
-			return acc;
-		}, {});
 
-		console.log();
-		console.log(cookies);
-		res.status(200).json({ user, cookies });
+		console.log(cookiesString);
+		res.status(200).json({ user, cookies: cookiesString });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}

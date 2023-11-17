@@ -5,12 +5,12 @@ const loginUser = async (req, res) => {
 	try {
 		const user = await User.login(email, password);
 		req.session.user = user;
-		const session = req.cookies;
+		// const session = req.cookies;
+		const session = res.getHeader("Set-Cookie");
+		// const session = setCookieHeader.split("; ");
+		// const sessionId = session[0]
 		console.log(session);
-		res
-			.status(200)
-			.cookie("session", "my-session data")
-			.json({ user, session });
+		res.status(200).json({ user, session });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}

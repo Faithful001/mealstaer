@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, QueryClient } from "react-query";
 import axios from "axios";
 import { useMeal } from "../contexts/MealContext";
@@ -10,7 +10,7 @@ import { useToast } from "../contexts/ToastContext";
 // import { useLiveQuery } from "dexie-react-hooks";
 // import { myDB } from "../utils/methods/IndexedDB";
 import { useFavorite } from "../contexts/FavoriteContext";
-import { usePage } from "../contexts/PageContext";
+// import { usePage } from "../contexts/PageContext";
 import { URL } from "../utils/methods/url/URL";
 
 const ForYou = () => {
@@ -18,7 +18,7 @@ const ForYou = () => {
 	const navigate = useNavigate();
 	const queryClient = new QueryClient();
 	const { setToast = () => {} } = useToast();
-	const { byYou, setByYou } = usePage();
+	// const { byYou, setByYou } = usePage();
 
 	//all states start
 	const [meals, setMeals] = useState<MealsType[]>([]);
@@ -146,7 +146,7 @@ const ForYou = () => {
 			// Return the previous data for potential rollback
 			return { prevData };
 		},
-		onError: (error, variables, context: any) => {
+		onError: (context: any) => {
 			// Rollback the cache to its previous state if the mutation fails
 			if (context.prevData) {
 				queryClient.setQueryData("fave", context.prevData);
@@ -212,7 +212,7 @@ const ForYou = () => {
 			// Return the previous data for potential rollback
 			return { prevData };
 		},
-		onError: (error, variables, context: any) => {
+		onError: (context: any) => {
 			// Rollback the cache to its previous state if the mutation fails
 			if (context.prevData) {
 				queryClient.setQueryData("fave", context.prevData);
@@ -245,13 +245,9 @@ const ForYou = () => {
 			}
 		}
 	}
-	const { error: queryError, data: queryData } = useQuery(
-		"fave",
-		getFavoritesFromDB,
-		{
-			enabled: Boolean(favorites),
-		}
-	);
+	const { data: queryData } = useQuery("fave", getFavoritesFromDB, {
+		enabled: Boolean(favorites),
+	});
 
 	useEffect(() => {
 		if (queryData) {
@@ -264,11 +260,11 @@ const ForYou = () => {
 		return mealId.find((id: any) => id == meal_id);
 	}
 
-	function queryParam() {
-		return new URLSearchParams(useLocation().search);
-	}
-	const query = queryParam().get("tab");
-	setByYou?.(query);
+	// function queryParam() {
+	// 	return new URLSearchParams(useLocation().search);
+	// }
+	// const query = queryParam().get("tab");
+	// setByYou?.(query);
 
 	return (
 		<div className="for-you px-5">

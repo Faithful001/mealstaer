@@ -7,12 +7,7 @@ const Recommended = () => {
 	const prodURL = URL.prodURL;
 	const [allMeals, setAllMeals] = useState<object[]>([]);
 	const [randomMeals, setRandomMeals] = useState<object[]>([]);
-	const [mealLabels, setMealLabels] = useState<string[]>([
-		"Breakfast",
-		"Lunch",
-		"Supper",
-		"Dinner",
-	]);
+	const mealLabels: string[] = ["Breakfast", "Lunch", "Supper", "Dinner"];
 
 	useEffect(() => {
 		const stringifiedData = JSON.stringify(allMeals);

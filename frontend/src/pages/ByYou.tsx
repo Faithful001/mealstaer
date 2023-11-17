@@ -127,7 +127,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 			// Return the previous data for potential rollback
 			return { prevData };
 		},
-		onError: (error, variables, context: any) => {
+		onError: (context: any) => {
 			// Rollback the cache to its previous state if the mutation fails
 			if (context.prevData) {
 				queryClient.setQueryData("fave", context.prevData);
@@ -193,7 +193,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 			// Return the previous data for potential rollback
 			return { prevData };
 		},
-		onError: (error, variables, context: any) => {
+		onError: (context: any) => {
 			// Rollback the cache to its previous state if the mutation fails
 			if (context.prevData) {
 				queryClient.setQueryData("fave", context.prevData);
@@ -227,13 +227,9 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 			}
 		}
 	}
-	const { error: queryError, data: queryData } = useQuery(
-		"fave",
-		getFavoritesFromDB,
-		{
-			enabled: Boolean(favorites),
-		}
-	);
+	const { data: queryData } = useQuery("fave", getFavoritesFromDB, {
+		enabled: Boolean(favorites),
+	});
 
 	useEffect(() => {
 		if (queryData) {

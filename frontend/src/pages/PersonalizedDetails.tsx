@@ -42,7 +42,7 @@ const PersonalizedDetails = () => {
 		}
 	}
 
-	const { isLoading, error, data } = useQuery("meals", fetchData, {
+	const { data } = useQuery("meals", fetchData, {
 		enabled: Boolean(meal),
 	});
 	// console.log(isLoading);

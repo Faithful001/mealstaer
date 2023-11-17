@@ -34,7 +34,7 @@ const MealDetails = () => {
 		}
 	}
 
-	const { isLoading, error, data } = useQuery("meals", fetchData, {
+	const { isLoading, data } = useQuery("meals", fetchData, {
 		enabled: Boolean(meal),
 	});
 	console.log(isLoading);

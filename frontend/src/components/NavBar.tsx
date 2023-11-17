@@ -61,7 +61,7 @@ const NavBar = () => {
 						<span className="material-symbols-outlined mr-1 text-yellow-400">
 							award_star
 						</span>
-						<h1 className="">mealstar</h1>
+						<h1 className="">mealstaer</h1>
 					</div>
 					<div className="flex items-center relative">
 						{/* <form onSubmit={handleSubmit}> */}

@@ -6,11 +6,19 @@ const loginUser = async (req, res) => {
 		const user = await User.login(email, password);
 		req.session.user = user;
 		// const session = req.cookies;
-		const session = res.getHeader("Set-Cookie");
+		// const session = res.getHeader("Set-Cookie");
 		// const session = setCookieHeader.split("; ");
 		// const sessionId = session[0]
-		console.log(session);
-		res.status(200).json({ user, session });
+		const cookiesString = req.headers.cookie || "";
+		const cookies = cookiesString.split(";").reduce((acc, cookie) => {
+			const [key, value] = cookie.trim().split("=");
+			acc[key] = decodeURIComponent(value);
+			return acc;
+		}, {});
+
+		console.log();
+		console.log(cookies);
+		res.status(200).json({ user, cookies });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}

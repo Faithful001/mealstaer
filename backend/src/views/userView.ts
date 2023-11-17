@@ -7,7 +7,7 @@ const router = express.Router();
 const CLIENT_URL = "http://localhost:5173/";
 router.get("/login/success", async (req, res) => {
 	const user = req.user;
-	// console.log("User from success route is: " + user);
+	console.log("User from success route is: " + user);
 	if (user) {
 		res.status(200).json({
 			message: "Successful login",

@@ -34,14 +34,15 @@ const Login = () => {
 	// };
 
 	async function getUser() {
-		const response = await axios.get(`${prodURL}/api/auth/login/success`, {
-			withCredentials: true,
-			headers: {
-				"Access-Control-Allow-Origin": "*",
-			},
-		});
-		console.log(response.data);
-		if (response.status == 200) {
+		try {
+			const response = await axios.get(`${prodURL}/api/auth/login/success`, {
+				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
+			});
+			console.log(response.data);
+
 			const cookieName = "sessions";
 			const cookieValue = response?.data?.session;
 
@@ -51,6 +52,8 @@ const Login = () => {
 			console.log(document.cookie);
 			const parsedUser = JSON.stringify(response.data.user);
 			localStorage.setItem("user", parsedUser);
+		} catch (error: any) {
+			console.log(error?.message ?? error);
 		}
 	}
 	// getUser();
@@ -60,20 +63,21 @@ const Login = () => {
 		e.preventDefault();
 		try {
 			const response = await axios.post(`${prodURL}/api/auth/login`, body, {
-				withCredentials: true,
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+				},
 			});
-			console.log(response.data.session);
-			if (response.status == 200) {
-				const cookieName = "sessions";
-				const cookieValue = response?.data?.session;
-				document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly;`;
+			console.log(response.data);
 
-				console.log(document.cookie);
+			const cookieName = "sessions";
+			const cookieValue = response?.data;
+			// document.cookie = `${cookieName}=${cookieValue}; path=/; HttpOnly;`;
 
-				const parsedUser = JSON.stringify(response.data.user);
-				localStorage.setItem("user", parsedUser);
-				navigate("/");
-			}
+			// console.log(document.cookie);
+
+			const parsedUser = JSON.stringify(response.data.user);
+			localStorage.setItem("user", parsedUser);
+			// navigate("/");
 		} catch (error: any) {
 			if (error.response) {
 				console.log(error.response.data.error);

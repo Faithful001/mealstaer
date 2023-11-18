@@ -18,22 +18,20 @@ export class IndexedDB {
 	// }
 
 	async addToMealDB(
-		_id: string,
-		name: string,
-		ingredients: string[],
-		steps: string[],
-		user_id: string
+		meals: any[]
 		// original_meal_id: string
 	) {
 		try {
-			const id = await mealdb.meals.add({
-				_id,
-				name,
-				ingredients,
-				steps,
-				user_id,
-				// original_meal_id,
-			});
+			const id = meals.map((meal) =>
+				mealdb.meals.add({
+					_id: meal._id,
+					name: meal.name,
+					ingredients: meal.ingredients,
+					steps: meal.steps,
+					user_id: meal.user_id,
+					// original_meal_id,
+				})
+			);
 
 			console.log(id);
 			return id;
@@ -56,22 +54,20 @@ export class IndexedDB {
 
 	//personlized
 	async addToPersonalizedDB(
-		_id: string,
-		name: string,
-		ingredients: string[],
-		steps: string[],
-		user_id: string
+		meals: any[]
 		// original_meal_id: string
 	) {
 		try {
-			const id = await personalizeddb.meals.add({
-				_id,
-				name,
-				ingredients,
-				steps,
-				user_id,
-				// original_meal_id,
-			});
+			const id = meals.map((meal) =>
+				mealdb.meals.add({
+					_id: meal._id,
+					name: meal.name,
+					ingredients: meal.ingredients,
+					steps: meal.steps,
+					user_id: meal.user_id,
+					// original_meal_id,
+				})
+			);
 
 			console.log(id);
 			return id;

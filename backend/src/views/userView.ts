@@ -6,7 +6,7 @@ const { loginUser, signupUser } = require("../controllers/userController");
 
 const router = express.Router();
 
-const CLIENT_URL = "http://localhost:5173/";
+const CLIENT_URL = "https://mealstaer.vercel.app";
 
 interface User {
 	_id: string;

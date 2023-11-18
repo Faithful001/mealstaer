@@ -59,7 +59,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const corsOptions = {
-	origin: "https://mealstaer.onrender.com",
+	origin: ["https://mealstaer.onrender.com", "http://localhost:5173"],
 	method: ["GET", "POST", "PATCH", "DELETE"],
 	credentials: true,
 };

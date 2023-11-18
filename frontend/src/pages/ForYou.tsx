@@ -12,6 +12,7 @@ import { useToast } from "../contexts/ToastContext";
 import { useFavorite } from "../contexts/FavoriteContext";
 // import { usePage } from "../contexts/PageContext";
 import { URL } from "../utils/methods/url/URL";
+import localStorageUtil from "../utils/localStorage.util";
 
 const ForYou = () => {
 	const prodURL = URL.prodURL;
@@ -44,11 +45,13 @@ const ForYou = () => {
 	//funtions & methods start
 	//onPageLoad data (render the meal data on page load)
 	async function fetchData() {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/data`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			// console.log(response.data);
@@ -105,6 +108,7 @@ const ForYou = () => {
 	//addToFavorites function
 	async function addToFavorites(meal: MealsType) {
 		localStorage.setItem("meal_id", meal._id);
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const body = {
 				name: meal.name,
@@ -116,6 +120,7 @@ const ForYou = () => {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			setToast(`${meal.name} added to favorites`);
@@ -163,11 +168,13 @@ const ForYou = () => {
 	// removeFromFavorite function
 	async function removeFromFavorites(meal: MealsType) {
 		localStorage.removeItem("meal_id");
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const getReqRes = await axios.get(`${prodURL}/api/fave`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			// const meal = getReqRes.data.map((item: any)=> item._id)
@@ -180,6 +187,7 @@ const ForYou = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
+						Authorization: `Bearer: ${token}`,
 					},
 				}
 			);
@@ -226,11 +234,13 @@ const ForYou = () => {
 
 	//getting favorite meals from the database and mapping through their original_meal_ids
 	async function getFavoritesFromDB() {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/fave/`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			const originalMealIds = response.data.map(

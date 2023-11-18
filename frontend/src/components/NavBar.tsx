@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useMeal } from "../contexts/MealContext";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { URL } from "../utils/methods/url/URL";
+// import axios from "axios";
+// import { URL } from "../utils/methods/url/URL";
 
 const NavBar = () => {
-	const prodURL = URL.prodURL;
+	// const prodURL = URL.prodURL;
 	// const [search, setSearch] = useState<string>("");
 	const [dropDown, setDropDown] = useState<boolean>(false);
 	const navigate = useNavigate();
@@ -38,20 +38,10 @@ const NavBar = () => {
 		setDropDown(!dropDown);
 	}
 
-	async function logout() {
+	function logout() {
 		navigate("/login");
-		try {
-			const response = await axios.get(`${prodURL}/api/auth/logout`, {
-				withCredentials: true,
-			});
-			console.log(response.data);
-		} catch (error: any) {
-			if (error.response.status == 401) {
-				navigate("/login");
-			} else {
-				console.log(`Something went wrong, ${error.message}`);
-			}
-		}
+		localStorage.removeItem("token");
+		localStorage.removeItem("user");
 	}
 	return (
 		<div className="navbar">

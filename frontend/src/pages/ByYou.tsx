@@ -10,6 +10,7 @@ import favorite from "../assets/favorite2.svg";
 import favorite_white from "../assets/favorite2_white.svg";
 import { useToast } from "../contexts/ToastContext";
 import { URL } from "../utils/methods/url/URL";
+import localStorageUtil from "../utils/localStorage.util";
 // import NavBar from "../components/NavBar";
 // import PreContent from "../components/PreContent";
 // import { usePage } from "../contexts/PageContext";
@@ -38,11 +39,13 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 
 	//onPageLoad data (render the meal data on page load)
 	async function fetchData() {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/personalized`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			// console.log(response.data);
@@ -86,6 +89,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 
 	async function addToFavorites(meal: MealsType) {
 		localStorage.setItem("meal_id", meal._id);
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const body = {
 				name: meal.name,
@@ -97,6 +101,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			setToast(`${meal.name} added to favorites`);
@@ -144,11 +149,13 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 	// removeFromFavorite function
 	async function removeFromFavorites(meal: MealsType) {
 		localStorage.removeItem("meal_id");
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const getReqRes = await axios.get(`${prodURL}/api/fave`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			// const meal = getReqRes.data.map((item: any)=> item._id)
@@ -161,6 +168,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
+						Authorization: `Bearer: ${token}`,
 					},
 				}
 			);
@@ -207,11 +215,13 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 
 	//getting favorite meals from the database and mapping through their original_meal_ids
 	async function getFavoritesFromDB() {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/fave/`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			const originalMealIds = response.data.map(

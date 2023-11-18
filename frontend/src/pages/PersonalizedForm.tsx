@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "../contexts/ToastContext";
 import { URL } from "../utils/methods/url/URL";
+import localStorageUtil from "../utils/localStorage.util";
 
 const PersonalizedForm = () => {
 	const prodURL = URL.prodURL;
@@ -63,6 +64,8 @@ const PersonalizedForm = () => {
 			steps: formattedSteps,
 		};
 
+		const token = localStorageUtil.getFromStorage("token");
+
 		try {
 			const response = await axios.post(
 				`${prodURL}/api/personalized`,
@@ -71,6 +74,7 @@ const PersonalizedForm = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
+						Authorization: `Bearer: ${token}`,
 					},
 				}
 			);

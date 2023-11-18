@@ -3,9 +3,9 @@ const Personalized = require("../models/personalizedModel");
 
 const getAllPersonalized = async (req, res) => {
 	try {
-		const user = req.session.user;
-		const userr = req.user;
-		const user_id = user ? user._id : userr._id;
+		const user_id = req.userr._id;
+		// const userr = req.user;
+		// const user_id = user ? user._id : userr._id;
 		// console.log("The user is: " + user_id);
 		const personalizedMeals = await Personalized.find({ user_id }).sort({
 			createdAt: -1,
@@ -35,9 +35,9 @@ const getPersonalized = async (req, res) => {
 
 const createPersonalized = async (req, res) => {
 	try {
-		const user = req.session.user;
-		const userr = req.user;
-		const user_id = user ? user._id : userr._id;
+		const user_id = req.userr._id;
+		// const userr = req.user;
+		// const user_id = user ? user._id : userr._id;
 		// console.log("The user is: " + user_id);
 		const { name, ingredients, steps } = req.body;
 		const exists = await Personalized.findOne({ name });

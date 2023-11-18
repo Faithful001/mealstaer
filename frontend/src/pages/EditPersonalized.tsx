@@ -8,6 +8,7 @@ import { useToast } from "../contexts/ToastContext";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { URL } from "../utils/methods/url/URL";
+import localStorageUtil from "../utils/localStorage.util";
 
 const EditPersonalized = () => {
 	const prodURL = URL.prodURL;
@@ -23,11 +24,13 @@ const EditPersonalized = () => {
 	let { id } = useParams();
 
 	async function getMealsData() {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/personalized/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 
@@ -93,6 +96,8 @@ const EditPersonalized = () => {
 			steps: formattedSteps,
 		};
 
+		const token = localStorageUtil.getFromStorage("token");
+
 		try {
 			const response = await axios.patch(
 				`${prodURL}/api/personalized/${id}`,
@@ -101,6 +106,7 @@ const EditPersonalized = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
+						Authorization: `Bearer: ${token}`,
 					},
 				}
 			);

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { URL } from "../utils/methods/url/URL";
+import localStorageUtil from "../utils/localStorage.util";
 
 const Favorited = () => {
 	const prodURL = URL.prodURL;
@@ -16,11 +17,13 @@ const Favorited = () => {
 	// console.log(favoritedArray);
 
 	async function getAllFavorites() {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/fave/`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			console.log(response.data);

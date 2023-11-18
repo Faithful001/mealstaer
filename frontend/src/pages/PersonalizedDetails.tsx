@@ -9,6 +9,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useToast } from "../contexts/ToastContext";
 import { URL } from "../utils/methods/url/URL";
+import localStorageUtil from "../utils/localStorage.util";
 
 const PersonalizedDetails = () => {
 	const prodURL = URL.prodURL;
@@ -24,11 +25,13 @@ const PersonalizedDetails = () => {
 	let { id } = useParams();
 
 	async function fetchData() {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/personalized/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			// console.log(response.data);
@@ -78,11 +81,13 @@ const PersonalizedDetails = () => {
 	}
 
 	async function deleteFromFavorite(id: any) {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/fave`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			const meal = response.data.find(
@@ -97,6 +102,7 @@ const PersonalizedDetails = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
+						Authorization: `Bearer: ${token}`,
 					},
 				}
 			);
@@ -110,12 +116,13 @@ const PersonalizedDetails = () => {
 
 	async function handleDelete(id: any, name: string) {
 		deleteFromFavorite(id);
-
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.delete(`${prodURL}/api/personalized/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			console.log(response);

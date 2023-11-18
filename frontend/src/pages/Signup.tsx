@@ -34,8 +34,10 @@ const Signup = () => {
 		});
 		console.log(response.data);
 		if (response.status == 200) {
-			const parsedUser = JSON.stringify(response.data.user);
-			localStorage.setItem("user", parsedUser);
+			const stringifiedUser = JSON.stringify(response.data.user);
+			const stringifiedToken = JSON.stringify(response.data.token);
+			localStorage.setItem("user", stringifiedUser);
+			localStorage.setItem("token", stringifiedToken);
 		}
 	}
 	// getUser();
@@ -51,8 +53,10 @@ const Signup = () => {
 			);
 			console.log(response);
 			if (response.status == 200) {
-				const parsedUser = JSON.stringify(response.data.user);
-				localStorage.setItem("user", parsedUser);
+				const stringifiedUser = JSON.stringify(response.data.user);
+				const stringifiedToken = JSON.stringify(response.data.token);
+				localStorage.setItem("user", stringifiedUser);
+				localStorage.setItem("token", stringifiedToken);
 				navigate("/");
 			}
 		} catch (error: any) {

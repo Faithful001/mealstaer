@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 
 const getMeals = async (req, res) => {
 	try {
-		const user = req.session.user;
-		const userr = req.user;
-		const user_id = user ? user._id : userr._id;
-		// console.log("The user is: " + user_id);
+		const user_id = req.userr._id;
+		// const userr = req.user;
+		// const user_id = user ? user._id : userr._id;
+		console.log("The user is: " + user_id);
 		const mealData = await Meal.find({ user_id }).sort({ createdAt: -1 });
 		res.status(200).json(mealData);
 	} catch (error) {
@@ -34,9 +34,9 @@ const getMeal = async (req, res) => {
 //createMeal
 const createMeal = async (req, res) => {
 	try {
-		const user = req.session.user;
-		const userr = req.user;
-		const user_id = user ? user._id : userr._id;
+		const user_id = req.user_id;
+		// const userr = req.user;
+		// const user_id = user ? user._id : userr._id;
 		// console.log("The user is: " + user_id);
 		const { name, ingredients, steps } = req.body;
 		const exists = await Meal.findOne({ name });

@@ -5,6 +5,7 @@ import { MealsType } from "../contexts/MealContext";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { URL } from "../utils/methods/url/URL";
+import localStorageUtil from "../utils/localStorage.util";
 
 const FavoriteDetails = () => {
 	const prodURL = URL.prodURL;
@@ -16,11 +17,13 @@ const FavoriteDetails = () => {
 	let { id } = useParams();
 
 	async function fetchData() {
+		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/fave/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
+					Authorization: `Bearer: ${token}`,
 				},
 			});
 			console.log(response.data);

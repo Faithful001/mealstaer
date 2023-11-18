@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { URL } from "../utils/methods/url/URL";
+import localStorageUtil from "../utils/localStorage.util";
 
 const Recommended = () => {
 	const prodURL = URL.prodURL;
@@ -39,11 +40,13 @@ const Recommended = () => {
 
 	useEffect(() => {
 		const getMeals = async () => {
+			const token = localStorageUtil.getFromStorage("token");
 			try {
 				const response = await axios.get(`${prodURL}/api/data/`, {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
+						Authorization: `Bearer: ${token}`,
 					},
 				});
 				const personalizedResponse = await axios.get(
@@ -52,6 +55,7 @@ const Recommended = () => {
 						withCredentials: true,
 						headers: {
 							"Access-Control-Allow-Origin": "*",
+							Authorization: `Bearer: ${token}`,
 						},
 					}
 				);

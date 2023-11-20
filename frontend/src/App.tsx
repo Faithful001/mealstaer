@@ -1,19 +1,15 @@
 import MealDetails from "./pages/MealDetails";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Body from "./pages/Body";
-// import Saved from "./pages/Saved";
 import Favorited from "./pages/Favorited";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import FavoriteDetails from "./pages/FavoritedDetails";
 import PersonalizedForm from "./pages/PersonalizedForm";
-// import ForYou from "./pages/ForYou";
 import PersonalizedDetails from "./pages/PersonalizedDetails";
 import EditPersonalized from "./pages/EditPersonalized";
 import Home from "./components/Home";
 import RecommendedDetails from "./pages/RecommendedDetails";
-// import ByYou from "./pages/ByYou";
 
 function App() {
 	const queryClient = new QueryClient();

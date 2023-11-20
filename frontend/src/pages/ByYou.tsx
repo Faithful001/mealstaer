@@ -49,7 +49,9 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 				},
 			});
 			// console.log(response.data);
-			return response.data;
+			localStorageUtil.addToStorage("By-You", response.data);
+			return localStorageUtil.getFromStorage("By-You");
+			// return response.data;
 		} catch (error: any) {
 			if (error.response.status == 401) {
 				navigate("/login");
@@ -64,6 +66,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 		enabled: Boolean(meals),
 	});
 	console.log(isLoading);
+
 	useEffect(() => {
 		if (data) {
 			setMeals(data);

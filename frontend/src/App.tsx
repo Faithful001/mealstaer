@@ -10,6 +10,7 @@ import PersonalizedDetails from "./pages/PersonalizedDetails";
 import EditPersonalized from "./pages/EditPersonalized";
 import Home from "./components/Home";
 import RecommendedDetails from "./pages/RecommendedDetails";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ function App() {
 						<Route path="/add-new-meal" element={<PersonalizedForm />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<Signup />} />
+						<Route path="/*" element={<ErrorPage />} />
 					</Routes>
 				</QueryClientProvider>
 			</Router>

@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { Label, TextInput } from "flowbite-react";
 import google_icon from "../assets/google_icon.png";
@@ -16,11 +16,11 @@ const Login = () => {
 	const [error, setError] = useState<any>("");
 	const navigate = useNavigate();
 	console.log(email, password);
-
-	const signInWithGoogle = async () => {
+	//
+	async function signInWithGoogle() {
 		window.open(`${prodURL}/api/auth/google`, "_self");
-		getUser();
-	};
+		await getUser();
+	}
 
 	// const setCookie = (name: string, value: string, days: number) => {
 	// 	const expirationDate = new Date();
@@ -55,7 +55,7 @@ const Login = () => {
 	// getUser();
 
 	const body = { email, password };
-	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+	async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		try {
 			const response = await axios.post(`${prodURL}/api/auth/login`, body, {
@@ -65,7 +65,7 @@ const Login = () => {
 				},
 			});
 			console.log(response.data);
-			if (response.status == 200) {
+			if (response.status === 200) {
 				const stringifiedUser = JSON.stringify(response.data.user);
 				const stringifiedToken = JSON.stringify(response.data.token);
 				localStorage.setItem("user", stringifiedUser);
@@ -81,7 +81,7 @@ const Login = () => {
 				setError(error.message);
 			}
 		}
-	};
+	}
 
 	return (
 		<div className="login flex flex-col items-center justify-center">

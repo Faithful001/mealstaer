@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import { Label } from "flowbite-react";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState } from "react";

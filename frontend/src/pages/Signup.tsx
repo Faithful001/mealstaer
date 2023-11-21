@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { Label, TextInput } from "flowbite-react";
 import google_icon from "../assets/google_icon.png";
@@ -20,10 +20,10 @@ const Signup = () => {
 	const [error, setError] = useState<any>("");
 	const navigate = useNavigate();
 
-	const signInWithGoogle = async () => {
-		window.open("http://localhost:4000/api/auth/google", "_self");
-		getUser();
-	};
+	async function signInWithGoogle() {
+		window.open(`${prodURL}/api/auth/google`, "_self");
+		await getUser();
+	}
 
 	async function getUser() {
 		const response = await axios.get(`${prodURL}/api/auth/login/success`, {
@@ -43,7 +43,7 @@ const Signup = () => {
 	// getUser();
 
 	const body = { user_name, email, password };
-	const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+	async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		try {
 			const response = await axios.post(
@@ -68,7 +68,7 @@ const Signup = () => {
 				setError(error.message);
 			}
 		}
-	};
+	}
 
 	function handlePassword(e: React.ChangeEvent<HTMLInputElement>) {
 		setPassword(e.target.value);

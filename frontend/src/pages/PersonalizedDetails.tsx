@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import { useState, useEffect } from "react";
 import { Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";

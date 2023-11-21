@@ -64,7 +64,6 @@ const Login = () => {
 					"Access-Control-Allow-Origin": "*",
 				},
 			});
-			console.log(response.data);
 			if (response.status === 200) {
 				const stringifiedUser = JSON.stringify(response.data.user);
 				const stringifiedToken = JSON.stringify(response.data.token);

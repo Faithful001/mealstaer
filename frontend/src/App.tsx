@@ -38,7 +38,7 @@ function App() {
 						<Route path="/add-new-meal" element={<PersonalizedForm />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<Signup />} />
-						<Route path="/*" element={<ErrorPage />} />
+						<Route path="*" element={<ErrorPage />} />
 					</Routes>
 				</QueryClientProvider>
 			</Router>

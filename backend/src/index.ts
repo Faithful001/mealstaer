@@ -22,9 +22,9 @@ const app = express();
 const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
 
 const store = new MongoDBStore({
-	uri: process.env.MONGO_URI, // Replace with your MongoDB URI
+	uri: process.env.MONGO_URI,
 	collection: "sessions",
-	expires: twoDaysInMilliseconds, // Session will expire in 1 day
+	expires: twoDaysInMilliseconds, // Session will expire in 2 days
 	// connectionOptions: {
 	// 	useNewUrlParser: true,
 	// 	useUnifiedTopology: true,

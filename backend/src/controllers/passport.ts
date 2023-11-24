@@ -2,9 +2,7 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 // import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 const User = require("../models/userModel");
-import dotenv from "dotenv";
-
-dotenv.config();
+require("dotenv").config();
 
 // interface User {
 // 	_id: string;

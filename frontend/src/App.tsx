@@ -8,9 +8,11 @@ import FavoriteDetails from "./pages/FavoritedDetails";
 import PersonalizedForm from "./pages/PersonalizedForm";
 import PersonalizedDetails from "./pages/PersonalizedDetails";
 import EditPersonalized from "./pages/EditPersonalized";
-import Home from "./components/Home";
+// import Home from "./components/Home";
 import RecommendedDetails from "./pages/RecommendedDetails";
 import ErrorPage from "./pages/ErrorPage";
+import ForYou from "./pages/ForYou";
+import ByYou from "./pages/ByYou";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -19,7 +21,8 @@ function App() {
 			<Router>
 				<QueryClientProvider client={queryClient}>
 					<Routes>
-						<Route path="/" element={<Home />} />
+						<Route index path="/" element={<ForYou />} />
+						<Route path="/by-you" element={<ByYou />} />
 						<Route path="/user/meal/:id" element={<MealDetails />} />
 						<Route
 							path="/user/recommended/:id"

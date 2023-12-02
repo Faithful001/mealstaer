@@ -21,12 +21,12 @@ export class MealClassedDexie extends Dexie {
 	}
 }
 export class PersonalClassedDexie extends Dexie {
-	meals!: Table<Meals>;
+	personalized!: Table<Meals>;
 
 	constructor() {
-		super("mealsDatabase");
+		super("personalizedDatabase");
 		this.version(1).stores({
-			meals: "++id, _id, name, ingredients, steps, user_ids",
+			personalized: "++id, _id, name, ingredients, steps, user_ids",
 		});
 	}
 }

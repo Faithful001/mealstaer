@@ -11,14 +11,37 @@ import favorite_white from "../assets/favorite2_white.svg";
 import { useToast } from "../contexts/ToastContext";
 import { URL } from "../utils/methods/url/URL";
 import localStorageUtil from "../utils/localStorage.util";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import NavBar from "../components/NavBar";
+import Recommended from "../components/Recommended";
+import PreContent from "../components/PreContent";
 // import NavBar from "../components/NavBar";
 // import PreContent from "../components/PreContent";
 // import { usePage } from "../contexts/PageContext";
 
-interface PropsType {
-	name: string | null;
-}
-const ByYou: React.FC<PropsType> = ({ name }) => {
+const ByYou = () => {
+	const [user_name, setUsername] = useState("");
+	const { toast: otherToast } = useToast();
+	// const navigate = useNavigate();
+
+	useEffect(() => {
+		if (otherToast !== "") {
+			toast(otherToast);
+		}
+	}, [otherToast]);
+
+	useEffect(() => {
+		const user = localStorage.getItem("user");
+		if (user) {
+			const userObject = JSON.parse(user);
+			const user_name = userObject.user_name;
+			const firstName = user_name.split(" ")[0];
+			setUsername(firstName);
+		}
+	}, []);
+	const abortCont = new AbortController();
+
 	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const queryClient = new QueryClient();
@@ -42,6 +65,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/personalized`, {
+				signal: abortCont.signal,
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -50,6 +74,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 			});
 			// console.log(response.data);
 			localStorageUtil.addToStorage("By-You", response.data);
+			abortCont.abort();
 			return localStorageUtil.getFromStorage("By-You");
 			// return response.data;
 		} catch (error: any) {
@@ -88,7 +113,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 			setMealsError(true);
 			setMeals([]);
 		}
-	}, [data, search, setValue, setSearchValue]);
+	}, [meals, data, search, setValue, setSearchValue]);
 
 	async function addToFavorites(meal: MealsType) {
 		localStorage.setItem("meal_id", meal._id);
@@ -255,10 +280,37 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 		return mealId.find((id: any) => id == meal_id);
 	}
 
+	function navigateToForYou() {
+		navigate("/");
+		meals.length = 0;
+	}
+	function navigateToByYou() {
+		navigate("/by-you");
+		meals.length = 0;
+	}
+
 	return (
-		<div className="by-you px-5 ">
-			<div className="section">
-				{meals && meals.length > 0 && name == "by-you" ? (
+		<div className="by-you">
+			<NavBar />
+			<ToastContainer />
+			<PreContent user_name={user_name} />
+			<Recommended />
+			<div className="section pt-2 px-5">
+				<div className="flex gap-4">
+					<button
+						className="border-white border-2 rounded-3xl text-sm p-2 px-4"
+						onClick={navigateToForYou}
+					>
+						For You
+					</button>
+					<button
+						className="bg-white rounded-3xl text-black text-sm p-2 px-4 border"
+						onClick={navigateToByYou}
+					>
+						By You
+					</button>
+				</div>
+				{meals && meals.length > 0 ? (
 					<div className="grid grid-cols-2 md:grid-cols-2 gap-4 text-white mt-8">
 						{meals.map((meal: MealsType) => (
 							<div key={meal._id} className="bg-[#424242] rounded-lg p-5">
@@ -291,7 +343,7 @@ const ByYou: React.FC<PropsType> = ({ name }) => {
 				) : error && error ? (
 					<div className="text-red font-medium text-2xl">{fetchError}</div>
 				) : (
-					<div className="text-xl mt-5">No meal available</div>
+					<div className="text-xl mt-5">Fetching meals...</div>
 				)}
 				{mealsError && (
 					<div className="text-red font-medium text-xl">Meal not found</div>

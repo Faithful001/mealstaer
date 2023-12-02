@@ -22,15 +22,20 @@ export class IndexedDB {
 		// original_meal_id: string
 	) {
 		try {
-			const id = meals.map((meal) =>
-				mealdb.meals.add({
-					_id: meal._id,
-					name: meal.name,
-					ingredients: meal.ingredients,
-					steps: meal.steps,
-					user_id: meal.user_id,
-					// original_meal_id,
-				})
+			// if (!meals) {
+			// 	console.error("Meals array is undefined or null");
+			// 	return [];
+			// }
+			const id = meals?.map(
+				async (meal) =>
+					await mealdb?.meals.add({
+						_id: meal._id,
+						name: meal.name,
+						ingredients: meal.ingredients,
+						steps: meal.steps,
+						user_id: meal.user_id,
+						// original_meal_id,
+					})
 			);
 
 			console.log(id);
@@ -54,12 +59,16 @@ export class IndexedDB {
 
 	//personlized
 	async addToPersonalizedDB(
-		meals: any[]
+		personalized: any[]
 		// original_meal_id: string
 	) {
 		try {
-			const id = meals.map((meal) =>
-				mealdb.meals.add({
+			// if (!personalized) {
+			// 	console.error("Meals array is undefined or null");
+			// 	return [];
+			// }
+			const id = personalized.map((meal) =>
+				personalizeddb.personalized.add({
 					_id: meal._id,
 					name: meal.name,
 					ingredients: meal.ingredients,
@@ -79,7 +88,7 @@ export class IndexedDB {
 
 	async getFromPersonalizedDB() {
 		try {
-			const fave = await personalizeddb.meals.toArray();
+			const fave = await personalizeddb.personalized.toArray();
 			const fieldValues = fave.map((item) => item);
 			return fieldValues;
 		} catch (error: any) {

@@ -7,24 +7,52 @@ import { MealsType } from "../contexts/MealContext";
 import favorite from "../assets/favorite2.svg";
 import favorite_white from "../assets/favorite2_white.svg";
 import { useToast } from "../contexts/ToastContext";
-// import { useLiveQuery } from "dexie-react-hooks";
-// import { myDB } from "../utils/methods/IndexedDB";
+import { useLiveQuery } from "dexie-react-hooks";
+import { myDB } from "../utils/methods/IndexedDB";
 import { useFavorite } from "../contexts/FavoriteContext";
 // import { usePage } from "../contexts/PageContext";
 import { URL } from "../utils/methods/url/URL";
 import localStorageUtil from "../utils/localStorage.util";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import NavBar from "../components/NavBar";
+import Recommended from "../components/Recommended";
+import PreContent from "../components/PreContent";
 
 const ForYou = () => {
+	const [user_name, setUsername] = useState("");
+	const { toast: otherToast } = useToast();
+	// const navigate = useNavigate();
+
+	useEffect(() => {
+		if (otherToast !== "") {
+			toast(otherToast);
+		}
+	}, [otherToast]);
+
+	useEffect(() => {
+		const user = localStorage.getItem("user");
+		if (user) {
+			const userObject = JSON.parse(user);
+			const user_name = userObject.user_name;
+			const firstName = user_name.split(" ")[0];
+			setUsername(firstName);
+		}
+	}, []);
+	const abortCont = new AbortController();
+
 	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const queryClient = new QueryClient();
 	const { setToast = () => {} } = useToast();
+
 	// const { byYou, setByYou } = usePage();
 
 	//all states start
 	const [meals, setMeals] = useState<MealsType[]>([]);
 	const [mealsError, setMealsError] = useState<boolean>(false);
 	const [fetchError, setFetchError] = useState<any>(null);
+	console.log(meals);
 
 	const {
 		search,
@@ -48,6 +76,7 @@ const ForYou = () => {
 		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/data`, {
+				signal: abortCont.signal,
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
@@ -56,6 +85,7 @@ const ForYou = () => {
 			});
 			// console.log(response.data);
 			localStorageUtil.addToStorage("By-You", response.data);
+			abortCont.abort();
 			return localStorageUtil.getFromStorage("By-You");
 			// return response.data;
 		} catch (error: any) {
@@ -72,6 +102,34 @@ const ForYou = () => {
 		enabled: Boolean(meals),
 	});
 	console.log(isLoading);
+
+	//add meals to indexed db
+	async function addMealToMealDB() {
+		try {
+			await myDB.addToMealDB(data);
+		} catch (error: any) {
+			console.error(error?.message);
+		}
+	}
+
+	useEffect(() => {
+		addMealToMealDB();
+	}, []);
+
+	const mealsFromIndexedDB = useLiveQuery(() => {
+		myDB
+			.getFromMealDB()
+			.then((res) => {
+				// console.log(res);
+				return res;
+			})
+			.catch((error: any) => {
+				console.error(error?.message);
+				throw error?.message;
+			});
+	});
+
+	console.log(mealsFromIndexedDB);
 
 	useEffect(() => {
 		if (data) {
@@ -94,7 +152,7 @@ const ForYou = () => {
 			setMealsError(true);
 			setMeals([]);
 		}
-	}, [data, search, setValue, setSearchValue]);
+	}, [meals, data, search, setValue, setSearchValue]);
 
 	//check if search is an array of length > 0
 	// useEffect(() => {
@@ -278,9 +336,36 @@ const ForYou = () => {
 	// const query = queryParam().get("tab");
 	// setByYou?.(query);
 
+	function navigateToForYou() {
+		meals.length = 0;
+		navigate("/");
+	}
+	function navigateToByYou() {
+		navigate("/by-you");
+		meals.length = 0;
+	}
+
 	return (
-		<div className="for-you px-5">
-			<div className="section pt-2">
+		<div className="for-you flex flex-col">
+			<NavBar />
+			<ToastContainer />
+			<PreContent user_name={user_name} />
+			<Recommended />
+			<div className="section pt-2 px-5">
+				<div className="flex gap-4">
+					<button
+						className="bg-white rounded-3xl text-black text-sm p-2 px-4 border"
+						onClick={navigateToForYou}
+					>
+						For You
+					</button>
+					<button
+						className=" border-white border-2 rounded-3xl text-sm p-2 px-4"
+						onClick={navigateToByYou}
+					>
+						By You
+					</button>
+				</div>
 				{meals && meals.length > 0 ? (
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-white mt-8">
 						{meals.map((meal: MealsType) => (
@@ -314,7 +399,7 @@ const ForYou = () => {
 				) : error ? (
 					<div className="text-red font-medium text-xxl">{fetchError}</div>
 				) : (
-					<div className="text-xl mt-5">No meal available</div>
+					<div className="text-xl mt-5">Fetching meals...</div>
 				)}
 				{mealsError && (
 					<div className="text-red font-medium text-xl">Meal not found</div>

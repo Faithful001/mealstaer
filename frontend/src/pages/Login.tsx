@@ -1,16 +1,17 @@
 // "use client";
-
-import { Label, TextInput } from "flowbite-react";
+import { Label, TextInput, Spinner } from "flowbite-react";
 import google_icon from "../assets/google_icon.png";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { URL } from "../utils/methods/url/URL";
+import { useMutation, useQueryClient } from "react-query";
 
 const Login = () => {
 	const prodURL = URL.prodURL;
 	// const [user, setUser] = useState<any>(null);
+	const queryClient = useQueryClient();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<any>("");
@@ -55,8 +56,7 @@ const Login = () => {
 	// getUser();
 
 	const body = { email, password };
-	async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
-		e.preventDefault();
+	async function login() {
 		try {
 			const response = await axios.post(`${prodURL}/api/auth/login`, body, {
 				withCredentials: true,
@@ -64,12 +64,14 @@ const Login = () => {
 					"Access-Control-Allow-Origin": "*",
 				},
 			});
+			console.log("login success");
 			if (response.status === 200) {
 				const stringifiedUser = JSON.stringify(response.data.user);
 				const stringifiedToken = JSON.stringify(response.data.token);
 				localStorage.setItem("user", stringifiedUser);
 				localStorage.setItem("token", stringifiedToken);
 				navigate("/");
+				return response.data;
 			}
 		} catch (error: any) {
 			if (error.response) {
@@ -79,7 +81,22 @@ const Login = () => {
 				console.log(error.message);
 				setError(error.message);
 			}
+			throw error?.response;
 		}
+	}
+
+	const { mutate, isLoading } = useMutation(login, {
+		onSuccess: () => {
+			queryClient.invalidateQueries("login");
+		},
+		onError: (error) => {
+			console.error(error);
+		},
+	});
+
+	function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		mutate();
 	}
 
 	return (
@@ -128,11 +145,12 @@ const Login = () => {
 							Remember me
 						</Label>
 					</div> */}
+
 					<button
 						className="p-2 rounded-md bg-yellow-400 hover:bg-yellow-500 font-semibold"
 						type="submit"
 					>
-						Login
+						{isLoading ? <Spinner /> : "Login"}
 					</button>
 				</form>
 				<span className="text-sm mt-2">

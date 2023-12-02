@@ -1,14 +1,16 @@
 // "use client";
 
-import { Label, TextInput } from "flowbite-react";
+import { Label, TextInput, Spinner } from "flowbite-react";
 import google_icon from "../assets/google_icon.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { URL } from "../utils/methods/url/URL";
+import { useMutation, useQueryClient } from "react-query";
 
 const Signup = () => {
+	const queryClient = useQueryClient();
 	const prodURL = URL.prodURL;
 	// const [user, setUser] = useState<any>(null);
 	const [user_name, setUsername] = useState("");
@@ -43,8 +45,7 @@ const Signup = () => {
 	// getUser();
 
 	const body = { user_name, email, password };
-	async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
-		e.preventDefault();
+	async function signup() {
 		try {
 			const response = await axios.post(
 				"http://localhost:4000/api/auth/signup",
@@ -68,6 +69,20 @@ const Signup = () => {
 				setError(error.message);
 			}
 		}
+	}
+
+	const { mutate, isLoading } = useMutation(signup, {
+		onSuccess: () => {
+			queryClient.invalidateQueries("login");
+		},
+		onError: (error) => {
+			console.error(error);
+		},
+	});
+
+	function handleSignup(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		mutate();
 	}
 
 	function handlePassword(e: React.ChangeEvent<HTMLInputElement>) {
@@ -179,7 +194,7 @@ const Signup = () => {
 						type="submit"
 						disabled={!pwdRequirements}
 					>
-						Signup
+						{isLoading ? <Spinner /> : "Login"}
 					</button>
 				</form>
 				<span className="text-sm mt-2">

@@ -339,11 +339,11 @@ const ForYou = () => {
 
 	function navigateToForYou() {
 		navigate("/");
-		// meals.length = 0;
+		meals.length = 0;
 	}
 	function navigateToByYou() {
 		navigate("/by-you");
-		// meals.length = 0;
+		meals.length = 0;
 	}
 
 	return (
@@ -399,8 +399,10 @@ const ForYou = () => {
 					</div>
 				) : error ? (
 					<div className="text-red font-medium text-xxl">{fetchError}</div>
-				) : (
+				) : meals && meals.length < 1 ? (
 					<div className="text-xl mt-5">Fetching meals...</div>
+				) : (
+					""
 				)}
 				{mealsError && (
 					<div className="text-red font-medium text-xl">Meal not found</div>

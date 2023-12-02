@@ -62,6 +62,7 @@ const ByYou = () => {
 
 	//onPageLoad data (render the meal data on page load)
 	async function fetchData() {
+		meals.length = 0;
 		const token = localStorageUtil.getFromStorage("token");
 		try {
 			const response = await axios.get(`${prodURL}/api/personalized`, {
@@ -282,11 +283,11 @@ const ByYou = () => {
 
 	function navigateToForYou() {
 		navigate("/");
-		meals.length = 0;
+		// meals.length = 0;
 	}
 	function navigateToByYou() {
 		navigate("/by-you");
-		meals.length = 0;
+		// meals.length = 0;
 	}
 
 	return (

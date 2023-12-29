@@ -18,9 +18,15 @@ const Signup = () => {
 	const [password, setPassword] = useState("");
 	const [pwdRequirements, setPwdRequirements] = useState(false);
 	const [pwdLength, setPwdLength] = useState(false);
+
+	const [visible, setVisible] = useState(false);
 	console.log(pwdLength);
 	const [error, setError] = useState<any>("");
 	const navigate = useNavigate();
+
+	function handleVisibility() {
+		setVisible(!visible);
+	}
 
 	async function signInWithGoogle() {
 		window.open(`${prodURL}/api/auth/google`, "_self");
@@ -159,12 +165,29 @@ const Signup = () => {
 								value="Your password"
 							/>
 						</div>
-						<TextInput
-							id="password1"
-							required
-							type="password"
-							onChange={handlePassword}
-						/>
+						<div className="relative">
+							<TextInput
+								id="password1"
+								required
+								type={visible ? "text" : "password"}
+								onChange={handlePassword}
+							/>
+							{!visible ? (
+								<span
+									onClick={handleVisibility}
+									className="material-symbols-outlined absolute text-xl top-2 right-2 text-black pl-5 cursor-pointer"
+								>
+									visibility_off
+								</span>
+							) : (
+								<span
+									onClick={handleVisibility}
+									className="material-symbols-outlined absolute text-xl top-2 right-2 text-black pl-5 cursor-pointer"
+								>
+									visibility
+								</span>
+							)}
+						</div>
 						<p
 							className={`text-red-700 text-[12px] leading-4 mt-1 ${
 								password.length > 0 && !pwdRequirements ? "block" : "hidden"

@@ -16,8 +16,13 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<any>("");
 	const navigate = useNavigate();
+	const [visible, setVisible] = useState(false);
 	console.log(email, password);
 	//
+
+	function handleVisibility() {
+		setVisible(!visible);
+	}
 	async function signInWithGoogle() {
 		window.open(`${prodURL}/api/auth/google`, "_self");
 		await getUser();
@@ -132,12 +137,29 @@ const Login = () => {
 								value="Your password"
 							/>
 						</div>
-						<TextInput
-							id="password1"
-							required
-							type="password"
-							onChange={(e) => setPassword(e.target.value)}
-						/>
+						<div className="relative">
+							<TextInput
+								id="password1"
+								required
+								type={visible ? "text" : "password"}
+								onChange={(e) => setPassword(e.target.value)}
+							/>
+							{!visible ? (
+								<span
+									onClick={handleVisibility}
+									className="material-symbols-outlined absolute text-xl top-2 right-2 text-black pl-5 cursor-pointer"
+								>
+									visibility_off
+								</span>
+							) : (
+								<span
+									onClick={handleVisibility}
+									className="material-symbols-outlined absolute text-xl top-2 right-2 text-black pl-5 cursor-pointer"
+								>
+									visibility
+								</span>
+							)}
+						</div>
 					</div>
 					{/* <div className="flex items-center gap-2">
 						<Checkbox id="remember" />

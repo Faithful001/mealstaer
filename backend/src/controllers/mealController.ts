@@ -34,7 +34,7 @@ const getMeal = async (req, res) => {
 //createMeal
 const createMeal = async (req, res) => {
 	try {
-		const user_id = req.user_id;
+		const user_id = req.userr._id;
 		// const userr = req.user;
 		// const user_id = user ? user._id : userr._id;
 		// console.log("The user is: " + user_id);

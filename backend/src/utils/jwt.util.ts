@@ -8,8 +8,8 @@ class JWT {
 		this.JWT_SEC = JWT_SEC;
 	}
 
-	createToken(_id: string) {
-		return jwt.sign({ _id }, this.JWT_SEC, { expiresIn: "2d" });
+	createToken(_id: string, expiresIn: string) {
+		return jwt.sign({ _id }, this.JWT_SEC, { expiresIn: expiresIn });
 	}
 
 	verifyToken(_id: string) {

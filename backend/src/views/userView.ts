@@ -1,10 +1,18 @@
 import express from "express";
 import passport from "passport";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 import jwtUtil from "../utils/jwt.util";
-const { loginUser, signupUser } = require("../controllers/userController");
+const {
+	loginUser,
+	signupUser,
+	recoverAccount,
+	verifyOTP,
+	resetPassword,
+} = require("../controllers/userController");
 
 const router = express.Router();
+
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 const CLIENT_URL = "https://mealstaer.vercel.app";
 
@@ -25,7 +33,7 @@ router.get("/login/success", async (req, res) => {
 		return;
 	}
 
-	const token = jwtUtil.createToken(user._id);
+	const token = jwtUtil.createToken(user._id, "2d");
 	console.log("jwt token:", token);
 	console.log("User from success route is: " + user);
 	res.status(200).json({
@@ -76,7 +84,9 @@ router.get(
 );
 
 router.post("/login", loginUser);
-
 router.post("/signup", signupUser);
+router.post("/recover-account", recoverAccount);
+router.post("/verify-otp", verifyOTP);
+router.post("/reset-password", isAuthenticated, resetPassword);
 
 module.exports = router;

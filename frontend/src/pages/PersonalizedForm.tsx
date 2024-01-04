@@ -65,7 +65,7 @@ const PersonalizedForm = () => {
 		};
 
 		const token = localStorageUtil.getFromStorage("token");
-
+		const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.post(
 				`${prodURL}/api/personalized`,
@@ -74,7 +74,7 @@ const PersonalizedForm = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
-						Authorization: `Bearer: ${token}`,
+						Authorization: `Bearer ${parsedToken}`,
 					},
 				}
 			);

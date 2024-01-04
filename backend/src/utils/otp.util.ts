@@ -41,6 +41,11 @@ export class OTPMethods {
 			const otpModel = await OTP.findOne({ user_id: otp_user_id });
 			console.log("otpModel", otpModel);
 
+			if (!otpModel) {
+				console.error("OTP document not found");
+				throw new Error("OTP document not found");
+			}
+
 			otpModel.otp = hashedOTP;
 			otpModel.status = "active";
 			await otpModel.save();

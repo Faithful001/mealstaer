@@ -117,7 +117,7 @@ const Signup = () => {
 	}, [password]);
 
 	return (
-		<div className="login flex flex-col items-center justify-center">
+		<div className="signup flex flex-col items-center justify-center">
 			<div className="section flex flex-col items-center justify-center p-10 px-20 outline outline-1 outline-slate-500 bg-[#2c2c2c] rounded-lg">
 				<p className="text-red-600"> {error} </p>
 				{/* login form */}
@@ -217,7 +217,7 @@ const Signup = () => {
 						type="submit"
 						disabled={!pwdRequirements}
 					>
-						{isLoading ? <Spinner /> : "Login"}
+						{isLoading ? <Spinner /> : "Signup"}
 					</button>
 				</form>
 				<span className="text-sm mt-2">

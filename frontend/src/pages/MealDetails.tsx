@@ -18,12 +18,13 @@ const MealDetails = () => {
 
 	async function fetchData() {
 		const token = localStorageUtil.getFromStorage("token");
+		const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.get(`${prodURL}/api/data/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer: ${token}`,
+					Authorization: `Bearer ${parsedToken}`,
 				},
 			});
 			console.log(response.data);

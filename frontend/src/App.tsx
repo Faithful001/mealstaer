@@ -13,6 +13,9 @@ import RecommendedDetails from "./pages/RecommendedDetails";
 import ErrorPage from "./pages/ErrorPage";
 import ForYou from "./pages/ForYou";
 import ByYou from "./pages/ByYou";
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyOTP from "./pages/VerifyOTP";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -41,6 +44,9 @@ function App() {
 						<Route path="/add-new-meal" element={<PersonalizedForm />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<Signup />} />
+						<Route path="/forgot-password" element={<ForgotPassword />} />
+						<Route path="/verify-otp" element={<VerifyOTP />} />
+						<Route path="/reset-password" element={<ResetPassword />} />
 						<Route path="*" element={<ErrorPage />} />
 					</Routes>
 				</QueryClientProvider>

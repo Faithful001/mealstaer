@@ -25,12 +25,13 @@ const EditPersonalized = () => {
 
 	async function getMealsData() {
 		const token = localStorageUtil.getFromStorage("token");
+		const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.get(`${prodURL}/api/personalized/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer: ${token}`,
+					Authorization: `Bearer ${parsedToken}`,
 				},
 			});
 
@@ -97,7 +98,7 @@ const EditPersonalized = () => {
 		};
 
 		const token = localStorageUtil.getFromStorage("token");
-
+		const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.patch(
 				`${prodURL}/api/personalized/${id}`,
@@ -106,7 +107,7 @@ const EditPersonalized = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
-						Authorization: `Bearer: ${token}`,
+						Authorization: `Bearer ${parsedToken}`,
 					},
 				}
 			);

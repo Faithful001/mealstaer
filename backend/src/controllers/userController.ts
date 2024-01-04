@@ -37,7 +37,7 @@ const recoverAccount = async (req, res) => {
 				.json({ error: "User with this email does not exist" });
 		}
 
-		if (!userExists.password) {
+		if (userExists.password == null) {
 			throw new Error(
 				"You registered with Gmail. You are not eligible to reset your password"
 			);
@@ -47,39 +47,48 @@ const recoverAccount = async (req, res) => {
 
 		const OTPexists = await OTP.findOne({ user_id });
 		// console.log("OTPexists:", OTPexists);
-		// const otp_id = OTPexists._id;
+		const otp_user_id = OTPexists.user_id;
 		if (!OTPexists) {
 			const hashedOTP = await sendOTPToEmail(email);
-			console.log("hashedOTP:", hashedOTP);
-			console.log("user_id:", user_id);
+			console.log("otp_user_id from db:", otp_user_id);
 
 			const returnToClient = await OTPMethods.createOTPForServer(
 				hashedOTP,
 				user_id
 			);
 
-			const ThirthyMininutes = 120000;
+			const ThirthyMininutes = 900000;
 			setTimeout(() => {
-				OTPMethods.changeOTPStatusToExpired(OTPexists.user_id);
+				OTPMethods.changeOTPStatusToExpired(user_id);
 			}, ThirthyMininutes);
 
 			console.log("otp_user_id", returnToClient?.user_id);
 
-			return res
-				.status(200)
-				.json({ message: "otp sent successfully", returnToClient });
+			return res.status(200).json({
+				message: "OTP sent. Check your email",
+				returnData: returnToClient,
+			});
 		} else {
 			const hashedOTP = await sendOTPToEmail(email);
 			console.log("hashedOTP:", hashedOTP);
-			console.log("user_id:", user_id);
-			const otpModel = await OTPMethods.updateOTPForServer(hashedOTP, user_id);
-			// console.log("otp_user_id", otpModel?.user_id);
-			const ThirthyMininutes = 120000;
+			console.log("otp_user_id from db:", otp_user_id);
+
+			const returnToClient = await OTPMethods.updateOTPForServer(
+				hashedOTP,
+				otp_user_id
+			);
+
+			const ThirthyMininutes = 900000;
 			setTimeout(() => {
-				OTPMethods.changeOTPStatusToExpired(OTPexists.user_id);
+				OTPMethods.changeOTPStatusToExpired(otp_user_id);
 			}, ThirthyMininutes);
 
-			res.status(200).json({ message: "otp sent successfully", otpModel });
+			console.log("otp_user_id", returnToClient?.user_id);
+
+			res.status(200).json({
+				message: "OTP sent. Check your email",
+				returnData: returnToClient,
+			});
 		}
 		// console.log("otpUser", otpUser);
 	} catch (error: any) {
@@ -92,9 +101,13 @@ const recoverAccount = async (req, res) => {
 const verifyOTP = async (req, res) => {
 	try {
 		const { otp, otp_user_id } = req.body;
-		console.log("otp inputed:", otp);
+		if (!otp || !otp_user_id) {
+			return res.status(400).json({ error: "OTP required" });
+		}
+		// console.log("otp inputed:", otp);
 
-		const otpModel = await OTP.findOne({ otp_user_id });
+		const otpModel = await OTP.findOne({ user_id: otp_user_id });
+		console.log("otp_user_id:", otpModel.user_id);
 		if (!otpModel) {
 			return res.status(404).json({ error: "No OTP found for this user" });
 		}
@@ -106,14 +119,14 @@ const verifyOTP = async (req, res) => {
 		}
 		// console.log("otpModel:", otpModel);
 		const compareOTP = await bcrypt.compare(otp, otpModel.otp);
-		console.log("compareOTP", typeof compareOTP);
 
 		if (!compareOTP) {
 			return res.status(401).json({ error: "Incorrect otp given" });
 		}
 		const user_id = otpModel.user_id;
 		const user = await User.findById(user_id);
-		const token = jwtUtil.createToken(user._id, "10m");
+		const token = jwtUtil.createToken(user_id, "10m");
+		console.log("otp token", token);
 
 		const returnData = {
 			user_name: user.user_name,
@@ -140,6 +153,7 @@ const resetPassword = async (req, res) => {
 		}
 
 		const user = await User.findOne({ email });
+		const otp = await OTP.findOne({ user_id: user._id });
 
 		if (!user) {
 			return res
@@ -183,7 +197,7 @@ const resetPassword = async (req, res) => {
 			updateAt: user.updatedAt,
 		};
 
-		res.status(200).json({ message: "password reset", returnData });
+		res.status(200).json({ message: "Password Reset", returnData });
 	} catch (error) {
 		res.status(500).json({ error: "an error occured" + error });
 	}

@@ -86,7 +86,6 @@ const Login = () => {
 				console.log(error.message);
 				setError(error.message);
 			}
-			throw error?.response;
 		}
 	}
 
@@ -167,6 +166,11 @@ const Login = () => {
 							Remember me
 						</Label>
 					</div> */}
+					<span className="text-sm w-full flex flex-col items-end">
+						<Link className="underline text-right " to={"/forgot-password"}>
+							Forgot Password
+						</Link>
+					</span>
 
 					<button
 						className="p-2 rounded-md bg-yellow-400 hover:bg-yellow-500 font-semibold"
@@ -175,6 +179,7 @@ const Login = () => {
 						{isLoading ? <Spinner /> : "Login"}
 					</button>
 				</form>
+
 				<span className="text-sm mt-2">
 					Don't have an account?{" "}
 					<Link className="underline" to={"/signup"}>

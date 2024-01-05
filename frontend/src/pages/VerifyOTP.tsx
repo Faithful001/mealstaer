@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { URL } from "../utils/methods/url/URL";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
-import { OtpCode } from "react-otp-code";
+import OtpInput from "react18-input-otp";
 
 const VerifyOTP = () => {
 	const prodURL = URL.prodURL;
@@ -126,10 +126,12 @@ const VerifyOTP = () => {
 						/>
 					</div>
 					<div className="flex flex-col items-center justify-center h-20">
-						<OtpCode
+						<OtpInput
+							value={otp}
 							onChange={handleChange}
-							items={4}
-							classNames={"otp-input text-black rounded"}
+							numInputs={4}
+							separator={<span>-</span>}
+							inputStyle={"otp-input text-4xl text-black rounded"}
 						/>
 					</div>
 				</div>

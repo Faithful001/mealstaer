@@ -32,10 +32,9 @@ const ByYou = () => {
 	}, [otherToast]);
 
 	useEffect(() => {
-		const user = localStorage.getItem("user");
+		const user = localStorageUtil.getFromStorage("user");
 		if (user) {
-			const userObject = JSON.parse(user);
-			const user_name = userObject.user_name;
+			const user_name = user && user?.user_name;
 			const firstName = user_name.split(" ")[0];
 			setUsername(firstName);
 		}
@@ -64,14 +63,13 @@ const ByYou = () => {
 	async function fetchData() {
 		meals.length = 0;
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.get(`${prodURL}/api/personalized`, {
 				signal: abortCont.signal,
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			// console.log(response.data);
@@ -118,9 +116,8 @@ const ByYou = () => {
 	}, [meals, data, search, setValue, setSearchValue]);
 
 	async function addToFavorites(meal: MealsType) {
-		localStorage.setItem("meal_id", meal._id);
+		localStorageUtil.addToStorage("meal_id", meal._id);
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
 		try {
 			const body = {
 				name: meal.name,
@@ -132,7 +129,7 @@ const ByYou = () => {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			setToast(`${meal.name} added to favorites`);
@@ -175,19 +172,18 @@ const ByYou = () => {
 		},
 	});
 
-	const meal_id = localStorage.getItem("meal_id");
+	const meal_id = localStorageUtil.getFromStorage("meal_id");
 
 	// removeFromFavorite function
 	async function removeFromFavorites(meal: MealsType) {
 		localStorage.removeItem("meal_id");
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
 		try {
 			const getReqRes = await axios.get(`${prodURL}/api/fave`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			// const meal = getReqRes.data.map((item: any)=> item._id)
@@ -200,7 +196,7 @@ const ByYou = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
-						Authorization: `Bearer ${parsedToken}`,
+						Authorization: `Bearer ${token}`,
 					},
 				}
 			);
@@ -248,13 +244,13 @@ const ByYou = () => {
 	//getting favorite meals from the database and mapping through their original_meal_ids
 	async function getFavoritesFromDB() {
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
+		// const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.get(`${prodURL}/api/fave/`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			const originalMealIds = response.data.map(

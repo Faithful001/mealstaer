@@ -1,5 +1,5 @@
 // "use client";
-import { Label } from "flowbite-react";
+import { Label, Spinner } from "flowbite-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
@@ -8,8 +8,10 @@ import axios from "axios";
 import { useToast } from "../contexts/ToastContext";
 import { URL } from "../utils/methods/url/URL";
 import localStorageUtil from "../utils/localStorage.util";
+import { useMutation, useQueryClient } from "react-query";
 
 const PersonalizedForm = () => {
+	const queryClient = useQueryClient();
 	const prodURL = URL.prodURL;
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>("");
@@ -35,9 +37,7 @@ const PersonalizedForm = () => {
 		return formattedSteps;
 	}
 
-	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-		e.preventDefault();
-
+	async function submit() {
 		const isCommaSeparated = /^(?:\s*\w+\s*(?:,\s*\w+\s*)*)?$/.test(
 			ingredients
 		);
@@ -65,7 +65,7 @@ const PersonalizedForm = () => {
 		};
 
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
+
 		try {
 			const response = await axios.post(
 				`${prodURL}/api/personalized`,
@@ -74,7 +74,7 @@ const PersonalizedForm = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
-						Authorization: `Bearer ${parsedToken}`,
+						Authorization: `Bearer ${token}`,
 					},
 				}
 			);
@@ -91,6 +91,20 @@ const PersonalizedForm = () => {
 				setError(error?.response?.data?.error);
 			}
 		}
+	}
+
+	const { mutate, isLoading } = useMutation(submit, {
+		onSuccess: () => {
+			queryClient.invalidateQueries("add to personalized");
+		},
+		onError: (error) => {
+			console.error(error);
+		},
+	});
+
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		mutate();
 	}
 
 	function handleBack(e: React.FormEvent<HTMLSpanElement>) {
@@ -187,7 +201,7 @@ const PersonalizedForm = () => {
 						className="p-2 w-full max-w-[250px] rounded-md bg-yellow-400 hover:bg-yellow-500 font-semibold"
 						type="submit"
 					>
-						Submit
+						{isLoading ? <Spinner /> : "Submit"}
 					</button>
 				</form>
 			</div>

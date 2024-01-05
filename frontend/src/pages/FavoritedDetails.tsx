@@ -18,13 +18,12 @@ const FavoriteDetails = () => {
 
 	async function fetchData() {
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.get(`${prodURL}/api/fave/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			console.log(response.data);

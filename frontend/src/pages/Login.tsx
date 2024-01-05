@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { URL } from "../utils/methods/url/URL";
 import { useMutation, useQueryClient } from "react-query";
+import localStorageUtil from "../utils/localStorage.util";
 
 const Login = () => {
 	const prodURL = URL.prodURL;
@@ -49,10 +50,10 @@ const Login = () => {
 			});
 			console.log(response.data);
 			if (response.status == 200) {
-				const stringifiedUser = JSON.stringify(response.data.user);
-				const stringifiedToken = JSON.stringify(response.data.token);
-				localStorage.setItem("user", stringifiedUser);
-				localStorage.setItem("token", stringifiedToken);
+				const user = response.data.user;
+				const token = response.data.token;
+				localStorageUtil.addToStorage("user", user);
+				localStorageUtil.addToStorage("token", token);
 			}
 		} catch (error: any) {
 			console.log(error?.message ?? error);
@@ -71,10 +72,10 @@ const Login = () => {
 			});
 			console.log("login success");
 			if (response.status === 200) {
-				const stringifiedUser = JSON.stringify(response.data.user);
-				const stringifiedToken = JSON.stringify(response.data.token);
-				localStorage.setItem("user", stringifiedUser);
-				localStorage.setItem("token", stringifiedToken);
+				const user = response.data.user;
+				const token = response.data.token;
+				localStorageUtil.addToStorage("user", user);
+				localStorageUtil.addToStorage("token", token);
 				navigate("/");
 				return response.data;
 			}

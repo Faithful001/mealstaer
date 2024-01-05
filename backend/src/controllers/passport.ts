@@ -1,5 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { URL } from "../url/URL";
 // import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 const User = require("../models/userModel");
 require("dotenv").config();
@@ -26,7 +27,7 @@ passport.use(
 		{
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: "https://mealstaer.onrender.com/api/auth/google/callback",
+			callbackURL: `${URL.localURL}/api/auth/google/callback`,
 		},
 		async (accessToken, refreshToken, profile, done) => {
 			// console.log(profile);

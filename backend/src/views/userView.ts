@@ -14,7 +14,8 @@ const router = express.Router();
 
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
-const CLIENT_URL = "https://mealstaer.vercel.app";
+const LOCAL_CLIENT_URL = "http://localhost:5173";
+const PROD_CLIENT_URL = "https://mealstaer.vercel.app";
 
 interface User {
 	_id: string;
@@ -61,7 +62,7 @@ router.get("/logout", (req, res) => {
 					console.error("Error during logout:", error);
 					res.status(500).send("Internal Server Error");
 				} else {
-					res.redirect(`${CLIENT_URL}login`);
+					res.redirect(`${LOCAL_CLIENT_URL}/login`);
 				}
 			});
 		}
@@ -78,7 +79,7 @@ router.get(
 router.get(
 	"/google/callback",
 	passport.authenticate("google", {
-		successRedirect: CLIENT_URL,
+		successRedirect: LOCAL_CLIENT_URL,
 		failureRedirect: "/login/failed",
 	})
 );

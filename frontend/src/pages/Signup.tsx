@@ -239,7 +239,7 @@ const Signup = () => {
 						className="h-[25px] absolute top-[48px] left-[12px] z-10"
 					/>
 					<button className="mt-10 p-[10px] pl-[40px] px-[20px] rounded-lg text-sm font-semibold hover:bg-slate-200 bg-white text-[#303030]">
-						Sign in with Google
+						Sign up with Google
 					</button>
 				</div>
 			</div>

@@ -26,13 +26,13 @@ const PersonalizedDetails = () => {
 
 	async function fetchData() {
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
+
 		try {
 			const response = await axios.get(`${prodURL}/api/personalized/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			// console.log(response.data);
@@ -83,13 +83,12 @@ const PersonalizedDetails = () => {
 
 	async function deleteFromFavorite(id: any) {
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.get(`${prodURL}/api/fave`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			const meal = response.data.find(
@@ -104,7 +103,7 @@ const PersonalizedDetails = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
-						Authorization: `Bearer ${parsedToken}`,
+						Authorization: `Bearer ${token}`,
 					},
 				}
 			);
@@ -119,13 +118,13 @@ const PersonalizedDetails = () => {
 	async function handleDelete(id: any, name: string) {
 		deleteFromFavorite(id);
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
+
 		try {
 			const response = await axios.delete(`${prodURL}/api/personalized/${id}`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			console.log(response);

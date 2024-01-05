@@ -4,6 +4,7 @@ import { useState } from "react";
 import { URL } from "../utils/methods/url/URL";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
+import localStorageUtil from "../utils/localStorage.util";
 
 const ForgotPassword = () => {
 	const prodURL = URL.prodURL;
@@ -32,10 +33,9 @@ const ForgotPassword = () => {
 			if (response.status === 200) {
 				setError("");
 				setMessage(response.data?.message);
-				const stringifiedUser = JSON.stringify(
-					response.data?.returnData?.user_id
-				);
-				localStorage.setItem("user_id", stringifiedUser);
+				const user_id = response.data?.returnData?.user_id;
+				localStorageUtil.addToStorage("user_id", user_id);
+
 				setTimeout(() => {
 					navigate("/verify-otp");
 				}, 2000);

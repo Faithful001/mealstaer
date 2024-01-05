@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import { useMeal } from "../contexts/MealContext";
 import { MealsType } from "../contexts/MealContext";
+import localStorageUtil from "../utils/localStorage.util";
 
 const RecommendedDetails = () => {
 	const navigate = useNavigate();
@@ -12,9 +13,8 @@ const RecommendedDetails = () => {
 	useEffect(() => {
 		function getExactMeal() {
 			const recommendedMeals =
-				localStorage.getItem("recommended meals") || "[]";
-			const parsedData = JSON.parse(recommendedMeals);
-			const exactMeal = parsedData.find((meal: any) => meal._id == id);
+				localStorageUtil.getFromStorage("recommended meals") || "[]";
+			const exactMeal = recommendedMeals.find((meal: any) => meal._id == id);
 			setMeal([exactMeal]);
 		}
 		getExactMeal();

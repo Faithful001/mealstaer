@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { URL } from "../utils/methods/url/URL";
 import { useMutation, useQueryClient } from "react-query";
+import localStorageUtil from "../utils/localStorage.util";
 
 const ResetPassword = () => {
 	const prodURL = URL.prodURL;
@@ -36,13 +37,11 @@ const ResetPassword = () => {
 		setVisibleTwo(!visibleTwo);
 	}
 
-	const email = localStorage.getItem("user_email");
-	const parsedEmail = email && JSON.parse(email);
-	console.log(parsedEmail);
-	const body = { email: parsedEmail, password };
+	const email = localStorageUtil.getFromStorage("user_email");
+	console.log(email);
+	const body = { email, password };
 
-	const token = localStorage.getItem("password_reset_token");
-	const parsedToken = token && JSON.parse(token);
+	const token = localStorageUtil.getFromStorage("password_reset_token");
 
 	console.log(token);
 	async function resetPassword() {
@@ -54,7 +53,7 @@ const ResetPassword = () => {
 					withCredentials: true,
 					headers: {
 						"Access-Control-Allow-Origin": "*",
-						Authorization: `Bearer ${parsedToken}`,
+						Authorization: `Bearer ${token}`,
 					},
 				}
 			);

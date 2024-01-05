@@ -5,6 +5,7 @@ import { URL } from "../utils/methods/url/URL";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import OtpInput from "react18-input-otp";
+import localStorageUtil from "../utils/localStorage.util";
 
 const VerifyOTP = () => {
 	const prodURL = URL.prodURL;
@@ -32,9 +33,9 @@ const VerifyOTP = () => {
 
 	const [message, setMessage] = useState<string>("");
 
-	const user_id = localStorage.getItem("user_id");
-	const parsedUserId = user_id && JSON.parse(user_id);
-	const body = { otp, otp_user_id: parsedUserId };
+	const user_id = localStorageUtil.getFromStorage("user_id");
+	// const parsedUserId = user_id && JSON.parse(user_id);
+	const body = { otp, otp_user_id: user_id };
 
 	async function requestOTP() {
 		try {
@@ -56,19 +57,17 @@ const VerifyOTP = () => {
 				}
 			);
 			console.log(response);
-			const stringifiedToken = JSON.stringify(response?.data?.token);
-			localStorage.setItem("password_reset_token", stringifiedToken);
+			const token = response?.data?.token;
+			localStorageUtil.addToStorage("password_reset_token", token);
 
 			console.log(response.data);
 			if (response.status === 200) {
 				setError("");
 				setMessage(response.data?.message);
 
-				const stringifiedEmail = JSON.stringify(
-					response.data?.returnData.email
-				);
+				const email = response.data?.returnData.email;
 
-				localStorage.setItem("user_email", stringifiedEmail);
+				localStorageUtil.addToStorage("user_email", email);
 				setTimeout(() => {
 					navigate("/reset-password");
 				}, 2000);

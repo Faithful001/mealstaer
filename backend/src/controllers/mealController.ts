@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 
 const getMeals = async (req, res) => {
 	try {
-		const user_id = req.userr._id;
+		// const user_id = req.userr._id;
 		// const userr = req.user;
 		// const user_id = user ? user._id : userr._id;
-		console.log("The user is: " + user_id);
-		const mealData = await Meal.find({ user_id }).sort({ createdAt: -1 });
+		// console.log("The user is: " + user_id);
+		const mealData = await Meal.find().sort({ createdAt: -1 });
 		res.status(200).json(mealData);
 	} catch (error) {
 		res.status(500).json({ error: "Something went wrong " + error });

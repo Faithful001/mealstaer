@@ -62,7 +62,7 @@ router.get("/logout", (req, res) => {
 					console.error("Error during logout:", error);
 					res.status(500).send("Internal Server Error");
 				} else {
-					res.redirect(`${LOCAL_CLIENT_URL}/login`);
+					res.redirect(`${PROD_CLIENT_URL}/login`);
 				}
 			});
 		}
@@ -79,7 +79,7 @@ router.get(
 router.get(
 	"/google/callback",
 	passport.authenticate("google", {
-		successRedirect: LOCAL_CLIENT_URL,
+		successRedirect: PROD_CLIENT_URL,
 		failureRedirect: "/login/failed",
 	})
 );

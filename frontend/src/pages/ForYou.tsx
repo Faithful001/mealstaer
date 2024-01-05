@@ -296,13 +296,12 @@ const ForYou = () => {
 	//getting favorite meals from the database and mapping through their original_meal_ids
 	async function getFavoritesFromDB() {
 		const token = localStorageUtil.getFromStorage("token");
-		const parsedToken = token && JSON.parse(token);
 		try {
 			const response = await axios.get(`${prodURL}/api/fave/`, {
 				withCredentials: true,
 				headers: {
 					"Access-Control-Allow-Origin": "*",
-					Authorization: `Bearer ${parsedToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			const originalMealIds = response.data.map(

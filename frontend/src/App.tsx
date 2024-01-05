@@ -16,6 +16,7 @@ import ByYou from "./pages/ByYou";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyOTP from "./pages/VerifyOTP";
 import ResetPassword from "./pages/ResetPassword";
+import Profile from "./pages/Profile";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ function App() {
 						<Route path="/user/favorite" element={<Favorited />} />
 						<Route path="/user/favorite/:id" element={<FavoriteDetails />} />
 						<Route path="/add-new-meal" element={<PersonalizedForm />} />
+						<Route path="/profile" element={<Profile />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<Signup />} />
 						<Route path="/forgot-password" element={<ForgotPassword />} />

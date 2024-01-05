@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useMeal } from "../contexts/MealContext";
 import { Link, useNavigate } from "react-router-dom";
+import { NavBarProfileData } from "../data/NavBarProfileData";
+import { NavBarProfileInterface } from "../interfaces/NavBarProfile.interface";
 // import axios from "axios";
 // import { URL } from "../utils/methods/url/URL";
 
@@ -85,23 +87,16 @@ const NavBar = () => {
 							className="bg-white rounded-md p-10 py-10 flex flex-col
 					 absolute right-5 top-[72px] z-10"
 						>
-							<Link to={"/add-new-meal"}>
-								<div className="flex items-center mb-3 cursor-pointer">
-									<span className="material-symbols-outlined text-black">
-										add_box
-									</span>
-									<p className="text-black ml-2">Add Your Meal</p>
-								</div>
-							</Link>
-
-							<Link to={"/user/favorite"}>
-								<div className="flex items-center mb-3 cursor-pointer">
-									<span className="material-symbols-outlined text-black">
-										favorite
-									</span>
-									<p className="text-black ml-2">Favourites</p>
-								</div>
-							</Link>
+							{NavBarProfileData.map((data: NavBarProfileInterface) => (
+								<Link to={`${data.link}`}>
+									<div className="flex items-center mb-3 cursor-pointer">
+										<span className="material-symbols-outlined text-black">
+											{data.icon}
+										</span>
+										<p className="text-black ml-2">{data.name}</p>
+									</div>
+								</Link>
+							))}
 
 							<button onClick={logout}>
 								<div className="flex items-center mb-3 cursor-pointer">

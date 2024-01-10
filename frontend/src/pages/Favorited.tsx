@@ -15,6 +15,9 @@ const Favorited = () => {
 	// console.log(favorites);
 	// const favoritedArray = favorites ? Array.from(favorites) : [];
 	// console.log(favoritedArray);
+	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
+	}, []);
 
 	async function getAllFavorites() {
 		const token = localStorageUtil.getFromStorage("token");
@@ -41,6 +44,7 @@ const Favorited = () => {
 	console.log(isLoading, error);
 
 	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
 		if (data) {
 			setFaves(data);
 		}

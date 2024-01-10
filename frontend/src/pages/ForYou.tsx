@@ -25,6 +25,10 @@ const ForYou = () => {
 	// const navigate = useNavigate();
 
 	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
+	}, []);
+
+	useEffect(() => {
 		if (otherToast !== "") {
 			toast(otherToast);
 		}
@@ -87,8 +91,8 @@ const ForYou = () => {
 			// console.log(response.data);
 			localStorageUtil.addToStorage("By-You", response.data);
 			abortCont.abort();
-			return localStorageUtil.getFromStorage("By-You");
-			// return response.data;
+			// return localStorageUtil.getFromStorage("By-You");
+			return response.data;
 		} catch (error: any) {
 			if (error.response.status == 401) {
 				navigate("/login");

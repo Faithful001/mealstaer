@@ -1,6 +1,12 @@
+import { useEffect } from "react";
 import localStorageUtil from "../utils/localStorage.util";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+	const navigate = useNavigate();
+	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
+	}, []);
 	const user = localStorageUtil.getFromStorage("user");
 	return (
 		<div className="profile flex flex-col gap-4">

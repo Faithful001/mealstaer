@@ -11,6 +11,10 @@ const RecommendedDetails = () => {
 	console.log(meal);
 
 	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
+	}, []);
+
+	useEffect(() => {
 		function getExactMeal() {
 			const recommendedMeals =
 				localStorageUtil.getFromStorage("recommended meals") || "[]";

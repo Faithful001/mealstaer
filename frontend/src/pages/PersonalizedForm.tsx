@@ -2,7 +2,7 @@
 import { Label, Spinner } from "flowbite-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "../contexts/ToastContext";
@@ -25,6 +25,10 @@ const PersonalizedForm = () => {
 	// console.log(steps);
 	// console.log(ingredientsMessage);
 	// console.log(stepsMessage);
+
+	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
+	}, []);
 
 	function formatSteps(steps: string) {
 		const split = steps.split("\n");

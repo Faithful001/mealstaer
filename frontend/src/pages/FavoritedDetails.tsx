@@ -16,6 +16,10 @@ const FavoriteDetails = () => {
 	// const [fetchError, setFetchError] = useState<any>(null);
 	let { id } = useParams();
 
+	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
+	}, []);
+
 	async function fetchData() {
 		const token = localStorageUtil.getFromStorage("token");
 		try {

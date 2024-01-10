@@ -23,6 +23,10 @@ const EditPersonalized = () => {
 
 	let { id } = useParams();
 
+	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
+	}, []);
+
 	async function getMealsData() {
 		const token = localStorageUtil.getFromStorage("token");
 		try {
@@ -52,6 +56,7 @@ const EditPersonalized = () => {
 	const step = data?.steps.join("\n");
 
 	useEffect(() => {
+		!localStorageUtil.getFromStorage("user") && navigate("/login");
 		if (data) {
 			setName(data?.name.toString());
 			setIngredients(ingredient);

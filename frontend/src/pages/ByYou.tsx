@@ -79,8 +79,8 @@ const ByYou = () => {
 			// console.log(response.data);
 			localStorageUtil.addToStorage("By-You", response.data);
 			abortCont.abort();
-			// localStorageUtil.getFromStorage("By-You");
-			return response.data;
+			return localStorageUtil.getFromStorage("By-You");
+			// return response.data;
 		} catch (error: any) {
 			if (error.response.status == 401) {
 				navigate("/login");

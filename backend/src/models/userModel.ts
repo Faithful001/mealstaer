@@ -30,15 +30,17 @@ function isStrongPassword(password) {
 			return false;
 		}
 		if (
-			!/[A-Z]/.test(password) ||
-			!/[a-z]/.test(password) ||
-			!/[0-9]/.test(password) ||
-			!/[¬`!"£$%^&*()-_=+/|[\]{};'@\\#~?><]/.test(password)
+			/[A-Z]/.test(password) &&
+			/[a-z]/.test(password) &&
+			/[0-9]/.test(password) &&
+			/[¬`!"£$%^&*()-_=+/|[\]{};'@\\#~?><]/.test(password)
 		) {
+			return true;
+		} else {
 			return false;
 		}
 	} else {
-		return true;
+		return false;
 	}
 }
 

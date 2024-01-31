@@ -57,10 +57,10 @@ const recoverAccount = async (req, res) => {
 				user_id
 			);
 
-			const ThirthyMininutes = 900000;
+			const ThirthyMinutes = 1800000;
 			setTimeout(() => {
 				OTPMethods.changeOTPStatusToExpired(user_id);
-			}, ThirthyMininutes);
+			}, ThirthyMinutes);
 
 			console.log("otp_user_id", returnToClient?.user_id);
 
@@ -78,10 +78,10 @@ const recoverAccount = async (req, res) => {
 				otp_user_id
 			);
 
-			const ThirthyMininutes = 900000;
+			const ThirthyMinutes = 1800000;
 			setTimeout(() => {
 				OTPMethods.changeOTPStatusToExpired(otp_user_id);
-			}, ThirthyMininutes);
+			}, ThirthyMinutes);
 
 			console.log("otp_user_id", returnToClient?.user_id);
 

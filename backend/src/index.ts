@@ -12,8 +12,6 @@ const mealView = require("./views/mealView");
 const favoritedView = require("./views/favoritedView");
 const userView = require("./views/userView");
 const personalizedView = require("./views/personalizedView");
-// const User = require("./models/userModel");
-// const URL = require("./URL");
 require("./controllers/passport");
 
 const app = express();

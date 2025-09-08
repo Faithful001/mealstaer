@@ -20,46 +20,50 @@ const app = express();
 const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
 
 const store = new MongoDBStore({
-	uri: process.env.MONGO_URI,
-	collection: "sessions",
-	expires: twoDaysInMilliseconds, // Session will expire in 2 days
-	// connectionOptions: {
-	// 	useNewUrlParser: true,
-	// 	useUnifiedTopology: true,
-	// },
+  uri: process.env.MONGO_URI,
+  collection: "sessions",
+  expires: twoDaysInMilliseconds, // Session will expire in 2 days
+  // connectionOptions: {
+  // 	useNewUrlParser: true,
+  // 	useUnifiedTopology: true,
+  // },
 });
 
 store.on("error", (error) => {
-	console.error("Session Store Error:", error);
+  console.error("Session Store Error:", error);
 });
 
 app.use(
-	session({
-		secret: process.env.COOKIE_KEY,
-		resave: false,
-		saveUninitialized: true,
-		store: store,
-		cookie: {
-			maxAge: twoDaysInMilliseconds,
-			expires: new Date(Date.now() + twoDaysInMilliseconds),
-		},
-	})
+  session({
+    secret: process.env.COOKIE_KEY,
+    resave: false,
+    saveUninitialized: true,
+    store: store,
+    cookie: {
+      maxAge: twoDaysInMilliseconds,
+      expires: new Date(Date.now() + twoDaysInMilliseconds),
+    },
+  })
 );
 
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-	res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-	next();
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  next();
 });
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 const corsOptions = {
-	origin: ["https://mealstaer.vercel.app", "https://mealstaerr.vercel.app", "http://localhost:5173"],
-	method: ["GET", "POST", "PATCH", "DELETE"],
-	credentials: true,
+  origin: [
+    "https://mealstaer.vercel.app",
+    "https://mealstaerr.vercel.app",
+    "http://localhost:5173",
+  ],
+  method: ["GET", "POST", "PATCH", "DELETE"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -70,8 +74,8 @@ app.use(express.json());
 app.use(morgan("combined"));
 
 app.use((req, res, next) => {
-	console.log(req.path, req.method);
-	next();
+  console.log(req.path, req.method);
+  next();
 });
 
 //middleware routes
@@ -81,12 +85,12 @@ app.use("/api/personalized", personalizedView);
 app.use("/api/auth", userView);
 
 mongoose
-	.connect(process.env.MONGO_URI)
-	.then(() => {
-		app.listen(port, () => {
-			console.log(`JSON server is running at http://localhost:${port}`);
-		});
-	})
-	.catch((error: any) => {
-		console.log(error);
-	});
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`server is running at http://localhost:${port}`);
+    });
+  })
+  .catch((error: any) => {
+    console.log(error);
+  });

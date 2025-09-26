@@ -1,20 +1,26 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload, Secret, SignOptions } from "jsonwebtoken";
 require("dotenv").config();
 
-class JWT {
-	private readonly JWT_SEC: string;
-
-	constructor(JWT_SEC: string) {
-		this.JWT_SEC = JWT_SEC;
-	}
-
-	createToken(_id: string, expiresIn: string) {
-		return jwt.sign({ _id }, this.JWT_SEC, { expiresIn: expiresIn });
-	}
-
-	verifyToken(_id: string) {
-		return jwt.verify({ _id }, this.JWT_SEC);
-	}
+interface MyJwtPayload extends JwtPayload {
+  _id: string;
 }
 
-export default new JWT(process.env.JWT_SEC);
+class JWT {
+  private readonly JWT_SEC: Secret;
+
+  constructor(JWT_SEC: string) {
+    this.JWT_SEC = JWT_SEC as Secret;
+  }
+
+  /** Create a signed token */
+  createToken(_id: string, expiresIn: SignOptions["expiresIn"]): string {
+    return jwt.sign({ _id }, this.JWT_SEC, { expiresIn });
+  }
+
+  /** Verify a token and return the payload */
+  verifyToken(token: string): MyJwtPayload {
+    return jwt.verify(token, this.JWT_SEC) as MyJwtPayload;
+  }
+}
+
+export default new JWT(process.env.JWT_SEC ?? "");

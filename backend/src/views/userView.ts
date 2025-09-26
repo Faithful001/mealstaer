@@ -84,6 +84,17 @@ router.get(
   })
 );
 
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", { failureRedirect: "/login/failed" }),
+//   (req, res) => {
+//     // Here req.user is set
+//     const user = req.user as User;
+//     const token = jwtUtil.createToken(user._id, "2d");
+//     res.json({ user, token });
+//   }
+// );
+
 router.post("/login", loginUser);
 router.post("/signup", signupUser);
 router.post("/recover-account", recoverAccount);

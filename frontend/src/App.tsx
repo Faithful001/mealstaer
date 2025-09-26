@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Favorited from "./pages/Favorited";
 import Login from "./pages/Login";
+import LoginFailed from "./pages/LoginFailed";
 import Signup from "./pages/Signup";
 import FavoriteDetails from "./pages/FavoritedDetails";
 import PersonalizedForm from "./pages/PersonalizedForm";
@@ -19,42 +20,43 @@ import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 
 function App() {
-	const queryClient = new QueryClient();
-	return (
-		<div className="pages">
-			<Router>
-				<QueryClientProvider client={queryClient}>
-					<Routes>
-						<Route index path="/" element={<ForYou />} />
-						<Route path="/by-you" element={<ByYou />} />
-						<Route path="/user/meal/:id" element={<MealDetails />} />
-						<Route
-							path="/user/recommended/:id"
-							element={<RecommendedDetails />}
-						/>
-						<Route
-							path="/user/personalized/:id"
-							element={<PersonalizedDetails />}
-						/>
-						<Route
-							path="/user/personalized/edit/:id"
-							element={<EditPersonalized />}
-						/>
-						<Route path="/user/favorite" element={<Favorited />} />
-						<Route path="/user/favorite/:id" element={<FavoriteDetails />} />
-						<Route path="/add-new-meal" element={<PersonalizedForm />} />
-						<Route path="/profile" element={<Profile />} />
-						<Route path="/login" element={<Login />} />
-						<Route path="/signup" element={<Signup />} />
-						<Route path="/forgot-password" element={<ForgotPassword />} />
-						<Route path="/verify-otp" element={<VerifyOTP />} />
-						<Route path="/reset-password" element={<ResetPassword />} />
-						<Route path="*" element={<ErrorPage />} />
-					</Routes>
-				</QueryClientProvider>
-			</Router>
-		</div>
-	);
+  const queryClient = new QueryClient();
+  return (
+    <div className="pages">
+      <Router>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route index path="/" element={<ForYou />} />
+            <Route path="/by-you" element={<ByYou />} />
+            <Route path="/user/meal/:id" element={<MealDetails />} />
+            <Route
+              path="/user/recommended/:id"
+              element={<RecommendedDetails />}
+            />
+            <Route
+              path="/user/personalized/:id"
+              element={<PersonalizedDetails />}
+            />
+            <Route
+              path="/user/personalized/edit/:id"
+              element={<EditPersonalized />}
+            />
+            <Route path="/user/favorite" element={<Favorited />} />
+            <Route path="/user/favorite/:id" element={<FavoriteDetails />} />
+            <Route path="/add-new-meal" element={<PersonalizedForm />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/login/failed" element={<LoginFailed />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/verify-otp" element={<VerifyOTP />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </QueryClientProvider>
+      </Router>
+    </div>
+  );
 }
 
 export default App;

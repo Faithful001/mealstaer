@@ -1,6 +1,13 @@
+import { config } from "dotenv";
+
+config();
+
 module.exports = {
   URL: {
     localURL: "http://localhost:5173",
-    prodURL: "https://mealstaerr.vercel.app",
+    prodURL:
+      process.env.NODE_ENV === "production"
+        ? "https://mealstaerr.vercel.app"
+        : "http://localhost:5173",
   },
 };

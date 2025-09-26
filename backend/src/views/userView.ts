@@ -9,13 +9,18 @@ const {
   verifyOTP,
   resetPassword,
 } = require("../controllers/userController");
+import { config } from "dotenv";
+config();
 
 const router = express.Router();
 
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
 const LOCAL_CLIENT_URL = "http://localhost:5173";
-const PROD_CLIENT_URL = "https://mealstaerr.vercel.app";
+const PROD_CLIENT_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://mealstaerr.vercel.app"
+    : "http://localhost:5173";
 
 interface User {
   _id: string;

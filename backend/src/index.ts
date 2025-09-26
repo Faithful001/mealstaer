@@ -1,5 +1,5 @@
 require("dotenv").config();
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction, RequestHandler } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
@@ -46,7 +46,8 @@ app.use(
   })
 );
 
-app.use(cookieParser());
+const cookieSecret = process.env.COOKIE_KEY ?? ""; // fallback to empty string
+app.use(cookieParser(cookieSecret) as RequestHandler);
 
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");

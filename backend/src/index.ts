@@ -1,5 +1,10 @@
 require("dotenv").config();
-import express, { Request, Response, NextFunction, RequestHandler } from "express";
+import express, {
+  Request,
+  Response,
+  NextFunction,
+  RequestHandler,
+} from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
@@ -58,11 +63,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const corsOptions = {
-  origin: [
-    "https://mealstaer.vercel.app",
-    "https://mealstaerr.vercel.app",
-    "http://localhost:5173",
-  ],
+  origin: ["https://mealstaerr.vercel.app", "http://localhost:5173"],
   method: ["GET", "POST", "PATCH", "DELETE"],
   credentials: true,
 };

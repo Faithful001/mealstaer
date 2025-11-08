@@ -1,0 +1,7 @@
+builds:
+  - src: .
+    type: node
+    env: node
+    buildCommand: npm install && npm run build
+    run: npm start
+    name: mealstaer-backend

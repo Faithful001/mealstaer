@@ -95,7 +95,7 @@ const ForYou = () => {
       // return response.data;
     } catch (error: any) {
       if (error.response.status == 401) {
-        // navigate("/login");
+        navigate("/login");
       } else {
         setFetchError(`Something went wrong, ${error.message}`);
         console.log(`Something went wrong, ${error.message}`);
@@ -193,7 +193,7 @@ const ForYou = () => {
       console.log(meal._id);
     } catch (error: any) {
       if (error.response.status == 401) {
-        // navigate("/login");
+        navigate("/login");
       } else {
         console.log("Problem adding to fave");
       }
@@ -260,7 +260,7 @@ const ForYou = () => {
       console.log(response.data);
     } catch (error: any) {
       if (error.response.status == 401) {
-        // navigate("/login");
+        navigate("/login");
       } else {
         console.log(error);
       }
@@ -314,7 +314,7 @@ const ForYou = () => {
       return originalMealIds;
     } catch (error: any) {
       if (error.response.status == 401) {
-        // navigate("/login");
+        navigate("/login");
       } else {
         console.log(error);
       }

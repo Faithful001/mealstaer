@@ -1,75 +1,130 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { URL } from "../url/URL";
-// import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
+import dotenv from "dotenv";
 const User = require("../models/userModel");
-require("dotenv").config();
 
-// interface User {
-// 	_id: string;
-// 	user_name: string;
-// 	email: string;
-// 	passowrd;
-// }
+dotenv.config();
 
-passport.serializeUser((user: any, done) => {
-	done(null, user.id);
-});
+// Serialize user into the sessions
+const serializeUser = (): void => {
+  passport.serializeUser((user: any, done) => {
+    done(null, { id: user._id });
+  });
+};
 
-passport.deserializeUser((id, done) => {
-	User.findById(id).then((user) => {
-		done(null, user);
-	});
-});
+// Deserialize user from the sessions
+const deserializeUser = (): void => {
+  passport.deserializeUser(async (userData: { id: string }, done) => {
+    try {
+      const user = await User.findById(userData.id);
+      if (!user) {
+        return done(null, false);
+      }
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
+  });
+};
 
-passport.use(
-	new GoogleStrategy(
-		{
-			clientID: process.env.GOOGLE_CLIENT_ID,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: `${URL.prodURL}/api/auth/google/callback`,
-		},
-		async (accessToken, refreshToken, profile, done) => {
-			// console.log(profile);
-			try {
-				const exists = await User.findOne({ email: profile?.emails[0]?.value });
-				if (exists) {
-					done(null, exists);
-				} else {
-					const user = new User({
-						user_name: profile.displayName,
-						email: profile?.emails[0]?.value,
-						password: null,
-					});
+// Configure Google Strategy
+const configureGoogleStrategy = (): void => {
+  passport.use(
+    "google",
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID || "",
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+        callbackURL: `${URL.prodURL}/auth/google/callback`,
+        scope: ["profile", "email"],
+        passReqToCallback: false,
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          if (!profile.emails || !profile.emails[0]) {
+            return done(new Error("No email found in Google profile"));
+          }
 
-					// Save the user to your database
-					await user.save();
-					done(null, user);
-				}
-			} catch (error) {
-				done(error, null);
-			}
-		}
-	)
-);
+          const email = profile.emails[0].value;
+          
+          // Try to find user by googleId first
+          let user = await User.findOne({ googleId: profile.id });
+          
+          // If not found by googleId, try by email
+          if (!user) {
+            user = await User.findOne({ email });
+          }
 
-// const opts = {
-// 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-// 	secretOrKey: process.env.JWT_SEC,
-// };
+          if (user) {
+            // Update googleId if not set or different
+            if (!user.googleId || user.googleId !== profile.id) {
+              user.googleId = profile.id;
+              await user.save();
+            }
+            return done(null, user);
+          }
+          
+          // User doesn't exist, redirect to registration
+          return done(null, false, { message: "User not registered. Please sign up first." });
+        } catch (error) {
+          console.error("Google Strategy Error:", error);
+          return done(error);
+        }
+      }
+    )
+  );
+};
 
-// passport.use(
-// 	new JwtStrategy(opts, function (jwt_payload, done) {
-// 		User.findOne({ id: jwt_payload.sub }, function (err, user) {
-// 			if (err) {
-// 				return done(err, false);
-// 			}
-// 			if (user) {
-// 				return done(null, user);
-// 			} else {
-// 				return done(null, false);
-// 				// or you could create a new account
-// 			}
-// 		});
-// 	})
-// );
+// Configure Google Registration Strategy
+const configureGoogleRegistrationStrategy = (): void => {
+  passport.use(
+    "google-register",
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID || "",
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+        callbackURL: `${URL.prodURL}/auth/google/register/callback`,
+        passReqToCallback: true,
+      },
+      async (req: any, accessToken: string, refreshToken: string, profile: any, done: any) => {
+        try {
+          // Check if user already exists
+          const existingUser = await User.findOne({
+            email: profile.emails?.[0]?.value,
+          });
+
+          if (existingUser) {
+            return done(null, false, {
+              message: "An account with this email already exists. Please log in instead.",
+            });
+          }
+
+          // Create new user
+          const newUser = new User({
+            user_name: profile.displayName,
+            email: profile.emails?.[0]?.value,
+            googleId: profile.id,
+            // Add any other required fields
+          });
+
+          await newUser.save();
+          return done(null, newUser);
+        } catch (error) {
+          console.error("Google registration error:", error);
+          return done(error);
+        }
+      }
+    )
+  );
+};
+
+// Initialize passport
+const initializePassport = (): void => {
+  serializeUser();
+  deserializeUser();
+  configureGoogleStrategy();
+  configureGoogleRegistrationStrategy();
+};
+
+export default initializePassport;

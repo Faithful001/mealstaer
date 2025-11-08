@@ -10,7 +10,24 @@ const {
   resetPassword,
 } = require("../controllers/userController");
 import { config } from "dotenv";
+import {
+  Strategy as GoogleStrategy,
+  VerifyCallback,
+} from "passport-google-oauth20";
+// import User, { IUser } from "../models/userModel";
+const User = require("../models/userModel");
+import { Request, Response, NextFunction } from "express";
+
 config();
+
+// Extend Express Request type to include user property
+// declare global {
+//   namespace Express {
+//     interface Request {
+//       user?: IUser;
+//     }
+//   }
+// }
 
 const router = express.Router();
 
@@ -20,7 +37,7 @@ const LOCAL_CLIENT_URL = "http://localhost:5173";
 const PROD_CLIENT_URL =
   process.env.NODE_ENV === "production"
     ? "https://mealstaerr.vercel.app"
-    : "http://localhost:5173";
+    : "http://localhost:5173/login";
 
 interface User {
   _id: string;
@@ -29,24 +46,21 @@ interface User {
   password?: string;
 }
 
-router.get("/login/success", async (req, res) => {
-  const user: User | undefined = req.user as User;
-  if (!user) {
-    // Handle the case where user is undefined
-    res.status(400).json({
-      error: "User not found",
+router.get("/login/success", (req, res) => {
+  if (req.user) {
+    const user = req.user as User;
+    const token = jwtUtil.createToken(user._id, "2d");
+    return res.status(200).json({
+      success: true,
+      user: user,
+      token: token,
     });
-    return;
+  } else {
+    return res.status(401).json({
+      success: false,
+      error: "Not authenticated",
+    });
   }
-
-  const token = jwtUtil.createToken(user._id, "2d");
-  console.log("jwt token:", token);
-  console.log("User from success route is: " + user);
-  res.status(200).json({
-    user: user,
-    token: token,
-  });
-  console.log("Google login successful");
 });
 
 router.get("/login/failed", (req, res) => {
@@ -73,20 +87,49 @@ router.get("/logout", (req, res) => {
     }
   });
 });
-
+// Google login route
 router.get(
   "/google",
   passport.authenticate("google", {
     scope: ["email", "profile"],
+    session: true,
+    failureRedirect: `${PROD_CLIENT_URL}/login?error=Google login failed`,
   })
 );
 
+// Google registration route
+router.get(
+  "/google/register",
+  passport.authenticate("google-register", {
+    scope: ["email", "profile"],
+    session: true,
+  })
+);
+
+// Google registration callback
+router.get(
+  "/google/register/callback",
+  passport.authenticate("google-register", {
+    failureRedirect: `${PROD_CLIENT_URL}/register?error=Google registration failed`,
+    session: true,
+  }),
+  (req, res) => {
+    // Successful registration, redirect to success page
+    res.redirect(`${PROD_CLIENT_URL}/login/success`);
+  }
+);
+
+// Google login callback
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: PROD_CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
+    failureRedirect: `${PROD_CLIENT_URL}/login?error=Google login failed`,
+    session: true,
+  }),
+  (req, res) => {
+    // Successful login, redirect to success page
+    res.redirect(`${PROD_CLIENT_URL}/login/success`);
+  }
 );
 
 // router.get(

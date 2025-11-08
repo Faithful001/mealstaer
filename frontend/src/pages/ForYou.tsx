@@ -22,11 +22,12 @@ import PreContent from "../components/PreContent";
 const ForYou = () => {
   const [user_name, setUsername] = useState("");
   const { toast: otherToast } = useToast();
-  // const navigate = useNavigate();
 
-  useEffect(() => {
-    !localStorageUtil.getFromStorage("user") && navigate("/login");
-  }, []);
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   !localStorageUtil.getFromStorage("user") && navigate("/login");
+  // }, []);
 
   useEffect(() => {
     if (otherToast !== "") {
@@ -45,7 +46,6 @@ const ForYou = () => {
   const abortCont = new AbortController();
 
   const prodURL = URL.prodURL;
-  const navigate = useNavigate();
   const queryClient = new QueryClient();
   const { setToast = () => {} } = useToast();
 

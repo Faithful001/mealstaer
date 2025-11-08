@@ -1,7 +1,7 @@
 // "use client";
 import { Label, TextInput, Spinner } from "flowbite-react";
 import google_icon from "../assets/google_icon.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -24,10 +24,22 @@ const Login = () => {
   function handleVisibility() {
     setVisible(!visible);
   }
+  // Check for error in URL params on component mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    if (error) {
+      setError(decodeURIComponent(error));
+      // Clean up the URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
   async function signInWithGoogle() {
-    window.open(`${prodURL}/api/auth/google`, "_self");
-    console.log("inside signin with google");
-    await getUser();
+    // Clear any previous errors
+    setError("");
+    // Redirect to Google OAuth
+    window.location.href = `${prodURL}/api/auth/google`;
   }
 
   // const setCookie = (name: string, value: string, days: number) => {
@@ -41,26 +53,36 @@ const Login = () => {
   // 	document.cookie = cookieValue;
   // };
 
-  async function getUser() {
-    try {
-      const response = await axios.get(`${prodURL}/api/auth/login/success`, {
-        withCredentials: true,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      console.log(response.data);
-      if (response.status == 200) {
-        const user = response.data.user;
-        const token = response.data.token;
-        localStorageUtil.addToStorage("user", user);
-        localStorageUtil.addToStorage("token", token);
-        navigate("/");
+  // Check for successful login after redirect from Google
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get(`${prodURL}/api/auth/login/success`, {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.data.success && response.data.user) {
+          const { user, token } = response.data;
+          localStorageUtil.addToStorage("user", user);
+          localStorageUtil.addToStorage("token", token);
+          navigate("/");
+        }
+      } catch (error: any) {
+        console.error('Auth check failed:', error);
+        if (error.response?.data?.error) {
+          setError(error.response.data.error);
+        }
       }
-    } catch (error: any) {
-      console.log(error?.message ?? error);
+    };
+
+    // Only run this check if we're on the login page and have just been redirected
+    if (window.location.pathname === '/login' && window.location.search.includes('success')) {
+      checkAuth();
     }
-  }
+  }, [navigate, prodURL]);
   // getUser();
 
   const body = { email, password };
@@ -78,7 +100,7 @@ const Login = () => {
         const token = response.data.token;
         localStorageUtil.addToStorage("user", user);
         localStorageUtil.addToStorage("token", token);
-        // navigate("/");
+        navigate("/");
         return response.data;
       }
     } catch (error: any) {
